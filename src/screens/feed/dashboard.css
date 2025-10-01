@@ -1,0 +1,101 @@
+/* Container for the entire dashboard */
+.dashboard-container {
+    padding: 20px;
+    text-align: center;
+    background-color: #1e2a3e;
+    height: 1000px;
+  }
+  
+  .dashboard-card {
+    background-color: #1e2a3e;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+  }
+  
+  /* Hover effect for cards */
+  .dashboard-card:hover {
+    transform: scale(1.05);
+  }
+  
+  .dashboard-image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  
+  .dashboard-info {
+    margin-top: 20px;
+  }
+  
+  .dashboard-info h3 {
+    font-size: 2em;
+    color: #4F6932; /* Main color */
+    margin-bottom: 10px;
+  }
+  
+  .dashboard-info p {
+    font-size: 1.2em;
+    color: #555;
+    margin-bottom: 20px;
+  }
+  
+  .dashboard-lyrics {
+    font-family: "Courier New", monospace;
+    font-size: 1.1em;
+    color: #333;
+    white-space: pre-wrap; /* Ensures the lyrics preserve line breaks */
+    word-wrap: break-word; /* Prevents long lines from breaking the layout */
+    line-height: 1.6;
+  }
+  
+  /* Styling for the dashboard song cards */
+  .dashboard-song-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+  }
+  
+  .dashboard-song-card {
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    width: 180px;
+    text-align: center;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+    cursor: pointer;
+  }
+  
+  .dashboard-song-card:hover {
+    transform: scale(1.05);
+  }
+  
+  .dashboard-song-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+  
+  .dashboard-song-title {
+    font-size: 1.2em;
+    color: #4F6932; /* Main color */
+    font-weight: bold;
+  }
+  
+  .dashboard-song-details {
+    font-size: 1em;
+    color: #555;
+  }
+  

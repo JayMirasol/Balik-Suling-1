@@ -1,0 +1,57 @@
+.chords-container {
+    padding: 20px;
+  }
+  
+  .chords-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: white;
+    text-align: center;
+  }
+  
+  .chords-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .chord-item {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    border-radius: 12px;
+    transition: background 0.3s ease;
+  }
+  
+  .chord-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  .song-link {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .song-title {
+    font-size: 16px; /* Smaller text */
+    font-weight: 600;
+    margin: 0;
+  }
+  
+  .song-chords {
+    font-size: 14px; /* Even smaller for chords */
+    margin: 4px 0 0 0;
+    color: #aaa;
+  }
+  
+  .song-lyrics {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 10px;
+    white-space: pre-wrap;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 16px;
+    color: #eee;
+  }
+  

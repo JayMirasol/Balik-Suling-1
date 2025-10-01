@@ -1,0 +1,29 @@
+2025-10-01 22:39:46,780 INFO [1759329583718-camera_capture]                 Book.java:562  | 1 sheet in C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\uploads\1759329583718-camera_capture.png
+2025-10-01 22:39:47,089 INFO []                 Book.java:2531 | Stored /book.xml
+2025-10-01 22:39:47,090 INFO []                 Book.java:2491 | Book stored as C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1759329583725\1759329583718-camera_capture.omr
+2025-10-01 22:39:47,105 INFO []                 Book.java:1933 | Book reaching PAGE on sheets:[#1]
+2025-10-01 22:39:47,108 INFO [1759329583718-camera_capture]       StepMonitoring.java:98   | LOAD
+2025-10-01 22:39:47,165 INFO [1759329583718-camera_capture]            SheetStub.java:1273 | Loaded image #1 300x200 from C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\uploads\1759329583718-camera_capture.png
+2025-10-01 22:39:47,173 INFO [1759329583718-camera_capture]            ImageUtil.java:206  | Discarding alpha band ...
+2025-10-01 22:39:47,197 INFO [1759329583718-camera_capture]            ImageUtil.java:124  | Converting max RGB to gray
+2025-10-01 22:39:47,220 INFO [1759329583718-camera_capture]       StepMonitoring.java:98   | BINARY
+2025-10-01 22:39:47,308 INFO [1759329583718-camera_capture]       StepMonitoring.java:98   | SCALE
+2025-10-01 22:39:47,320 WARN [1759329583718-camera_capture]            SheetStub.java:412  | 1759329583718-camera_capture
+
+ With a too low interline value of 3 pixels,
+ either this sheet contains no multi-line staves,
+ or the picture resolution is too low (try 300 DPI).
+
+ This interline value is NOT RELIABLE!
+2025-10-01 22:39:47,321 INFO [1759329583718-camera_capture]                 Book.java:545  | Created scores: []
+2025-10-01 22:39:47,322 INFO [1759329583718-camera_capture]            SheetStub.java:1191 | Sheet 1759329583718-camera_capture flagged as invalid.
+2025-10-01 22:39:47,322 INFO [1759329583718-camera_capture]            SheetStub.java:1410 | StepException cause detected in [LOAD, BINARY, SCALE, GRID, HEADERS, STEM_SEEDS, BEAMS, LEDGERS, HEADS, STEMS, REDUCTION, CUE_BEAMS, TEXTS, MEASURES, CHORDS, CURVES, SYMBOLS, LINKS, RHYTHMS, PAGE]
+2025-10-01 22:39:47,323 INFO [1759329583718-camera_capture]                 Book.java:2550 | Book{1759329583718-camera_capture} storing
+2025-10-01 22:39:47,351 INFO [1759329583718-camera_capture]                 Book.java:2531 | Stored /book.xml
+2025-10-01 22:39:47,385 INFO [1759329583718-camera_capture]           DataHolder.java:348  | Stored /sheet#1/BINARY.png
+2025-10-01 22:39:47,860 INFO [1759329583718-camera_capture]                Sheet.java:1583 | Stored /sheet#1/sheet#1.xml
+2025-10-01 22:39:47,861 INFO [1759329583718-camera_capture]                 Book.java:2491 | Book stored as C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1759329583725\1759329583718-camera_capture.omr
+2025-10-01 22:39:47,868 INFO [1759329583718-camera_capture]            SheetStub.java:1660 | Disposed sheet
+2025-10-01 22:39:47,911 INFO [1759329583718-camera_capture]                 Book.java:2018 | End of Stub#1 memory: 14,414,448
+2025-10-01 22:39:47,913 INFO [1759329583718-camera_capture]                 Book.java:2025 | Book processed.
+2025-10-01 22:39:47,916 INFO [1759329583718-camera_capture]                 Book.java:599  | Could not export since transcription did not complete successfully

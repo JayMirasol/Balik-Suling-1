@@ -1,0 +1,110 @@
+/* Container & Title (support both old and current class names) */
+.chords-container,
+.screen-container {
+  padding: 20px;
+}
+
+.chords-title,
+.screen-container h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: white;
+  text-align: center;
+}
+
+/* Lists */
+.chords-list,
+.song-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Each item (support old .chord-item and current <li> under .song-list) */
+.chord-item,
+.song-list li {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  border-radius: 12px;
+  transition: background 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.chord-item:hover,
+.song-list li:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Links */
+.song-link {
+  text-decoration: none;
+  color: inherit;
+  font-weight: 600;
+}
+
+/* Save Offline button */
+.save-offline-btn {
+  appearance: none;
+  border: 1px solid #4a4a4a;
+  background: #1e1e1e;
+  color: #f3f3f3;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
+}
+
+.save-offline-btn:hover {
+  background: #2b2b2b;
+  border-color: #666;
+}
+
+.save-offline-btn:active {
+  transform: translateY(1px);
+}
+
+.save-offline-btn:focus-visible {
+  outline: 2px solid #7aa2ff;
+  outline-offset: 2px;
+}
+
+/* Small screens: stack link above button */
+@media (max-width: 520px) {
+  .song-list li {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .save-offline-btn {
+    width: 100%;
+  }
+}
+
+/* Keep your existing text styles */
+.song-title {
+  font-size: 16px; /* Smaller text */
+  font-weight: 600;
+  margin: 0;
+}
+
+.song-chords {
+  font-size: 14px; /* Even smaller for chords */
+  margin: 4px 0 0 0;
+  color: #aaa;
+}
+
+.song-lyrics {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 10px;
+  white-space: pre-wrap;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 16px;
+  color: #eee;
+}

@@ -1,0 +1,63 @@
+2025-09-28 19:43:43,042 INFO [1759059819406-sample_score_twinkle]                 Book.java:562  | 1 sheet in C:\Users\Jay Mirasol\Downloads\Balik-Suling-Updated-FreelanceProject-main\Balik-Suling-Updated-FreelanceProject-main\backend\uploads\1759059819406-sample_score_twinkle.png
+2025-09-28 19:43:43,318 INFO []                 Book.java:2531 | Stored /book.xml
+2025-09-28 19:43:43,319 INFO []                 Book.java:2491 | Book stored as C:\Users\Jay Mirasol\Downloads\Balik-Suling-Updated-FreelanceProject-main\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1759059819413\1759059819406-sample_score_twinkle.omr
+2025-09-28 19:43:43,326 INFO []                 Book.java:1933 | Book reaching PAGE on sheets:[#1]
+2025-09-28 19:43:43,327 INFO [1759059819406-sample_score_twinkle]       StepMonitoring.java:98   | LOAD
+2025-09-28 19:43:43,459 INFO [1759059819406-sample_score_twinkle]            SheetStub.java:1273 | Loaded image #1 1654x2339 from C:\Users\Jay Mirasol\Downloads\Balik-Suling-Updated-FreelanceProject-main\Balik-Suling-Updated-FreelanceProject-main\backend\uploads\1759059819406-sample_score_twinkle.png
+2025-09-28 19:43:43,464 INFO [1759059819406-sample_score_twinkle]            ImageUtil.java:124  | Converting max RGB to gray
+2025-09-28 19:43:43,624 INFO [1759059819406-sample_score_twinkle]       StepMonitoring.java:98   | BINARY
+2025-09-28 19:43:44,047 INFO [1759059819406-sample_score_twinkle]       StepMonitoring.java:98   | SCALE
+2025-09-28 19:43:44,064 INFO [1759059819406-sample_score_twinkle]         ScaleBuilder.java:241  | Beam  guessed height:  7 -- 0.50 of 14 interline
+2025-09-28 19:43:44,066 INFO [1759059819406-sample_score_twinkle]         ScaleBuilder.java:264  | Beam measured height:  5 -- 0.10 of [4..14] range at 190% of needed quorum
+2025-09-28 19:43:44,067 INFO [1759059819406-sample_score_twinkle]            ScaleStep.java:65   | Scale{ interline(14,14,14) line(2,2,2) beam(5)}
+2025-09-28 19:43:44,068 INFO [1759059819406-sample_score_twinkle]       StepMonitoring.java:98   | GRID
+2025-09-28 19:43:44,323 INFO [1759059819406-sample_score_twinkle]       LinesRetriever.java:1500 | Global slope: 0.00000
+2025-09-28 19:43:44,354 INFO [1759059819406-sample_score_twinkle]    ClustersRetriever.java:328  | Retrieved raw line clusters: 3 of sizes [5] with interline(14,14,14)
+2025-09-28 19:43:44,429 INFO [1759059819406-sample_score_twinkle]            PeakGraph.java:310  | Systems: #1[1] #2[2] #3[3]
+2025-09-28 19:43:44,598 INFO [1759059819406-sample_score_twinkle]        SystemManager.java:779  | 1 part along 3 systems
+2025-09-28 19:43:44,599 INFO [1759059819406-sample_score_twinkle]                 Book.java:545  | Created scores: [{Score 1}]
+2025-09-28 19:43:44,600 INFO [1759059819406-sample_score_twinkle]       StepMonitoring.java:98   | HEADERS
+2025-09-28 19:43:44,924 INFO []      BasicClassifier.java:277  | Classifier loaded XML norms.
+2025-09-28 19:43:44,929 INFO []   AbstractClassifier.java:396  | Classifier data loaded from default uri jar:file:/C:/Program%20Files/Audiveris/app/audiveris.jar!/res/basic-classifier.zip
+2025-09-28 19:43:45,127 WARN [1759059819406-sample_score_twinkle]          ClefBuilder.java:658  | Staff#1 no recognized header clef.
+2025-09-28 19:43:45,175 WARN [1759059819406-sample_score_twinkle]          ClefBuilder.java:658  | Staff#2 no recognized header clef.
+2025-09-28 19:43:45,185 WARN [1759059819406-sample_score_twinkle]          ClefBuilder.java:658  | Staff#3 no recognized header clef.
+2025-09-28 19:43:45,188 INFO [1759059819406-sample_score_twinkle]       StepMonitoring.java:98   | STEM_SEEDS
+2025-09-28 19:43:45,244 INFO [1759059819406-sample_score_twinkle]        StemSeedsStep.java:86   | stem(2 max:2)
+2025-09-28 19:43:45,280 INFO [1759059819406-sample_score_twinkle]       StepMonitoring.java:98   | BEAMS
+2025-09-28 19:43:45,961 INFO [1759059819406-sample_score_twinkle]       StepMonitoring.java:98   | LEDGERS
+2025-09-28 19:43:46,192 INFO [1759059819406-sample_score_twinkle]       StepMonitoring.java:98   | HEADS
+2025-09-28 19:43:47,593 INFO [1759059819406-sample_score_twinkle]        HeadSeedTally.java:235  | Scale information: HeadSeeds{NOTEHEAD_VOID[R:0.5] NOTEHEAD_BLACK[L:-1.0,R:-0.5]}
+2025-09-28 19:43:47,603 INFO [1759059819406-sample_score_twinkle]       StepMonitoring.java:98   | STEMS
+2025-09-28 19:43:48,192 INFO [1759059819406-sample_score_twinkle]       StepMonitoring.java:98   | REDUCTION
+2025-09-28 19:43:48,315 INFO [1759059819406-sample_score_twinkle]        ReductionStep.java:105  | Stems free length median value: 51 pixels, 3.6 interlines
+2025-09-28 19:43:48,318 INFO [1759059819406-sample_score_twinkle]       StepMonitoring.java:98   | CUE_BEAMS
+2025-09-28 19:43:48,321 INFO [1759059819406-sample_score_twinkle]         CueBeamsStep.java:81   | Step CUE_BEAMS is skipped because small heads switch is off
+2025-09-28 19:43:48,321 INFO [1759059819406-sample_score_twinkle]       StepMonitoring.java:98   | TEXTS
+2025-09-28 19:43:48,398 WARN [1759059819406-sample_score_twinkle]         TesseractOCR.java:335  | The collection of supported languages is empty
+2025-09-28 19:43:48,398 INFO [1759059819406-sample_score_twinkle]              OcrUtil.java:106  | Missing support for 'eng' language(s)
+2025-09-28 19:43:48,416 INFO [1759059819406-sample_score_twinkle]       StepMonitoring.java:98   | MEASURES
+2025-09-28 19:43:48,436 INFO [1759059819406-sample_score_twinkle]                 Page.java:307  | 9 raw measures: [3 in system#1, 3 in system#2, 3 in system#3]
+2025-09-28 19:43:48,438 INFO [1759059819406-sample_score_twinkle]       StepMonitoring.java:98   | CHORDS
+2025-09-28 19:43:48,455 INFO [1759059819406-sample_score_twinkle]       StepMonitoring.java:98   | CURVES
+2025-09-28 19:43:49,185 INFO [1759059819406-sample_score_twinkle]         SlursBuilder.java:240  | Slurs: 0
+2025-09-28 19:43:49,204 INFO [1759059819406-sample_score_twinkle]      SegmentsBuilder.java:155  | Segments: 10
+2025-09-28 19:43:49,217 INFO [1759059819406-sample_score_twinkle]       StepMonitoring.java:98   | SYMBOLS
+2025-09-28 19:43:49,898 INFO [1759059819406-sample_score_twinkle]       StepMonitoring.java:98   | LINKS
+2025-09-28 19:43:49,930 INFO [1759059819406-sample_score_twinkle]       StepMonitoring.java:98   | RHYTHMS
+2025-09-28 19:43:50,012 INFO [1759059819406-sample_score_twinkle]       StepMonitoring.java:98   | PAGE
+2025-09-28 19:43:50,023 WARN [1759059819406-sample_score_twinkle]         MeasureFixer.java:343  | System#1 No target duration for measures local IDs [1, 2, 3], please check time signatures
+2025-09-28 19:43:50,023 WARN [1759059819406-sample_score_twinkle]         MeasureFixer.java:343  | System#2 No target duration for measures local IDs [4, 5, 6], please check time signatures
+2025-09-28 19:43:50,023 WARN [1759059819406-sample_score_twinkle]         MeasureFixer.java:343  | System#3 No target duration for measures local IDs [7, 8, 9], please check time signatures
+2025-09-28 19:43:50,026 INFO [1759059819406-sample_score_twinkle]                 Book.java:2550 | Book{1759059819406-sample_score_twinkle} storing
+2025-09-28 19:43:50,058 INFO [1759059819406-sample_score_twinkle]                 Book.java:2531 | Stored /book.xml
+2025-09-28 19:43:50,170 INFO [1759059819406-sample_score_twinkle]           DataHolder.java:348  | Stored /sheet#1/BINARY.png
+2025-09-28 19:43:50,665 INFO [1759059819406-sample_score_twinkle]                Sheet.java:1583 | Stored /sheet#1/sheet#1.xml
+2025-09-28 19:43:50,964 INFO [1759059819406-sample_score_twinkle]                 Book.java:2491 | Book stored as C:\Users\Jay Mirasol\Downloads\Balik-Suling-Updated-FreelanceProject-main\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1759059819413\1759059819406-sample_score_twinkle.omr
+2025-09-28 19:43:50,972 INFO [1759059819406-sample_score_twinkle]            SheetStub.java:1660 | Disposed sheet
+2025-09-28 19:43:51,047 INFO [1759059819406-sample_score_twinkle]                 Book.java:2018 | End of Stub#1 memory: 32,251,864
+2025-09-28 19:43:51,047 INFO [1759059819406-sample_score_twinkle]                 Book.java:2025 | Book processed.
+2025-09-28 19:43:51,892 INFO [1759059819406-sample_score_twinkle]            SheetStub.java:997  | Loaded /sheet#1/sheet#1.xml
+2025-09-28 19:43:52,748 INFO [1759059819406-sample_score_twinkle]      PartwiseBuilder.java:2661 | Exporting sheet(s): [#1]
+2025-09-28 19:43:52,842 INFO [1759059819406-sample_score_twinkle]        ScoreExporter.java:164  | Score 1759059819406-sample_score_twinkle exported to C:\Users\Jay Mirasol\Downloads\Balik-Suling-Updated-FreelanceProject-main\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1759059819413\1759059819406-sample_score_twinkle.mxl
+2025-09-28 19:43:52,890 INFO [1759059819406-sample_score_twinkle]                Score.java:181  | Closing {Score 1}

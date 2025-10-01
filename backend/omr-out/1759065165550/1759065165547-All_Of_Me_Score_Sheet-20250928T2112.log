@@ -1,0 +1,48 @@
+2025-09-28 21:12:47,933 ERROR [1759065165547-All_Of_Me_Score_Sheet]              IOUtils.java:278  | Unmapping is not supported.
+java.lang.reflect.InaccessibleObjectException: Unable to make public jdk.internal.ref.Cleaner java.nio.DirectByteBuffer.cleaner() accessible: module java.base does not "opens java.nio" to unnamed module @7c711375
+	at java.base/java.lang.reflect.AccessibleObject.throwInaccessibleObjectException(Unknown Source)
+	at java.base/java.lang.reflect.AccessibleObject.checkCanSetAccessible(Unknown Source)
+	at java.base/java.lang.reflect.AccessibleObject.checkCanSetAccessible(Unknown Source)
+	at java.base/java.lang.reflect.Method.checkCanSetAccessible(Unknown Source)
+	at java.base/java.lang.reflect.Method.setAccessible(Unknown Source)
+	at org.apache.pdfbox.io.IOUtils.unmapper(IOUtils.java:244)
+	at java.base/java.security.AccessController.doPrivileged(Unknown Source)
+	at org.apache.pdfbox.io.IOUtils.<clinit>(IOUtils.java:69)
+	at org.apache.pdfbox.Loader.loadPDF(Loader.java:378)
+	at org.audiveris.omr.image.ImageLoading.getPdfLoader(ImageLoading.java:159)
+	at org.audiveris.omr.image.ImageLoading.getLoader(ImageLoading.java:209)
+	at org.audiveris.omr.sheet.Book.createStubs(Book.java:557)
+	at org.audiveris.omr.CLI$ProcessingTask.processBook(CLI.java:830)
+	at org.audiveris.omr.CLI$CliTask.call(CLI.java:504)
+	at org.audiveris.omr.Main.runBatchTasks(Main.java:371)
+	at org.audiveris.omr.Main.main(Main.java:260)
+	at Audiveris.main(Audiveris.java:50)
+2025-09-28 21:12:47,996 INFO [1759065165547-All_Of_Me_Score_Sheet]                 Book.java:562  | 1 sheet in C:\Users\Jay Mirasol\Downloads\Balik-Suling-Updated-FreelanceProject-main\Balik-Suling-Updated-FreelanceProject-main\backend\uploads\1759065165547-All_Of_Me_Score_Sheet.pdf
+2025-09-28 21:12:48,228 INFO []                 Book.java:2531 | Stored /book.xml
+2025-09-28 21:12:48,228 INFO []                 Book.java:2491 | Book stored as C:\Users\Jay Mirasol\Downloads\Balik-Suling-Updated-FreelanceProject-main\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1759065165550\1759065165547-All_Of_Me_Score_Sheet.omr
+2025-09-28 21:12:48,234 INFO []                 Book.java:1933 | Book reaching PAGE on sheets:[#1]
+2025-09-28 21:12:48,236 INFO [1759065165547-All_Of_Me_Score_Sheet]       StepMonitoring.java:98   | LOAD
+2025-09-28 21:12:48,628 INFO [1759065165547-All_Of_Me_Score_Sheet]            SheetStub.java:1273 | Loaded image #1 2550x3299 from C:\Users\Jay Mirasol\Downloads\Balik-Suling-Updated-FreelanceProject-main\Balik-Suling-Updated-FreelanceProject-main\backend\uploads\1759065165547-All_Of_Me_Score_Sheet.pdf
+2025-09-28 21:12:48,632 INFO [1759065165547-All_Of_Me_Score_Sheet]       StepMonitoring.java:98   | BINARY
+2025-09-28 21:12:49,361 INFO [1759065165547-All_Of_Me_Score_Sheet]       StepMonitoring.java:98   | SCALE
+2025-09-28 21:12:49,395 INFO [1759065165547-All_Of_Me_Score_Sheet]         ScaleBuilder.java:241  | Beam  guessed height:  8 -- 0.50 of 16 interline
+2025-09-28 21:12:49,397 INFO [1759065165547-All_Of_Me_Score_Sheet]         ScaleBuilder.java:264  | Beam measured height:  9 -- 0.42 of [4..16] range at 186% of needed quorum
+2025-09-28 21:12:49,398 INFO [1759065165547-All_Of_Me_Score_Sheet]            ScaleStep.java:65   | Scale{ small_interline(13,14,14) interline(16,16,16) line(1,2,2) small_beam(7) beam(9)}
+2025-09-28 21:12:49,399 INFO [1759065165547-All_Of_Me_Score_Sheet]       StepMonitoring.java:98   | GRID
+2025-09-28 21:12:49,972 INFO [1759065165547-All_Of_Me_Score_Sheet]       LinesRetriever.java:1500 | Global slope: 0.00000
+2025-09-28 21:12:50,011 INFO [1759065165547-All_Of_Me_Score_Sheet]    ClustersRetriever.java:328  | Retrieved raw line clusters: 0 of sizes [5] with interline(16,16,16)
+2025-09-28 21:12:50,013 INFO [1759065165547-All_Of_Me_Score_Sheet]       LinesRetriever.java:1516 | Searching clusters with smallInterline: 14
+2025-09-28 21:12:50,026 INFO [1759065165547-All_Of_Me_Score_Sheet]    ClustersRetriever.java:328  | Retrieved raw line clusters: 0 of sizes [5] with interline(13,14,14)
+2025-09-28 21:12:50,043 WARN [1759065165547-All_Of_Me_Score_Sheet]            PeakGraph.java:305  | No system found
+2025-09-28 21:12:50,044 INFO [1759065165547-All_Of_Me_Score_Sheet]                 Book.java:545  | Created scores: []
+2025-09-28 21:12:50,044 INFO [1759065165547-All_Of_Me_Score_Sheet]            SheetStub.java:1191 | Sheet 1759065165547-All_Of_Me_Score_Sheet flagged as invalid.
+2025-09-28 21:12:50,045 INFO [1759065165547-All_Of_Me_Score_Sheet]            SheetStub.java:1410 | StepException cause detected in [LOAD, BINARY, SCALE, GRID, HEADERS, STEM_SEEDS, BEAMS, LEDGERS, HEADS, STEMS, REDUCTION, CUE_BEAMS, TEXTS, MEASURES, CHORDS, CURVES, SYMBOLS, LINKS, RHYTHMS, PAGE]
+2025-09-28 21:12:50,045 INFO [1759065165547-All_Of_Me_Score_Sheet]                 Book.java:2550 | Book{1759065165547-All_Of_Me_Score_Sheet} storing
+2025-09-28 21:12:50,088 INFO [1759065165547-All_Of_Me_Score_Sheet]                 Book.java:2531 | Stored /book.xml
+2025-09-28 21:12:50,292 INFO [1759065165547-All_Of_Me_Score_Sheet]           DataHolder.java:348  | Stored /sheet#1/BINARY.png
+2025-09-28 21:12:50,645 INFO [1759065165547-All_Of_Me_Score_Sheet]                Sheet.java:1583 | Stored /sheet#1/sheet#1.xml
+2025-09-28 21:12:50,646 INFO [1759065165547-All_Of_Me_Score_Sheet]                 Book.java:2491 | Book stored as C:\Users\Jay Mirasol\Downloads\Balik-Suling-Updated-FreelanceProject-main\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1759065165550\1759065165547-All_Of_Me_Score_Sheet.omr
+2025-09-28 21:12:50,668 INFO [1759065165547-All_Of_Me_Score_Sheet]            SheetStub.java:1660 | Disposed sheet
+2025-09-28 21:12:50,708 INFO [1759065165547-All_Of_Me_Score_Sheet]                 Book.java:2018 | End of Stub#1 memory: 19,684,144
+2025-09-28 21:12:50,710 INFO [1759065165547-All_Of_Me_Score_Sheet]                 Book.java:2025 | Book processed.
+2025-09-28 21:12:50,710 INFO [1759065165547-All_Of_Me_Score_Sheet]                 Book.java:599  | Could not export since transcription did not complete successfully

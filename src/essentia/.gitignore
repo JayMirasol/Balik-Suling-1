@@ -1,0 +1,9 @@
+.vscode/
+.idea/
+.DS_Store
+node_modules/
+*.pyc
+builds/
+dist/
+coverage/
+package-lock.json

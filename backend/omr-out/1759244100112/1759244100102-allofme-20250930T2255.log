@@ -1,0 +1,27 @@
+2025-09-30 22:55:03,565 INFO [1759244100102-allofme]                 Book.java:562  | 1 sheet in C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\uploads\1759244100102-allofme.png
+2025-09-30 22:55:03,838 INFO []                 Book.java:2531 | Stored /book.xml
+2025-09-30 22:55:03,839 INFO []                 Book.java:2491 | Book stored as C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1759244100112\1759244100102-allofme.omr
+2025-09-30 22:55:03,851 INFO []                 Book.java:1933 | Book reaching PAGE on sheets:[#1]
+2025-09-30 22:55:03,854 INFO [1759244100102-allofme]       StepMonitoring.java:98   | LOAD
+2025-09-30 22:55:03,909 INFO [1759244100102-allofme]            SheetStub.java:1273 | Loaded image #1 850x1100 from C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\uploads\1759244100102-allofme.png
+2025-09-30 22:55:03,917 INFO [1759244100102-allofme]       StepMonitoring.java:98   | BINARY
+2025-09-30 22:55:04,188 INFO [1759244100102-allofme]       StepMonitoring.java:98   | SCALE
+2025-09-30 22:55:04,216 WARN [1759244100102-allofme]            SheetStub.java:412  | 1759244100102-allofme
+
+ With a too low interline value of 7 pixels,
+ either this sheet contains no multi-line staves,
+ or the picture resolution is too low (try 300 DPI).
+
+ This interline value is NOT RELIABLE!
+2025-09-30 22:55:04,217 INFO [1759244100102-allofme]                 Book.java:545  | Created scores: []
+2025-09-30 22:55:04,218 INFO [1759244100102-allofme]            SheetStub.java:1191 | Sheet 1759244100102-allofme flagged as invalid.
+2025-09-30 22:55:04,219 INFO [1759244100102-allofme]            SheetStub.java:1410 | StepException cause detected in [LOAD, BINARY, SCALE, GRID, HEADERS, STEM_SEEDS, BEAMS, LEDGERS, HEADS, STEMS, REDUCTION, CUE_BEAMS, TEXTS, MEASURES, CHORDS, CURVES, SYMBOLS, LINKS, RHYTHMS, PAGE]
+2025-09-30 22:55:04,219 INFO [1759244100102-allofme]                 Book.java:2550 | Book{1759244100102-allofme} storing
+2025-09-30 22:55:04,243 INFO [1759244100102-allofme]                 Book.java:2531 | Stored /book.xml
+2025-09-30 22:55:04,291 INFO [1759244100102-allofme]           DataHolder.java:348  | Stored /sheet#1/BINARY.png
+2025-09-30 22:55:04,773 INFO [1759244100102-allofme]                Sheet.java:1583 | Stored /sheet#1/sheet#1.xml
+2025-09-30 22:55:04,774 INFO [1759244100102-allofme]                 Book.java:2491 | Book stored as C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1759244100112\1759244100102-allofme.omr
+2025-09-30 22:55:04,780 INFO [1759244100102-allofme]            SheetStub.java:1660 | Disposed sheet
+2025-09-30 22:55:04,821 INFO [1759244100102-allofme]                 Book.java:2018 | End of Stub#1 memory: 12,297,320
+2025-09-30 22:55:04,823 INFO [1759244100102-allofme]                 Book.java:2025 | Book processed.
+2025-09-30 22:55:04,823 INFO [1759244100102-allofme]                 Book.java:599  | Could not export since transcription did not complete successfully

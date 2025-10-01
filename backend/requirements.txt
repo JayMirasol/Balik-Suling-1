@@ -1,0 +1,23 @@
+fastapi
+uvicorn[standard]
+python-multipart
+
+# --- Core numeric stack (pins chosen for TF 2.13 + basic-pitch 0.2.6) ---
+numpy==1.23.5
+scipy==1.10.1
+typing-extensions==4.5.0
+keras<3
+
+# --- TensorFlow 2.13 (auto-select per OS) ---
+tensorflow-intel==2.13.1 ; platform_system == "Windows"
+tensorflow==2.13.1       ; platform_system != "Windows"
+
+# --- Audio / music processing ---
+basic-pitch==0.2.6
+librosa==0.10.2.post1
+soundfile==0.12.1
+music21==9.1.0
+
+# --- Whisper ASR (CPU) ---
+faster-whisper==1.0.3
+

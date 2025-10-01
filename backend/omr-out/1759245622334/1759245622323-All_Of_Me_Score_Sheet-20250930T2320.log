@@ -1,0 +1,47 @@
+2025-09-30 23:20:26,210 ERROR [1759245622323-All_Of_Me_Score_Sheet]              IOUtils.java:278  | Unmapping is not supported.
+java.lang.reflect.InaccessibleObjectException: Unable to make public jdk.internal.ref.Cleaner java.nio.DirectByteBuffer.cleaner() accessible: module java.base does not "opens java.nio" to unnamed module @7c711375
+	at java.base/java.lang.reflect.AccessibleObject.throwInaccessibleObjectException(Unknown Source)
+	at java.base/java.lang.reflect.AccessibleObject.checkCanSetAccessible(Unknown Source)
+	at java.base/java.lang.reflect.AccessibleObject.checkCanSetAccessible(Unknown Source)
+	at java.base/java.lang.reflect.Method.checkCanSetAccessible(Unknown Source)
+	at java.base/java.lang.reflect.Method.setAccessible(Unknown Source)
+	at org.apache.pdfbox.io.IOUtils.unmapper(IOUtils.java:244)
+	at java.base/java.security.AccessController.doPrivileged(Unknown Source)
+	at org.apache.pdfbox.io.IOUtils.<clinit>(IOUtils.java:69)
+	at org.apache.pdfbox.Loader.loadPDF(Loader.java:378)
+	at org.audiveris.omr.image.ImageLoading.getPdfLoader(ImageLoading.java:159)
+	at org.audiveris.omr.image.ImageLoading.getLoader(ImageLoading.java:209)
+	at org.audiveris.omr.sheet.Book.createStubs(Book.java:557)
+	at org.audiveris.omr.CLI$ProcessingTask.processBook(CLI.java:830)
+	at org.audiveris.omr.CLI$CliTask.call(CLI.java:504)
+	at org.audiveris.omr.Main.runBatchTasks(Main.java:371)
+	at org.audiveris.omr.Main.main(Main.java:260)
+	at Audiveris.main(Audiveris.java:50)
+2025-09-30 23:20:26,298 INFO [1759245622323-All_Of_Me_Score_Sheet]                 Book.java:562  | 1 sheet in C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\uploads\1759245622323-All_Of_Me_Score_Sheet.pdf
+2025-09-30 23:20:26,593 INFO []                 Book.java:2531 | Stored /book.xml
+2025-09-30 23:20:26,593 INFO []                 Book.java:2491 | Book stored as C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1759245622334\1759245622323-All_Of_Me_Score_Sheet.omr
+2025-09-30 23:20:26,602 INFO []                 Book.java:1933 | Book reaching PAGE on sheets:[#1]
+2025-09-30 23:20:26,604 INFO [1759245622323-All_Of_Me_Score_Sheet]       StepMonitoring.java:98   | LOAD
+2025-09-30 23:20:27,130 INFO [1759245622323-All_Of_Me_Score_Sheet]            SheetStub.java:1273 | Loaded image #1 2550x3299 from C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\uploads\1759245622323-All_Of_Me_Score_Sheet.pdf
+2025-09-30 23:20:27,136 INFO [1759245622323-All_Of_Me_Score_Sheet]       StepMonitoring.java:98   | BINARY
+2025-09-30 23:20:28,194 INFO [1759245622323-All_Of_Me_Score_Sheet]       StepMonitoring.java:98   | SCALE
+2025-09-30 23:20:28,238 INFO [1759245622323-All_Of_Me_Score_Sheet]         ScaleBuilder.java:222  | Significant beam peak detected: 6 pixels
+2025-09-30 23:20:28,239 INFO [1759245622323-All_Of_Me_Score_Sheet]            ScaleStep.java:65   | Scale{ small_interline(19,19,19) interline(22,22,22) line(2,3,3) beam(6)}
+2025-09-30 23:20:28,240 INFO [1759245622323-All_Of_Me_Score_Sheet]       StepMonitoring.java:98   | GRID
+2025-09-30 23:20:29,113 INFO [1759245622323-All_Of_Me_Score_Sheet]       LinesRetriever.java:1500 | Global slope: 0.00000
+2025-09-30 23:20:29,159 INFO [1759245622323-All_Of_Me_Score_Sheet]    ClustersRetriever.java:328  | Retrieved raw line clusters: 0 of sizes [5] with interline(22,22,22)
+2025-09-30 23:20:29,162 INFO [1759245622323-All_Of_Me_Score_Sheet]       LinesRetriever.java:1516 | Searching clusters with smallInterline: 19
+2025-09-30 23:20:29,186 INFO [1759245622323-All_Of_Me_Score_Sheet]    ClustersRetriever.java:328  | Retrieved raw line clusters: 0 of sizes [5] with interline(19,19,19)
+2025-09-30 23:20:29,210 WARN [1759245622323-All_Of_Me_Score_Sheet]            PeakGraph.java:305  | No system found
+2025-09-30 23:20:29,212 INFO [1759245622323-All_Of_Me_Score_Sheet]                 Book.java:545  | Created scores: []
+2025-09-30 23:20:29,212 INFO [1759245622323-All_Of_Me_Score_Sheet]            SheetStub.java:1191 | Sheet 1759245622323-All_Of_Me_Score_Sheet flagged as invalid.
+2025-09-30 23:20:29,213 INFO [1759245622323-All_Of_Me_Score_Sheet]            SheetStub.java:1410 | StepException cause detected in [LOAD, BINARY, SCALE, GRID, HEADERS, STEM_SEEDS, BEAMS, LEDGERS, HEADS, STEMS, REDUCTION, CUE_BEAMS, TEXTS, MEASURES, CHORDS, CURVES, SYMBOLS, LINKS, RHYTHMS, PAGE]
+2025-09-30 23:20:29,214 INFO [1759245622323-All_Of_Me_Score_Sheet]                 Book.java:2550 | Book{1759245622323-All_Of_Me_Score_Sheet} storing
+2025-09-30 23:20:29,270 INFO [1759245622323-All_Of_Me_Score_Sheet]                 Book.java:2531 | Stored /book.xml
+2025-09-30 23:20:29,496 INFO [1759245622323-All_Of_Me_Score_Sheet]           DataHolder.java:348  | Stored /sheet#1/BINARY.png
+2025-09-30 23:20:29,954 INFO [1759245622323-All_Of_Me_Score_Sheet]                Sheet.java:1583 | Stored /sheet#1/sheet#1.xml
+2025-09-30 23:20:29,954 INFO [1759245622323-All_Of_Me_Score_Sheet]                 Book.java:2491 | Book stored as C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1759245622334\1759245622323-All_Of_Me_Score_Sheet.omr
+2025-09-30 23:20:29,960 INFO [1759245622323-All_Of_Me_Score_Sheet]            SheetStub.java:1660 | Disposed sheet
+2025-09-30 23:20:30,015 INFO [1759245622323-All_Of_Me_Score_Sheet]                 Book.java:2018 | End of Stub#1 memory: 19,659,552
+2025-09-30 23:20:30,017 INFO [1759245622323-All_Of_Me_Score_Sheet]                 Book.java:2025 | Book processed.
+2025-09-30 23:20:30,017 INFO [1759245622323-All_Of_Me_Score_Sheet]                 Book.java:599  | Could not export since transcription did not complete successfully

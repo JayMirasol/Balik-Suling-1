@@ -1,0 +1,27 @@
+2025-09-28 19:21:19,018 INFO [1759058476469-scoreSheet-Test]                 Book.java:562  | 1 sheet in C:\Users\Jay Mirasol\Downloads\Balik-Suling-Updated-FreelanceProject-main\Balik-Suling-Updated-FreelanceProject-main\backend\uploads\1759058476469-scoreSheet-Test.png
+2025-09-28 19:21:19,219 INFO []                 Book.java:2531 | Stored /book.xml
+2025-09-28 19:21:19,219 INFO []                 Book.java:2491 | Book stored as C:\Users\Jay Mirasol\Downloads\Balik-Suling-Updated-FreelanceProject-main\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1759058476472\1759058476469-scoreSheet-Test.omr
+2025-09-28 19:21:19,245 INFO []                 Book.java:1933 | Book reaching PAGE on sheets:[#1]
+2025-09-28 19:21:19,247 INFO [1759058476469-scoreSheet-Test]       StepMonitoring.java:98   | LOAD
+2025-09-28 19:21:19,285 INFO [1759058476469-scoreSheet-Test]            SheetStub.java:1273 | Loaded image #1 850x1100 from C:\Users\Jay Mirasol\Downloads\Balik-Suling-Updated-FreelanceProject-main\Balik-Suling-Updated-FreelanceProject-main\backend\uploads\1759058476469-scoreSheet-Test.png
+2025-09-28 19:21:19,291 INFO [1759058476469-scoreSheet-Test]       StepMonitoring.java:98   | BINARY
+2025-09-28 19:21:19,505 INFO [1759058476469-scoreSheet-Test]       StepMonitoring.java:98   | SCALE
+2025-09-28 19:21:19,533 WARN [1759058476469-scoreSheet-Test]            SheetStub.java:412  | 1759058476469-scoreSheet-Test
+
+ With a too low interline value of 7 pixels,
+ either this sheet contains no multi-line staves,
+ or the picture resolution is too low (try 300 DPI).
+
+ This interline value is NOT RELIABLE!
+2025-09-28 19:21:19,534 INFO [1759058476469-scoreSheet-Test]                 Book.java:545  | Created scores: []
+2025-09-28 19:21:19,534 INFO [1759058476469-scoreSheet-Test]            SheetStub.java:1191 | Sheet 1759058476469-scoreSheet-Test flagged as invalid.
+2025-09-28 19:21:19,535 INFO [1759058476469-scoreSheet-Test]            SheetStub.java:1410 | StepException cause detected in [LOAD, BINARY, SCALE, GRID, HEADERS, STEM_SEEDS, BEAMS, LEDGERS, HEADS, STEMS, REDUCTION, CUE_BEAMS, TEXTS, MEASURES, CHORDS, CURVES, SYMBOLS, LINKS, RHYTHMS, PAGE]
+2025-09-28 19:21:19,535 INFO [1759058476469-scoreSheet-Test]                 Book.java:2550 | Book{1759058476469-scoreSheet-Test} storing
+2025-09-28 19:21:19,558 INFO [1759058476469-scoreSheet-Test]                 Book.java:2531 | Stored /book.xml
+2025-09-28 19:21:19,601 INFO [1759058476469-scoreSheet-Test]           DataHolder.java:348  | Stored /sheet#1/BINARY.png
+2025-09-28 19:21:19,990 INFO [1759058476469-scoreSheet-Test]                Sheet.java:1583 | Stored /sheet#1/sheet#1.xml
+2025-09-28 19:21:19,991 INFO [1759058476469-scoreSheet-Test]                 Book.java:2491 | Book stored as C:\Users\Jay Mirasol\Downloads\Balik-Suling-Updated-FreelanceProject-main\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1759058476472\1759058476469-scoreSheet-Test.omr
+2025-09-28 19:21:19,995 INFO [1759058476469-scoreSheet-Test]            SheetStub.java:1660 | Disposed sheet
+2025-09-28 19:21:20,027 INFO [1759058476469-scoreSheet-Test]                 Book.java:2018 | End of Stub#1 memory: 14,396,936
+2025-09-28 19:21:20,028 INFO [1759058476469-scoreSheet-Test]                 Book.java:2025 | Book processed.
+2025-09-28 19:21:20,028 INFO [1759058476469-scoreSheet-Test]                 Book.java:599  | Could not export since transcription did not complete successfully

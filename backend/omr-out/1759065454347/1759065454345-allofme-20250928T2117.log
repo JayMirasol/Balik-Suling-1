@@ -1,0 +1,27 @@
+2025-09-28 21:17:36,767 INFO [1759065454345-allofme]                 Book.java:562  | 1 sheet in C:\Users\Jay Mirasol\Downloads\Balik-Suling-Updated-FreelanceProject-main\Balik-Suling-Updated-FreelanceProject-main\backend\uploads\1759065454345-allofme.png
+2025-09-28 21:17:36,997 INFO []                 Book.java:2531 | Stored /book.xml
+2025-09-28 21:17:36,997 INFO []                 Book.java:2491 | Book stored as C:\Users\Jay Mirasol\Downloads\Balik-Suling-Updated-FreelanceProject-main\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1759065454347\1759065454345-allofme.omr
+2025-09-28 21:17:37,004 INFO []                 Book.java:1933 | Book reaching PAGE on sheets:[#1]
+2025-09-28 21:17:37,006 INFO [1759065454345-allofme]       StepMonitoring.java:98   | LOAD
+2025-09-28 21:17:37,045 INFO [1759065454345-allofme]            SheetStub.java:1273 | Loaded image #1 850x1100 from C:\Users\Jay Mirasol\Downloads\Balik-Suling-Updated-FreelanceProject-main\Balik-Suling-Updated-FreelanceProject-main\backend\uploads\1759065454345-allofme.png
+2025-09-28 21:17:37,054 INFO [1759065454345-allofme]       StepMonitoring.java:98   | BINARY
+2025-09-28 21:17:37,270 INFO [1759065454345-allofme]       StepMonitoring.java:98   | SCALE
+2025-09-28 21:17:37,295 WARN [1759065454345-allofme]            SheetStub.java:412  | 1759065454345-allofme
+
+ With a too low interline value of 7 pixels,
+ either this sheet contains no multi-line staves,
+ or the picture resolution is too low (try 300 DPI).
+
+ This interline value is NOT RELIABLE!
+2025-09-28 21:17:37,297 INFO [1759065454345-allofme]                 Book.java:545  | Created scores: []
+2025-09-28 21:17:37,297 INFO [1759065454345-allofme]            SheetStub.java:1191 | Sheet 1759065454345-allofme flagged as invalid.
+2025-09-28 21:17:37,298 INFO [1759065454345-allofme]            SheetStub.java:1410 | StepException cause detected in [LOAD, BINARY, SCALE, GRID, HEADERS, STEM_SEEDS, BEAMS, LEDGERS, HEADS, STEMS, REDUCTION, CUE_BEAMS, TEXTS, MEASURES, CHORDS, CURVES, SYMBOLS, LINKS, RHYTHMS, PAGE]
+2025-09-28 21:17:37,298 INFO [1759065454345-allofme]                 Book.java:2550 | Book{1759065454345-allofme} storing
+2025-09-28 21:17:37,323 INFO [1759065454345-allofme]                 Book.java:2531 | Stored /book.xml
+2025-09-28 21:17:37,376 INFO [1759065454345-allofme]           DataHolder.java:348  | Stored /sheet#1/BINARY.png
+2025-09-28 21:17:37,682 INFO [1759065454345-allofme]                Sheet.java:1583 | Stored /sheet#1/sheet#1.xml
+2025-09-28 21:17:37,682 INFO [1759065454345-allofme]                 Book.java:2491 | Book stored as C:\Users\Jay Mirasol\Downloads\Balik-Suling-Updated-FreelanceProject-main\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1759065454347\1759065454345-allofme.omr
+2025-09-28 21:17:37,705 INFO [1759065454345-allofme]            SheetStub.java:1660 | Disposed sheet
+2025-09-28 21:17:37,737 INFO [1759065454345-allofme]                 Book.java:2018 | End of Stub#1 memory: 12,345,808
+2025-09-28 21:17:37,739 INFO [1759065454345-allofme]                 Book.java:2025 | Book processed.
+2025-09-28 21:17:37,739 INFO [1759065454345-allofme]                 Book.java:599  | Could not export since transcription did not complete successfully

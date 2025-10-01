@@ -1,0 +1,38 @@
+a {
+    text-decoration: none !important;
+}
+
+.btn-body {
+    height: 75px;
+    width: 80px;
+    border-radius: 20px;
+    color: #000; /* Icon color black */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin: 15px auto;
+    transition: all 0.3s ease;
+    background: rgba(0, 0, 0, 0.05); /* Light subtle background */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.btn-body.active {
+    background: linear-gradient(145deg, #1e2a3e, #f8d9c0);
+    color: #fff; /* Icon color turns white */
+    transform: scale(1.08);
+    box-shadow: 0 6px 15px rgba(244, 187, 146, 0.4);
+}
+
+.btn-body:hover {
+    background: rgba(244, 187, 146, 0.3);
+    transform: scale(1.05);
+}
+
+.btn-title {
+    margin-top: 5px;
+    font-weight: 600;
+    font-size: 13px;
+    text-align: center;
+    color: inherit; /* Inherit color from .btn-body */
+}

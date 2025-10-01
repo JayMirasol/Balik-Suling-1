@@ -1,0 +1,77 @@
+.sidebar-container{
+    width: 100px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #ffffff;
+}
+
+.profile-img{
+    width: 55px;
+    height: 35px;
+    margin-top: 10px;
+}
+/* Modal Styles */
+.logout-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    width: 300px;
+  }
+  
+  .modal-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+  }
+  
+  .modal-buttons button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .modal-buttons button:first-child {
+    background-color: #4CAF50; /* Green */
+    color: white;
+  }
+  
+  .modal-buttons button:last-child {
+    background-color: #f44336; /* Red */
+    color: white;
+  }
+  
+  /* Thank You Message Styles */
+  .thank-you-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    z-index: 1001;
+  }
+  
+  .thank-you-message p {
+    font-size: 18px;
+    color: #333;
+  }
+  

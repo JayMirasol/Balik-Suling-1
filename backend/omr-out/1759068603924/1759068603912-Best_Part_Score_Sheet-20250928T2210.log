@@ -1,0 +1,78 @@
+2025-09-28 22:10:08,443 ERROR [1759068603912-Best_Part_Score_Sheet]              IOUtils.java:278  | Unmapping is not supported.
+java.lang.reflect.InaccessibleObjectException: Unable to make public jdk.internal.ref.Cleaner java.nio.DirectByteBuffer.cleaner() accessible: module java.base does not "opens java.nio" to unnamed module @7c711375
+	at java.base/java.lang.reflect.AccessibleObject.throwInaccessibleObjectException(Unknown Source)
+	at java.base/java.lang.reflect.AccessibleObject.checkCanSetAccessible(Unknown Source)
+	at java.base/java.lang.reflect.AccessibleObject.checkCanSetAccessible(Unknown Source)
+	at java.base/java.lang.reflect.Method.checkCanSetAccessible(Unknown Source)
+	at java.base/java.lang.reflect.Method.setAccessible(Unknown Source)
+	at org.apache.pdfbox.io.IOUtils.unmapper(IOUtils.java:244)
+	at java.base/java.security.AccessController.doPrivileged(Unknown Source)
+	at org.apache.pdfbox.io.IOUtils.<clinit>(IOUtils.java:69)
+	at org.apache.pdfbox.Loader.loadPDF(Loader.java:378)
+	at org.audiveris.omr.image.ImageLoading.getPdfLoader(ImageLoading.java:159)
+	at org.audiveris.omr.image.ImageLoading.getLoader(ImageLoading.java:209)
+	at org.audiveris.omr.sheet.Book.createStubs(Book.java:557)
+	at org.audiveris.omr.CLI$ProcessingTask.processBook(CLI.java:830)
+	at org.audiveris.omr.CLI$CliTask.call(CLI.java:504)
+	at org.audiveris.omr.Main.runBatchTasks(Main.java:371)
+	at org.audiveris.omr.Main.main(Main.java:260)
+	at Audiveris.main(Audiveris.java:50)
+2025-09-28 22:10:08,525 INFO [1759068603912-Best_Part_Score_Sheet]                 Book.java:562  | 1 sheet in C:\Users\Jay Mirasol\Downloads\Balik-Suling-Updated-FreelanceProject-main\Balik-Suling-Updated-FreelanceProject-main\backend\uploads\1759068603912-Best_Part_Score_Sheet.pdf
+2025-09-28 22:10:08,815 INFO []                 Book.java:2531 | Stored /book.xml
+2025-09-28 22:10:08,816 INFO []                 Book.java:2491 | Book stored as C:\Users\Jay Mirasol\Downloads\Balik-Suling-Updated-FreelanceProject-main\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1759068603924\1759068603912-Best_Part_Score_Sheet.omr
+2025-09-28 22:10:08,824 INFO []                 Book.java:1933 | Book reaching PAGE on sheets:[#1]
+2025-09-28 22:10:08,828 INFO [1759068603912-Best_Part_Score_Sheet]       StepMonitoring.java:98   | LOAD
+2025-09-28 22:10:09,351 INFO [1759068603912-Best_Part_Score_Sheet]            SheetStub.java:1273 | Loaded image #1 2550x3299 from C:\Users\Jay Mirasol\Downloads\Balik-Suling-Updated-FreelanceProject-main\Balik-Suling-Updated-FreelanceProject-main\backend\uploads\1759068603912-Best_Part_Score_Sheet.pdf
+2025-09-28 22:10:09,356 INFO [1759068603912-Best_Part_Score_Sheet]       StepMonitoring.java:98   | BINARY
+2025-09-28 22:10:10,381 INFO [1759068603912-Best_Part_Score_Sheet]       StepMonitoring.java:98   | SCALE
+2025-09-28 22:10:10,421 INFO [1759068603912-Best_Part_Score_Sheet]         ScaleBuilder.java:222  | Significant beam peak detected: 4 pixels
+2025-09-28 22:10:10,422 INFO [1759068603912-Best_Part_Score_Sheet]            ScaleStep.java:65   | Scale{ small_interline(13,14,14) interline(16,16,17) line(2,2,3) beam(4)}
+2025-09-28 22:10:10,424 INFO [1759068603912-Best_Part_Score_Sheet]       StepMonitoring.java:98   | GRID
+2025-09-28 22:10:11,256 INFO [1759068603912-Best_Part_Score_Sheet]       LinesRetriever.java:1500 | Global slope: 0.00000
+2025-09-28 22:10:11,350 INFO [1759068603912-Best_Part_Score_Sheet]    ClustersRetriever.java:328  | Retrieved raw line clusters: 0 of sizes [5] with interline(16,16,17)
+2025-09-28 22:10:11,353 INFO [1759068603912-Best_Part_Score_Sheet]       LinesRetriever.java:1516 | Searching clusters with smallInterline: 14
+2025-09-28 22:10:11,381 INFO [1759068603912-Best_Part_Score_Sheet]    ClustersRetriever.java:328  | Retrieved raw line clusters: 2 of sizes [5] with interline(13,14,14)
+2025-09-28 22:10:11,555 INFO [1759068603912-Best_Part_Score_Sheet]            PeakGraph.java:310  | Systems: #1[1, 2]
+2025-09-28 22:10:12,056 INFO [1759068603912-Best_Part_Score_Sheet]        SystemManager.java:779  | 1 part along 1 system
+2025-09-28 22:10:12,057 INFO [1759068603912-Best_Part_Score_Sheet]                 Book.java:545  | Created scores: [{Score 1}]
+2025-09-28 22:10:12,059 INFO [1759068603912-Best_Part_Score_Sheet]       StepMonitoring.java:98   | HEADERS
+2025-09-28 22:10:12,648 INFO [1759068603912-Best_Part_Score_Sheet]      BasicClassifier.java:277  | Classifier loaded XML norms.
+2025-09-28 22:10:12,659 INFO [1759068603912-Best_Part_Score_Sheet]   AbstractClassifier.java:396  | Classifier data loaded from default uri jar:file:/C:/Program%20Files/Audiveris/app/audiveris.jar!/res/basic-classifier.zip
+2025-09-28 22:10:13,695 WARN [1759068603912-Best_Part_Score_Sheet]          ClefBuilder.java:658  | Staff#2 no recognized header clef.
+2025-09-28 22:10:13,818 INFO [1759068603912-Best_Part_Score_Sheet]       StepMonitoring.java:98   | STEM_SEEDS
+2025-09-28 22:10:13,934 INFO [1759068603912-Best_Part_Score_Sheet]        StemSeedsStep.java:86   | stem(5 max:5)
+2025-09-28 22:10:14,061 INFO [1759068603912-Best_Part_Score_Sheet]       StepMonitoring.java:98   | BEAMS
+2025-09-28 22:10:17,486 INFO [1759068603912-Best_Part_Score_Sheet]       StepMonitoring.java:98   | LEDGERS
+2025-09-28 22:10:18,252 INFO [1759068603912-Best_Part_Score_Sheet]       StepMonitoring.java:98   | HEADS
+2025-09-28 22:10:20,774 INFO [1759068603912-Best_Part_Score_Sheet]        HeadSeedTally.java:235  | Scale information: HeadSeeds{NOTEHEAD_BLACK[R:0.2]}
+2025-09-28 22:10:20,776 INFO [1759068603912-Best_Part_Score_Sheet]       StepMonitoring.java:98   | STEMS
+2025-09-28 22:10:25,877 INFO [1759068603912-Best_Part_Score_Sheet]       StepMonitoring.java:98   | REDUCTION
+2025-09-28 22:10:26,120 INFO [1759068603912-Best_Part_Score_Sheet]        ReductionStep.java:105  | Stems free length median value: 52 pixels, 3.3 interlines
+2025-09-28 22:10:26,133 INFO [1759068603912-Best_Part_Score_Sheet]       StepMonitoring.java:98   | CUE_BEAMS
+2025-09-28 22:10:26,133 INFO [1759068603912-Best_Part_Score_Sheet]         CueBeamsStep.java:81   | Step CUE_BEAMS is skipped because small heads switch is off
+2025-09-28 22:10:26,133 INFO [1759068603912-Best_Part_Score_Sheet]       StepMonitoring.java:98   | TEXTS
+2025-09-28 22:10:28,831 INFO [1759068603912-Best_Part_Score_Sheet]       StepMonitoring.java:98   | MEASURES
+2025-09-28 22:10:28,857 INFO [1759068603912-Best_Part_Score_Sheet]                 Page.java:307  | 4 raw measures: [4 in system#1]
+2025-09-28 22:10:28,865 INFO [1759068603912-Best_Part_Score_Sheet]       StepMonitoring.java:98   | CHORDS
+2025-09-28 22:10:28,944 INFO [1759068603912-Best_Part_Score_Sheet]       StepMonitoring.java:98   | CURVES
+2025-09-28 22:10:30,891 INFO [1759068603912-Best_Part_Score_Sheet]         SlursBuilder.java:240  | Slurs: 5
+2025-09-28 22:10:30,941 INFO [1759068603912-Best_Part_Score_Sheet]      SegmentsBuilder.java:155  | Segments: 26
+2025-09-28 22:10:30,988 INFO [1759068603912-Best_Part_Score_Sheet]       StepMonitoring.java:98   | SYMBOLS
+2025-09-28 22:10:32,494 INFO [1759068603912-Best_Part_Score_Sheet]       StepMonitoring.java:98   | LINKS
+2025-09-28 22:10:32,539 INFO [1759068603912-Best_Part_Score_Sheet]       StepMonitoring.java:98   | RHYTHMS
+2025-09-28 22:10:32,614 INFO [1759068603912-Best_Part_Score_Sheet]        MeasureRhythm.java:1045 | Measure{#4} No timeOffset for HeadChordInter#4564{(0.595/0.595) staff:2 slot#2 dur:1/8}
+2025-09-28 22:10:32,618 INFO [1759068603912-Best_Part_Score_Sheet]          StackRhythm.java:224  | S1 MeasureStack#4 no correct rhythm
+2025-09-28 22:10:32,622 INFO [1759068603912-Best_Part_Score_Sheet]       StepMonitoring.java:98   | PAGE
+2025-09-28 22:10:32,625 WARN [1759068603912-Best_Part_Score_Sheet]         MeasureFixer.java:343  | System#1 No target duration for measures local IDs [1, 2, 3, 4], please check time signatures
+2025-09-28 22:10:32,625 INFO [1759068603912-Best_Part_Score_Sheet]                 Book.java:2550 | Book{1759068603912-Best_Part_Score_Sheet} storing
+2025-09-28 22:10:32,717 INFO [1759068603912-Best_Part_Score_Sheet]                 Book.java:2531 | Stored /book.xml
+2025-09-28 22:10:32,910 INFO [1759068603912-Best_Part_Score_Sheet]           DataHolder.java:348  | Stored /sheet#1/BINARY.png
+2025-09-28 22:10:33,870 INFO [1759068603912-Best_Part_Score_Sheet]                Sheet.java:1583 | Stored /sheet#1/sheet#1.xml
+2025-09-28 22:10:33,870 INFO [1759068603912-Best_Part_Score_Sheet]                 Book.java:2491 | Book stored as C:\Users\Jay Mirasol\Downloads\Balik-Suling-Updated-FreelanceProject-main\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1759068603924\1759068603912-Best_Part_Score_Sheet.omr
+2025-09-28 22:10:33,894 INFO [1759068603912-Best_Part_Score_Sheet]            SheetStub.java:1660 | Disposed sheet
+2025-09-28 22:10:33,975 INFO [1759068603912-Best_Part_Score_Sheet]                 Book.java:2018 | End of Stub#1 memory: 39,375,032
+2025-09-28 22:10:33,978 INFO [1759068603912-Best_Part_Score_Sheet]                 Book.java:2025 | Book processed.
+2025-09-28 22:10:34,773 INFO [1759068603912-Best_Part_Score_Sheet]            SheetStub.java:997  | Loaded /sheet#1/sheet#1.xml
+2025-09-28 22:10:35,627 INFO [1759068603912-Best_Part_Score_Sheet]      PartwiseBuilder.java:2661 | Exporting sheet(s): [#1]
+2025-09-28 22:10:35,749 INFO [1759068603912-Best_Part_Score_Sheet]        ScoreExporter.java:164  | Score 1759068603912-Best_Part_Score_Sheet exported to C:\Users\Jay Mirasol\Downloads\Balik-Suling-Updated-FreelanceProject-main\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1759068603924\1759068603912-Best_Part_Score_Sheet.mxl
+2025-09-28 22:10:35,813 INFO [1759068603912-Best_Part_Score_Sheet]                Score.java:181  | Closing {Score 1}
