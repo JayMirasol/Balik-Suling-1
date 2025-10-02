@@ -27,3 +27,17 @@ Balik-Suling-backup.git/
 Balik-Suling-backup-local.git/
 *.pyc
 __pycache__/
+# Python venv
+backend/venv/
+# nested git DBs / backups
+*/.git
+*/.git/
+Balik-Suling-backup.git
+projects/baling-suling/Balik-Suling-backup-local.git
+projects/baling-suling/Balik-Suling-backup.git
+# OS files
+*.exe
+*.dll
+*.pyd
+*.so
+*.pack
