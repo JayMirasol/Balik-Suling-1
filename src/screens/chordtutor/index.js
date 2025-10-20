@@ -36,12 +36,12 @@ export default function Chords() {
                 padding: 12,
                 borderRadius: 8,
                 border: "1px solid #eee",
-                background: "#000"
+                background: "#233656"
               }}>
                 <Link to={`/chords/${song.slug}`} className="song-link" style={{ textDecoration: "none", color: "inherit" }}>
                   <h3 className="song-title" style={{ margin: 0 }}>{song.title}</h3>
                 </Link>
-                <p className="song-chords" style={{ margin: "6px 0 0", color: "#555" }}>{song.chords}</p>
+                <p className="song-chords" style={{ margin: "6px 0 0", color: "#fff" }}>{song.chords}</p>
               </li>
             ))}
           </ul>
@@ -66,7 +66,7 @@ export default function Chords() {
                 />
               </div>
             </div>
-              <Link to="http://localhost:3000/chordtutor" style={{ color: "#0a58ca" }}>← Browse songs to see more</Link>
+              <Link to="http://localhost:3000/chordtutor" style={{ color: "#0056b3" }}>← Browse songs to see more</Link>
 
           </div>
         </div>

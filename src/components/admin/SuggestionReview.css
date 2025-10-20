@@ -1,0 +1,36 @@
+.suggestion-review {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.suggestion-review h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.suggestion-review ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.suggestion-review li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.suggestion-review button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.suggestion-review button:hover {
+  background-color: #f0f0f0;
+}

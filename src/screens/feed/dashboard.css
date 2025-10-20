@@ -1,101 +1,153 @@
-/* Container for the entire dashboard */
+/* Spotify-like dark theme */
+:root {
+  --bg: #121212;
+  --panel: #181818;
+  --panel-hover: #242424;
+  --text: #e5e5e5;
+  --subtext: #b3b3b3;
+  --accent: #1db954; /* Spotify green */
+  --shadow: rgba(0, 0, 0, 0.35);
+}
+
 .dashboard-container {
-    padding: 20px;
-    text-align: center;
-    background-color: #1e2a3e;
-    height: 1000px;
-  }
-  
-  .dashboard-card {
-    background-color: #1e2a3e;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    width: 100%;
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s;
-  }
-  
-  /* Hover effect for cards */
-  .dashboard-card:hover {
-    transform: scale(1.05);
-  }
-  
-  .dashboard-image {
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 20px;
-  }
-  
-  .dashboard-info {
-    margin-top: 20px;
-  }
-  
-  .dashboard-info h3 {
-    font-size: 2em;
-    color: #4F6932; /* Main color */
-    margin-bottom: 10px;
-  }
-  
-  .dashboard-info p {
-    font-size: 1.2em;
-    color: #555;
-    margin-bottom: 20px;
-  }
-  
-  .dashboard-lyrics {
-    font-family: "Courier New", monospace;
-    font-size: 1.1em;
-    color: #333;
-    white-space: pre-wrap; /* Ensures the lyrics preserve line breaks */
-    word-wrap: break-word; /* Prevents long lines from breaking the layout */
-    line-height: 1.6;
-  }
-  
-  /* Styling for the dashboard song cards */
-  .dashboard-song-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 15px;
-  }
-  
-  .dashboard-song-card {
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    width: 180px;
-    text-align: center;
-    padding: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s;
-    cursor: pointer;
-  }
-  
-  .dashboard-song-card:hover {
-    transform: scale(1.05);
-  }
-  
-  .dashboard-song-image {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 10px;
-  }
-  
-  .dashboard-song-title {
-    font-size: 1.2em;
-    color: #4F6932; /* Main color */
-    font-weight: bold;
-  }
-  
-  .dashboard-song-details {
-    font-size: 1em;
-    color: #555;
-  }
+  background: var(--bg);
+  min-height: 100vh;
+  padding: 24px;
+}
+
+/* Header area */
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  color: var(--text);
+}
+.dashboard-header h1 {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+  margin: 0;
+}
+.dashboard-header .subtitle {
+  color: var(--subtext);
+  font-size: 14px;
+}
+
+/* Grid of cards */
+.dashboard-song-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 18px;
+}
+
+.dashboard-song-card {
+  background: var(--panel);
+  border-radius: 8px;
+  padding: 16px;
+  transition: background 150ms ease, transform 150ms ease;
+  box-shadow: 0 8px 18px var(--shadow);
+}
+.dashboard-song-card:hover { background: var(--panel-hover); transform: translateY(-2px); }
+.dashboard-song-card.active { outline: 2px solid var(--accent); }
+
+/* Cover with overlay play button */
+.cover-wrap {
+  position: relative;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.dashboard-song-image {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+}
+.play-overlay {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+  background: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 150ms ease, transform 150ms ease;
+  box-shadow: 0 8px 18px rgba(29, 185, 84, 0.35);
+}
+.dashboard-song-card:hover .play-overlay { opacity: 1; transform: translateY(0); }
+.play-overlay button {
+  all: unset;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.play-icon {
+  width: 0;
+  height: 0;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-left: 14px solid #000;
+  margin-left: 3px;
+}
+.pause-icon {
+  position: relative;
+  width: 14px;
+  height: 14px;
+}
+.pause-icon::before,
+.pause-icon::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 4px;
+  height: 14px;
+  background: #000;
+}
+.pause-icon::before { left: 2px; }
+.pause-icon::after { right: 2px; }
+
+/* Title and meta */
+.dashboard-song-title {
+  color: var(--text);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.2px;
+  margin-bottom: 4px;
+}
+.dashboard-song-details,
+.dashboard-song-views {
+  color: var(--subtext);
+  font-size: 13px;
+}
+
+/* Card link wraps text, image is separate clickable element */
+.dashboard-song-link {
+  text-decoration: none;
+}
+
+/* Embedded player styling area (kept minimal, hidden until used) */
+.dashboard-audio-player {
+  margin-top: 10px;
+}
+
+/* Utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
   

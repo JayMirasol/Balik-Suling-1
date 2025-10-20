@@ -16,7 +16,33 @@ export default function Sidebar() {
     "https://static.vecteezy.com/system/resources/previews/019/879/186/large_2x/user-icon-on-transparent-background-free-png.png"
   );
   const [showLogoutModal, setShowLogoutModal] = useState(false); // Track modal visibility
+  const [language, setLanguage] = useState("English"); // Track selected language
+  const [showLanguageOptions, setShowLanguageOptions] = useState(false); // Track visibility of language options
   const navigate = useNavigate();
+
+  const translations = {
+    English: {
+      Home: "Home",
+      Tutorials: "Tutorials",
+      ChordScanner: "Chord Scanner",
+      Translate: "Translate",
+      SavedOffline: "Saved Offline",
+    },
+    Tagalog: {
+      Home: "Bahay",
+      Tutorials: "Pagsasanay",
+      ChordScanner: "Bagting Iskaner",
+      Translate: "Isalin",
+      SavedOffline: "Naka-offline",
+    },
+    Kapampangan: {
+      Home: "Bale",
+      Tutorials: "Paningwas",
+      ChordScanner: "Malino",
+      Translate: "Asyu",
+      SavedOffline: "Ali konektadu",
+    },
+  };
 
   useEffect(() => {
     apiClient.get("me").then((response) => {
@@ -43,22 +69,36 @@ export default function Sidebar() {
     setShowLogoutModal(false); // Close the modal without logging out
   };
 
+  const handleLanguageChange = (lang) => {
+    setLanguage(lang);
+    setShowLanguageOptions(false); // Hide options after selection
+  };
+
+  const toggleLanguageOptions = () => {
+    setShowLanguageOptions(!showLanguageOptions);
+  };
+
   return (
     <div className="sidebar-container">
       <img src={image} className="profile-img" alt="profile" />
       <div>
-        <SidebarButton title="Home" to="/feed" icon={<MdSpaceDashboard />} />
-        <SidebarButton title="Tutorials" to="/chordtutor" icon={<FaGuitar />} />
-        {/* <SidebarButton title="Player" to="/player" icon={<FaPlay />} /> */}
-        <SidebarButton title="Chord Scanner" to="/chordscanner" icon={<FaMusic />} />
-        {/* <SidebarButton title="Library" to="/library" icon={<IoLibrary />} /> */}
+        <SidebarButton title={translations[language].Home} to="/feed" icon={<MdSpaceDashboard />} />
+        <SidebarButton title={translations[language].Tutorials} to="/chordtutor" icon={<FaGuitar />} />
+        <SidebarButton title={translations[language].ChordScanner} to="/chordscanner" icon={<FaMusic />} />
+        <SidebarButton title={translations[language].Translate} to="/translate" icon={<MdTranslate />} />
+        <SidebarButton title={translations[language].SavedOffline} to="/offline" icon={<MdOfflineShare />} />
+      </div>
 
-        <SidebarButton title="Scan Score" to="/scan-score" icon={<MdScore />} />
-        {/* <SidebarButton title="Beginner Chords" to="/beginner-chords" icon={<MdStart/>} /> */}
-        <SidebarButton title="Translate" to="/translate" icon={<MdTranslate />} />
-        {/* <SidebarButton title="Tutorials" to="/tutorials" icon={<FaGuitar />} /> */}
-        <SidebarButton title="Saved Offline" to="/offline" icon={<MdOfflineShare />} />
-
+      {/* Language Mode Button */}
+      <div className="sidebar-button" onClick={toggleLanguageOptions}>
+        <SidebarButton title="Mode" icon={<FaChevronDown />} />
+        {showLanguageOptions && (
+          <div className="language-options">
+            <button onClick={() => handleLanguageChange("English")}>English</button>
+            <button onClick={() => handleLanguageChange("Tagalog")}>Tagalog</button>
+            <button onClick={() => handleLanguageChange("Kapampangan")}>Kapampangan</button>
+          </div>
+        )}
       </div>
 
       {/* Log Out Button */}

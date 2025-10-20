@@ -2,7 +2,7 @@
 import React, { useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
 import "./songDetail.css"; // ensure this path/name matches your project
-import { saveOffline } from "../shared/offlineStore"; // optional, keep if available
+import { saveOffline } from "../shared/offlineStore";
 
 /**
  * Song details page (robust to route param name).
@@ -255,27 +255,20 @@ export default function SongDetail() {
 
   const handleSaveOffline = async () => {
     if (!song) return;
+
     try {
-      if (typeof saveOffline === "function") {
-        await saveOffline({
-          id: `song-${key}`,
-          type: "song",
-          data: song,
-        });
-        alert("Saved for offline use.");
-        return;
-      }
-    } catch (e) {
-      console.error("saveOffline failed", e);
+      await saveOffline({
+        id: song.slug || song.title,
+        title: song.title,
+        artist: song.songwriter || "Unknown Artist",
+        chords: song.lyrics, // Assuming chords are part of the lyrics
+        video: song.video || "",
+      });
+      alert(`${song.title} has been saved offline.`);
+    } catch (error) {
+      console.error("Failed to save song offline:", error);
+      alert("Failed to save song offline. Please try again.");
     }
-    const blob = new Blob([contentText], { type: "text/plain;charset=utf-8" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = `${key || "song"}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(a.href);
   };
 
   if (!song) {

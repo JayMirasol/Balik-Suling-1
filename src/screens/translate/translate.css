@@ -1,0 +1,181 @@
+.translate-screen {
+  position: relative;
+}
+
+.translate-screen h2 {
+  margin-top: 0;
+}
+
+/* New top bar for language selectors and swap */
+.translate-topbar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: end;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.topbar-side { display: flex; gap: 8px; }
+.swap-btn {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  background: #fafafa;
+  cursor: pointer;
+}
+.swap-btn:hover { background: #f0f0f0; }
+.translate-allowed { color: #888; font-size: 12px; margin-bottom: 10px; }
+
+/* Two main columns */
+.translate-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media (max-width: 900px) {
+  .translate-columns { grid-template-columns: 1fr; }
+}
+
+.translate-panel {
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 10px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  padding: 16px;
+  overflow: hidden; /* keep inner borders from bleeding over rounded corners */
+}
+
+.translate-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.translate-panel__title {
+  margin: 0;
+  font-size: 16px;
+  color: #000;
+}
+
+.translate-panel__actions {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.char-count { color: #666; font-size: 12px; }
+.auto-toggle { color: #444; font-size: 12px; display: inline-flex; gap: 6px; align-items: center; }
+.loading-dot { color: #666; }
+
+.translate-form__group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.translate-label {
+  font-size: 12px;
+  color: #fff;
+}
+
+.translate-select,
+.translate-textarea {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  background: #fff;
+  direction: ltr;
+  unicode-bidi: isolate;
+  text-align: left;
+  box-sizing: border-box; /* prevent overflow due to borders/padding */
+}
+
+/* Textarea tweaks to avoid visual overlap and ensure good UX */
+.translate-textarea {
+  display: block;
+  max-width: 100%;
+  resize: vertical;
+}
+
+.translate-hint {
+  color: #666;
+  font-size: 12px;
+}
+
+.btn {
+  appearance: none;
+  border: 1px solid #d0d0d0;
+  border-radius: 8px;
+  padding: 8px 12px;
+  background: #f7f7f7;
+  cursor: pointer;
+}
+
+.btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: #0d6efd;
+  border-color: #0d6efd;
+  color: #fff;
+}
+
+.btn-secondary {
+  background: #f1f1f1;
+}
+
+.translate-status {
+  color: #666;
+  min-height: 20px;
+}
+
+.translate-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+  position: relative;
+}
+
+.wordy {
+  line-height: 1.6;
+  word-break: break-word;
+  direction: ltr;
+  unicode-bidi: isolate;
+  color: #000;
+}
+
+.wordy__token {
+  border-bottom: 1px dotted #bbb;
+  cursor: help;
+}
+
+.translate-tooltip {
+  position: absolute;
+  z-index: 1000;
+}
+
+.translate-tooltip__inner {
+  background: #111;
+  color: #fff;
+  padding: 8px 10px;
+  border-radius: 6px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  max-width: 360px;
+}
+
+.translate-tooltip__title {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.translate-tooltip__line {
+  opacity: 0.95;
+}
+
+.translate-error {
+  color: crimson;
+}

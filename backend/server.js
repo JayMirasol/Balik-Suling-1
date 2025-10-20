@@ -24,6 +24,7 @@ const { Chord, Note } = require("@tonaljs/tonal");
 const AdmZip = require("adm-zip");
 const mm = require("music-metadata");
 const franc = require("franc");
+const { smartTranslateTokens, fetchTagalogLangEntry } = require("./dict-helpers");
 
 const app = express();
 
@@ -418,6 +419,349 @@ function escapeXml(s) {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;");
 }
+const TRANSLATION_PROVIDER = process.env.TRANSLATION_PROVIDER || "mock";
+
+// ============================================================================
+// 3) TRANSLATION - KAPAMPANGAN TO TAGALOG & ENGLISH 
+// ============================================================================
+
+// --- Translation endpoint --------------------------------------------------
+// ---------- Translation helpers (paste here) ----------
+const axios = require("axios");
+
+// Config / provider list
+const KNOWN_PROVIDER_ENDPOINTS = [
+  process.env.LIBRE_URL || "http://127.0.0.1:5000/translate",
+  "https://translate.argosopentech.com/translate",
+  // add other providers here if you want
+];
+
+// small in-memory cache
+let _providerLangsCache = { ts: 0, langs: null, provider: null, ttl: 60_000 }; // cache 60s
+
+function mapFrontendToProvider(lang) {
+  if (!lang) return lang;
+  if (lang === "fil") return "tl"; // map Filipino frontend tag to provider tagalog code
+  return lang;
+}
+
+async function fetchProviderLanguages(url) {
+  // cached per URL for small ttl
+  const now = Date.now();
+  if (_providerLangsCache.provider === url && _providerLangsCache.langs && (now - _providerLangsCache.ts) < _providerLangsCache.ttl) {
+    return _providerLangsCache.langs;
+  }
+
+  try {
+    // Most Libre-compatible servers expose GET /languages
+    const infoUrl = url.replace(/\/translate\/?$/i, "/languages");
+    const resp = await axios.get(infoUrl, { timeout: 8000, validateStatus: null });
+    if (resp.status >= 200 && resp.status < 300 && Array.isArray(resp.data)) {
+      const codes = resp.data.map((x) => (typeof x === "string" ? x : x.code)).filter(Boolean);
+      _providerLangsCache = { ts: now, langs: codes, provider: url, ttl: 60_000 };
+      return codes;
+    }
+  } catch (e) {
+    // ignore and return null
+  }
+  return null;
+}
+
+async function providerSupports(url, lang) {
+  const mapped = mapFrontendToProvider(lang);
+  if (!mapped) return false;
+  const langs = await fetchProviderLanguages(url);
+  if (!langs) return false;
+  // some providers list codes like "en","de","tl", etc.
+  return langs.includes(mapped);
+}
+
+// low-level single-provider call (normalizes response and rejects HTML)
+async function callProviderOnce(url, payload) {
+  const resp = await axios.post(url, payload, { timeout: 15000, validateStatus: null, headers: { "Content-Type": "application/json" } });
+  const contentType = (resp.headers && resp.headers["content-type"]) || "";
+  if (resp.status < 200 || resp.status >= 300) throw new Error(`status ${resp.status}`);
+  if (typeof resp.data === "string" && (contentType.includes("text/html") || /^<!doctype/i.test(resp.data) || resp.data.trim().startsWith("<"))) {
+    throw new Error("provider returned HTML");
+  }
+  const body = resp.data;
+  if (typeof body === "object") {
+    if (body.translatedText) return String(body.translatedText);
+    if (body.translated) return String(body.translated);
+    if (body.result) return String(body.result);
+    if (body.output) return String(body.output);
+    return String(JSON.stringify(body));
+  }
+  return String(body);
+}
+
+// Try providers (in order) for a single pair
+async function translateViaProviders(text, source, target) {
+  const payloadBase = { q: text, source: mapFrontendToProvider(source) || "auto", target: mapFrontendToProvider(target), format: "text" };
+
+  const tried = [];
+  for (const url of KNOWN_PROVIDER_ENDPOINTS) {
+    if (!url) continue;
+    tried.push(url);
+    try {
+      // Before calling, check whether provider advertises the target/source languages (best-effort)
+      const srcOk = await providerSupports(url, source);
+      const tgtOk = await providerSupports(url, target);
+      // If the provider doesn't advertise either src or tgt, still try (some hosts don't expose /languages)
+      // but we prefer providers that claim to support them.
+      const payload = { ...payloadBase };
+      const out = await callProviderOnce(url, payload);
+      return { translated: out, provider: url };
+    } catch (err) {
+      // try next provider
+    }
+  }
+  throw new Error(`All providers failed (${tried.join(",")})`);
+}
+
+// Simple Kapampangan (pam) translator via dictionary (best-effort).
+// Loads backend/pam-dict.json if present and does phrase-first replace then word-by-word fallback.
+let _pamDict = null;
+function loadPamDictOnce() {
+  if (_pamDict !== null) return _pamDict;
+  try {
+    const p = path.join(__dirname, "pam-dict.json");
+    if (fs.existsSync(p)) {
+      const raw = fs.readFileSync(p, "utf8");
+      const j = JSON.parse(raw);
+      // Normalize keys -> lower-case
+      const norm = {};
+      Object.entries(j).forEach(([k, v]) => { norm[String(k).toLowerCase()] = String(v); });
+      _pamDict = norm;
+    } else {
+      _pamDict = {};
+    }
+  } catch (e) {
+    _pamDict = {};
+  }
+  return _pamDict;
+}
+
+function translatePamWithDict(text, source, target) {
+  // If neither source nor target is pam, nothing to do
+  const srcIsPam = source === "pam";
+  const tgtIsPam = target === "pam";
+  if (!srcIsPam && !tgtIsPam) return null;
+
+  const dict = loadPamDictOnce();
+  if (!Object.keys(dict).length) return null; // no dict available
+
+  // Lowercase text for matching
+  const t = String(text || "").toLowerCase().trim();
+  // Exact phrase match first
+  if (dict[t]) {
+    if (tgtIsPam) return dict[t];           // english -> pam (dict maps en->pam or phrase)
+    if (srcIsPam) return dict[t] || null;   // pam -> english (if dict contains reverse mapping you should add them)
+  }
+
+  // Word-by-word fallback
+  const words = t.split(/\s+/);
+  const mapped = words.map(w => dict[w] || w);
+  const out = mapped.join(" ");
+  return out || null;
+}
+
+// High-level translation that handles direct, pivot via English, and pam-dict fallback
+async function translateSmart(text, source, target) {
+  // quick no-op
+  if (!text || !String(text).trim()) return "";
+
+  // If either lang is pam, try local dict first (both directions)
+  if (source === "pam" || target === "pam") {
+    // Try token-level smart translation using local dict and tagaloglang fallback
+    try {
+      const tokenOut = await smartTranslateTokens(text, source, target);
+      if (tokenOut && tokenOut !== text) {
+        return { translated: tokenOut, provider: "pam-dict+tagaloglang", mode: "token" };
+      }
+    } catch {}
+    const dictOut = translatePamWithDict(text, source, target);
+    if (dictOut) return { translated: dictOut, provider: "pam-dict", mode: "phrase" };
+    // else continue to try providers / pivot but most providers won't support pam
+  }
+
+  // Try direct via providers
+  try {
+    const direct = await translateViaProviders(text, source, target);
+    return { translated: direct.translated, provider: direct.provider, mode: "direct" };
+  } catch (errDirect) {
+    // If direct failed, try pivoting via English (en)
+    const pivot = "en";
+    try {
+      // if source already en or target already en, pivot is meaningless
+      if (source === pivot || target === pivot) throw errDirect;
+
+      // first source -> en
+      const first = await translateViaProviders(text, source, pivot);
+      // then en -> target
+      const second = await translateViaProviders(first.translated, pivot, target);
+      return { translated: second.translated, provider: second.provider, mode: "pivot", pivotedText: first.translated };
+    } catch (errPivot) {
+      // all failed -> bubble up original or pivot errors
+      throw new Error(`Direct and pivot translation failed: ${errDirect.message}; ${errPivot.message}`);
+    }
+  }
+}
+// --- /translate route (uses translateSmart) ---
+app.post("/translate", async (req, res) => {
+  try {
+    const { text, target, targets, source } = req.body || {};
+    if (!text || !String(text).trim()) {
+      return res.status(400).json({ ok: false, error: "Empty text" });
+    }
+
+    const targetList = Array.isArray(targets) ? targets : (target ? [target] : []);
+    if (!targetList.length) {
+      return res.status(400).json({ ok: false, error: "No target language(s) specified" });
+    }
+
+    const doSingle = async (t) => {
+      try {
+        const out = await translateSmart(text, source || "auto", t);
+        if (typeof out === "string") return { target: t, translated: out, provider: null };
+        return { target: t, translated: out.translated || "", provider: out.provider || null, mode: out.mode || null };
+      } catch (err) {
+        return { target: t, translated: mockTranslate(text, source || "auto", t), _warn: String(err.message) };
+      }
+    };
+
+    const jobs = targetList.map((t) => doSingle(t));
+    const results = await Promise.all(jobs);
+
+    if (results.length === 1) {
+      return res.json({
+        ok: true,
+        translated: results[0].translated,
+        target: results[0].target,
+        _meta: { provider: results[0].provider || "mock", mode: results[0].mode || null }
+      });
+    }
+
+    const translations = {};
+    results.forEach((r) => (translations[r.target] = r.translated));
+    return res.json({ ok: true, translations, _meta: { provider: results.map(r => r.provider).filter(Boolean) } });
+  } catch (err) {
+    console.error("TRANSLATE ERROR", err);
+    return res.status(500).json({ ok: false, error: String(err) });
+  }
+});
+// Quick dictionary lookup endpoint to show definitions in UI and pre-fill cache
+// GET /dict/lookup?term=word
+app.get("/dict/lookup", async (req, res) => {
+  try {
+    const term = String(req.query.term || "").trim();
+    if (!term) return res.status(400).json({ ok: false, error: "Empty term" });
+    const entry = await fetchTagalogLangEntry(term);
+    if (!entry) return res.json({ ok: true, entry: null });
+    res.json({ ok: true, entry });
+  } catch (e) {
+    res.status(500).json({ ok: false, error: String(e.message || e) });
+  }
+});
+// ----------------- end TRANSLATION block -----------------
+// ---------- end translation helpers ----------
+
+// --- Views -------------------------------------------------------------------
+const VIEWS_FILE = path.join(__dirname, "views.json");
+
+// Ensure views file exists
+if (!fs.existsSync(VIEWS_FILE)) {
+  fs.writeFileSync(VIEWS_FILE, JSON.stringify({}));
+}
+
+function readViews() {
+  try {
+    const data = fs.readFileSync(VIEWS_FILE, "utf8");
+    return JSON.parse(data);
+  } catch (e) {
+    return {};
+  }
+}
+
+function writeViews(views) {
+  fs.writeFileSync(VIEWS_FILE, JSON.stringify(views, null, 2));
+}
+
+// Simple in-memory IP recent map to help dedupe short-term (not persistent)
+const ipRecent = new Map(); // ip -> { key -> ts }
+const IP_DEDUPE_WINDOW_MS = Number(process.env.IP_DEDUPE_WINDOW_MS || 60 * 60 * 1000); // 1h by default
+
+function cleanupIpRecent() {
+  const now = Date.now();
+  for (const [ip, map] of ipRecent.entries()) {
+    for (const [key, ts] of Object.entries(map)) {
+      if (now - ts > IP_DEDUPE_WINDOW_MS) delete map[key];
+    }
+    if (!Object.keys(map).length) ipRecent.delete(ip);
+  }
+}
+
+// Periodic cleanup
+setInterval(cleanupIpRecent, 10 * 60 * 1000);
+
+// GET all views (returns mapping title->count, and also key->count for completeness)
+app.get("/api/views", (req, res) => {
+  try {
+    const data = fs.existsSync(VIEWS_FILE) ? fs.readFileSync(VIEWS_FILE, "utf8") : "{}";
+    const views = JSON.parse(data || "{}");
+    // Return the raw mapping: { "Atin Cu Pung Singsing": 5, "/chords/..": 2, ... }
+    res.json(views);
+  } catch (error) {
+    console.error("Error reading views:", error);
+    res.status(500).json({ error: "Failed to fetch views." });
+  }
+});
+
+
+// POST increment
+// Expect body: { key: "/chords/...", title: "Human Title" }
+// --- API: POST /api/views/increment ----------------------------------------
+app.post("/api/views/increment", (req, res) => {
+  try {
+    // Expect body: { title: "Atin Cu Pung Singsing", key: "/chords/..." }
+    const { title, key } = req.body || {};
+    const storageKey = title || key;
+    if (!storageKey) {
+      console.error("No title or key provided in increment request");
+      return res.status(400).json({ ok: false, error: "title or key is required." });
+    }
+
+    // Read current views (fresh)
+    let views = {};
+    try {
+      const raw = fs.readFileSync(VIEWS_FILE, "utf8");
+      views = JSON.parse(raw || "{}");
+    } catch (err) {
+      // If parse/read fails, start with empty object (and log)
+      console.warn("Could not read views.json cleanly, starting fresh:", err && err.message);
+      views = {};
+    }
+
+    // Ensure integer and increment
+    const prev = Number(views[storageKey] || 0);
+    const next = prev + 1;
+    views[storageKey] = next;
+
+    // Write atomically: write to tmp then rename
+    const tmpPath = VIEWS_FILE + ".tmp";
+    fs.writeFileSync(tmpPath, JSON.stringify(views, null, 2), "utf8");
+    fs.renameSync(tmpPath, VIEWS_FILE);
+
+    console.log(`Incremented views for "${storageKey}" -> ${next}`);
+
+    // Return the authoritative value
+    return res.json({ ok: true, title: storageKey, views: next });
+  } catch (error) {
+    console.error("Error updating views:", error);
+    return res.status(500).json({ ok: false, error: "Failed to update views." });
+  }
+});
+
 
 // --- Bind -------------------------------------------------------------------
 const PORT = Number(process.env.PORT || 8001);

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Sidebar from "../../components/sidebar";
 import { setClientToken } from "../../spotify";
 import Login from "../auth/login";
@@ -16,6 +16,9 @@ import Translate from "../translate";
 import Tutorials from "../tutorials";
 import Offline from "../offline";
 import "./home.css";
+import { PlayerProvider } from "../../components/footerPlayer/PlayerContext";
+import { usePlayer } from "../../components/footerPlayer/PlayerContext";
+import FooterPlayer from "../../components/footerPlayer/FooterPlayer";
 
 export default function Home() {
   const [token, setToken] = useState("");
@@ -59,9 +62,10 @@ export default function Home() {
         </Routes>
       ) : (
         // Logged in: default to /feed and block /login
-        <div className="main-body">
-          <Sidebar />
-          <Routes>
+        <PlayerProvider>
+          <div className="main-body" style={{ paddingBottom: 72 }}>
+            <Sidebar />
+            <Routes>
             <Route path="/" element={<Navigate to="/feed" replace />} />
             <Route path="/login" element={<Navigate to="/feed" replace />} />
             <Route path="/library" element={<Library />} />
@@ -77,9 +81,35 @@ export default function Home() {
             <Route path="/tutorials" element={<Tutorials />} />
             <Route path="/offline" element={<Offline />} />
             <Route path="*" element={<Navigate to="/feed" replace />} />
-          </Routes>
-        </div>
+            </Routes>
+          </div>
+          <AutoHideFooterPlayer />
+        </PlayerProvider>
       )}
     </Router>
   );
+}
+
+// A small helper component that hides the footer player on non-audio pages
+function AutoHideFooterPlayer() {
+  const location = useLocation();
+  const { clearPlayer } = usePlayer();
+
+  useEffect(() => {
+    // List pages where the player should be hidden
+    const hideOn = [
+      "/chordtutor",
+      "/chordscanner",
+      "/scan-score",
+      "/translate",
+      "/beginner-chords",
+      "/offline",
+    ];
+    const shouldHide = hideOn.some((p) => location.pathname.startsWith(p));
+    if (shouldHide) {
+      clearPlayer();
+    }
+  }, [location, clearPlayer]);
+
+  return <FooterPlayer />;
 }
