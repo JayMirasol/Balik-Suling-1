@@ -1,7 +1,7 @@
 .login-page {
   background: 
   linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.8) 60%, rgba(0, 0, 0, 1) 100%),
-    url('/public//bg-image.jpg') no-repeat center center/cover;
+    url('/public//bg-music.jpg') no-repeat center center/cover;
   height: 100vh;
   width: 100vw;
   display: flex;

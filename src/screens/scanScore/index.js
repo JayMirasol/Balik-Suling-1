@@ -1,6 +1,8 @@
 // src/screens/scanScore/index.js
 import React, { useEffect, useMemo, useState, useCallback } from "react";
 import axios from "axios";
+// Use ESM build to avoid CJS subpath resolution issues in some bundlers
+import { PDFDocument, StandardFonts, rgb } from "pdf-lib/dist/pdf-lib.esm.js";
 
 export default function ScanScore() {
   const [file, setFile] = useState(null);
@@ -112,6 +114,9 @@ export default function ScanScore() {
     }
   };
 
+  // PDF export ---------------------------------------------------------------
+  // defined later after chords/progression declarations
+
   // Chords utilities ----------------------------------------------------------
   const chords = Array.isArray(result?.chords) ? result.chords : [];
 
@@ -136,6 +141,105 @@ export default function ScanScore() {
   };
 
   const chordGrid = chunk(chords, 4); // 4 measures per row
+
+  // PDF export ---------------------------------------------------------------
+  const onDownloadPdf = useCallback(async () => {
+    try {
+      if (!result?.ok) {
+        alert("No successful scan to export.");
+        return;
+      }
+
+      const pdfDoc = await PDFDocument.create();
+
+      // 1) Include the original score sheet
+      if (file) {
+        if (isPdf(file)) {
+          const srcBytes = await file.arrayBuffer();
+          const srcDoc = await PDFDocument.load(srcBytes);
+          const pageIndices = srcDoc.getPageIndices();
+          const copiedPages = await pdfDoc.copyPages(srcDoc, pageIndices);
+          copiedPages.forEach((p) => pdfDoc.addPage(p));
+        } else if (isImage(file)) {
+          const imgBytes = await file.arrayBuffer();
+          const page = pdfDoc.addPage([595, 842]); // A4 portrait in points
+          const margin = 36;
+          const maxW = 595 - margin * 2;
+          const maxH = 842 - margin * 2;
+          let embedded;
+          const lower = (file.type || "").toLowerCase();
+          if (lower.includes("png")) embedded = await pdfDoc.embedPng(imgBytes);
+          else embedded = await pdfDoc.embedJpg(imgBytes);
+          const { width: iw, height: ih } = embedded.size();
+          const scale = Math.min(maxW / iw, maxH / ih);
+          const w = iw * scale;
+          const h = ih * scale;
+          const x = (595 - w) / 2;
+          const y = (842 - h) / 2;
+          page.drawImage(embedded, { x, y, width: w, height: h });
+        }
+      }
+
+      // 2) Append a section for chords + progression
+      const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+      const pageSize = { w: 595, h: 842 };
+      let page = pdfDoc.addPage([pageSize.w, pageSize.h]);
+      const margin = 36;
+      let y = pageSize.h - margin;
+      const lh = 14;
+      const drawText = (text, size = 12, color = rgb(0, 0, 0)) => {
+        if (y < margin + lh) {
+          page = pdfDoc.addPage([pageSize.w, pageSize.h]);
+          y = pageSize.h - margin;
+        }
+        page.drawText(text, { x: margin, y, size, font, color });
+        y -= lh + (size > 12 ? 4 : 0);
+      };
+
+      drawText("Converted Guitar Chords", 16);
+
+      // Progression
+      const tokens = (progression || "").split(" | ").filter(Boolean);
+      if (tokens.length) {
+        drawText("Progression:", 13, rgb(0.16, 0.66, 0.36));
+        const perLine = 8;
+        for (let i = 0; i < tokens.length; i += perLine) {
+          const line = tokens.slice(i, i + perLine).join(" | ");
+          drawText(line);
+        }
+      } else {
+        drawText("Progression: —", 13, rgb(0.16, 0.66, 0.36));
+      }
+
+      // Chords by measure
+      if (chords.length) {
+        y -= 6;
+        drawText("Chords by measure:", 13, rgb(0.16, 0.66, 0.36));
+        chords.forEach((m) => {
+          const mNo = String(m.measure).padStart(2, "0");
+          drawText(`m${mNo}: ${m.chord || "—"}`);
+          if (Array.isArray(m.notes) && m.notes.length) {
+            drawText(`  notes: [${m.notes.join(", ")}]`, 11, rgb(0.33, 0.33, 0.33));
+          }
+        });
+      }
+
+      const pdfBytes = await pdfDoc.save();
+      const blob = new Blob([pdfBytes], { type: "application/pdf" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      const baseName = (result?.summary?.filename || file?.name || "scan").replace(/\.[^.]+$/, "");
+      a.href = url;
+      a.download = `${baseName}-score-and-chords.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
+    } catch (err) {
+      console.error("PDF export failed", err);
+      alert("Failed to create PDF. Please try again.");
+    }
+  }, [result, file, chords, progression]);
 
   // Styles (inline) -----------------------------------------------------------
   const styles = {
@@ -284,13 +388,13 @@ export default function ScanScore() {
         <div>
           <h2 style={styles.title}>Scan Score → Guitar Chords</h2>
           <div style={styles.subtitle}>
-            Upload a printed score (PNG/JPG/TIFF/PDF). We’ll run OMR and display measure-by-measure chords.
+            Upload a printed score (PDF). We’ll run OMR and display measure-by-measure chords.
           </div>
         </div>
         <div style={styles.row}>
-          <button type="button" style={styles.buttonGhost} onClick={onPing}>
+          {/* <button type="button" style={styles.buttonGhost} onClick={onPing}>
             Test API
-          </button>
+          </button> */}
           <button
             type="button"
             style={{ ...styles.buttonGhost }}
@@ -383,19 +487,12 @@ export default function ScanScore() {
                 <span style={styles.label}>Size:</span> {formatBytes(result.summary?.bytes)}
               </div>
 
-              {/* MusicXML link */}
-              {result.musicxmlUrl && (
-                <div style={{ marginTop: 8 }}>
-                  <a
-                    href={buildUrl(result.musicxmlUrl)}
-                    target="_blank"
-                    rel="noreferrer"
-                    style={styles.link}
-                  >
-                    Download MusicXML
-                  </a>
-                </div>
-              )}
+              {/* PDF export */}
+              <div style={{ marginTop: 8 }}>
+                <button type="button" style={styles.button} onClick={onDownloadPdf}>
+                  Download PDF
+                </button>
+              </div>
 
               {/* Chords */}
               {chords.length ? (

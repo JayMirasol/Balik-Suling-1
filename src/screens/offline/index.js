@@ -11,6 +11,22 @@ export default function Offline() {
   const [progress, setProgress] = useState(0);
   const audioRef = useRef(null);
 
+  // Toast notification state
+  const [toastMsg, setToastMsg] = useState("");
+  const [toastType, setToastType] = useState("success"); // success | info | error
+  const showToast = (msg, type = "success", timeout = 2500) => {
+    setToastType(type);
+    setToastMsg(msg);
+    if (timeout) {
+      setTimeout(() => setToastMsg(""), timeout);
+    }
+  };
+
+  // Confirm delete modal state
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [pendingId, setPendingId] = useState(null);
+  const [pendingTitle, setPendingTitle] = useState("");
+
   useEffect(() => {
     getAllOffline().then((savedItems) => {
       const validItems = savedItems.filter((item) => item.title && item.artist);
@@ -75,11 +91,32 @@ export default function Offline() {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this song?")) {
-      await removeOffline(id);
-      setItems(items.filter((x) => x.id !== id));
+  const requestDelete = (id) => {
+    const it = items.find((x) => x.id === id);
+    setPendingId(id);
+    setPendingTitle(it?.title || "this song");
+    setConfirmOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!pendingId) return;
+    try {
+      await removeOffline(pendingId);
+      setItems((prev) => prev.filter((x) => x.id !== pendingId));
+      setConfirmOpen(false);
+      setPendingId(null);
+      showToast("Removed from Offline.", "success");
+    } catch (e) {
+      console.error("Failed to delete offline item", e);
+      setConfirmOpen(false);
+      showToast("Failed to delete. Please try again.", "error", 3200);
     }
+  };
+
+  const cancelDelete = () => {
+    setConfirmOpen(false);
+    setPendingId(null);
+    showToast("Delete cancelled.", "info", 1800);
   };
 
   return (
@@ -116,7 +153,7 @@ export default function Offline() {
               <button className="offline" onClick={() => playTrack(index)}>Play</button>
               <button
                 className="offline"
-                onClick={() => handleDelete(it.id)}
+                onClick={() => requestDelete(it.id)}
               >
                 Delete
               </button>
@@ -124,6 +161,107 @@ export default function Offline() {
           </div>
         ))}
       </div>
+      {/* Toast notification */}
+      {toastMsg && (
+        <div
+          aria-live="polite"
+          style={{
+            position: "fixed",
+            right: 24,
+            bottom: 24,
+            background:
+              toastType === "success" ? "#2a6" : toastType === "info" ? "#0a58ca" : "#cc0000",
+            color: "#fff",
+            padding: "12px 14px",
+            borderRadius: 10,
+            boxShadow: "0 6px 18px rgba(0,0,0,0.25)",
+            zIndex: 1000,
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+            minWidth: 240,
+          }}
+        >
+          <span>{toastMsg}</span>
+          <button
+            onClick={() => setToastMsg("")}
+            style={{
+              marginLeft: "auto",
+              background: "transparent",
+              border: 0,
+              color: "#fff",
+              cursor: "pointer",
+              fontSize: 16,
+              lineHeight: 1,
+            }}
+            aria-label="Dismiss notification"
+            title="Dismiss"
+          >
+            ×
+          </button>
+        </div>
+      )}
+      {/* Confirm delete modal */}
+      {confirmOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="confirm-title"
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0,0,0,0.45)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 1200,
+          }}
+        >
+          <div
+            style={{
+              background: "#fff",
+              color: "#111",
+              borderRadius: 12,
+              padding: 20,
+              width: "min(92vw, 420px)",
+              boxShadow: "0 10px 28px rgba(0,0,0,0.3)",
+            }}
+          >
+            <h3 id="confirm-title" style={{ marginTop: 0, marginBottom: 8 }}>
+              Are you sure you want to delete this song?
+            </h3>
+            <div style={{ opacity: 0.7, marginBottom: 14 }}>{pendingTitle}</div>
+            <div style={{ display: "flex", gap: 10, justifyContent: "flex-end" }}>
+              <button
+                onClick={cancelDelete}
+                style={{
+                  padding: "8px 12px",
+                  background: "#fff",
+                  border: "1px solid #ddd",
+                  borderRadius: 8,
+                  cursor: "pointer",
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                style={{
+                  padding: "8px 12px",
+                  background: "#c62828",
+                  color: "#fff",
+                  border: "1px solid #c62828",
+                  borderRadius: 8,
+                  cursor: "pointer",
+                  fontWeight: 700,
+                }}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
     </div>
   );

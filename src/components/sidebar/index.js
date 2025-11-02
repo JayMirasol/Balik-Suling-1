@@ -85,7 +85,7 @@ export default function Sidebar() {
         <SidebarButton title={translations[language].Home} to="/feed" icon={<MdSpaceDashboard />} />
         <SidebarButton title={translations[language].Tutorials} to="/chordtutor" icon={<FaGuitar />} />
         <SidebarButton title={translations[language].ChordScanner} to="/chordscanner" icon={<FaMusic />} />
-        <SidebarButton title={translations[language].Translate} to="/translate" icon={<MdTranslate />} />
+        {/* <SidebarButton title={translations[language].Translate} to="/translate" icon={<MdTranslate />} /> */}
         <SidebarButton title={translations[language].SavedOffline} to="/offline" icon={<MdOfflineShare />} />
       </div>
 
@@ -97,6 +97,7 @@ export default function Sidebar() {
             <button onClick={() => handleLanguageChange("English")}>English</button>
             <button onClick={() => handleLanguageChange("Tagalog")}>Tagalog</button>
             <button onClick={() => handleLanguageChange("Kapampangan")}>Kapampangan</button>
+        <SidebarButton title={translations[language].Translate} to="/translate" icon={<MdTranslate />} />
           </div>
         )}
       </div>
