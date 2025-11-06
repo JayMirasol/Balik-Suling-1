@@ -2,14 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // for navigation
 import "./sidebar.css";
 import SidebarButton from "./sidebarButton";
-import { MdFavorite, MdOfflineShare, MdScore, MdStart, MdTranslate } from "react-icons/md";
-import { FaGripfire, FaPlay, FaMusic, FaGuitar, FaChevronDown } from "react-icons/fa";
+import { MdOfflineShare, MdTranslate } from "react-icons/md";
+import { FaMusic, FaGuitar, FaChevronDown } from "react-icons/fa";
 import { FaSignOutAlt } from "react-icons/fa";
-import { IoBatteryChargingOutline, IoLibrary } from "react-icons/io5";
 import { MdSpaceDashboard } from "react-icons/md";
 import apiClient from "../../spotify";
-import { Link } from "react-router-dom";
-import { Player } from "tone";
 
 export default function Sidebar() {
   const [image, setImage] = useState(

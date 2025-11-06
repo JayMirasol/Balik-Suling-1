@@ -69,7 +69,7 @@ const api = axios.create({
 
 export default function Dashboard() {
   const [views, setViews] = useState({}); // mapping: { "Atin Cu Pung Singsing": 5, ... }
-  const { playTrack, current, isPlaying, setIsPlaying } = usePlayer();
+  const { playTrack, current, isPlaying } = usePlayer();
   const countedOnceRef = useRef({});
 
   useEffect(() => {

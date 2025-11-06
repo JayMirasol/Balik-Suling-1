@@ -1,4 +1,4 @@
-﻿import React, { useMemo, useRef, useState, useEffect, useCallback } from "react";
+import React, { useMemo, useRef, useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import "./translate.css";
 
@@ -47,7 +47,7 @@ export default function Translate() {
     if (!allowed.includes(target)) {
       setTarget(allowed[0] || "");
     }
-  }, [source]); // target intentionally not included, we check allowed membership
+  }, [source, target]);
 
   // -- Stable refs to help debounced callbacks read latest state without recreation --
   const stateRef = useRef({ text, source, target, auto });

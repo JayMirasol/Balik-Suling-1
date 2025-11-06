@@ -48,7 +48,7 @@ export function PlayerProvider({ children }) {
     playTrack,
     playByIndex,
     clearPlayer,
-  }), [queue, index, current, isPlaying, playTrack, playByIndex]);
+  }), [queue, index, current, isPlaying, playTrack, playByIndex, clearPlayer]);
 
   // Restore from localStorage on first mount
   useEffect(() => {

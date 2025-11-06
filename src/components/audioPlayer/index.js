@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import "./audioPlayer.css";
 import Controls from "./controls";
 import ProgressCircle from "./progressCircle";
@@ -12,7 +12,10 @@ export default function AudioPLayer({
 }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [trackProgress, setTrackProgress] = useState(0);
-  var audioSrc = total[currentIndex]?.track.preview_url;
+  const audioSrc = useMemo(
+    () => total[currentIndex]?.track?.preview_url,
+    [total, currentIndex]
+  );
 
   const audioRef = useRef(new Audio(total[0]?.track.preview_url));
 
@@ -24,7 +27,18 @@ export default function AudioPLayer({
 
   const currentPercentage = duration ? (trackProgress / duration) * 100 : 0;
 
-  const startTimer = () => {
+  const handleNext = useCallback(() => {
+    if (currentIndex < total.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    } else setCurrentIndex(0);
+  }, [currentIndex, total.length, setCurrentIndex]);
+
+  const handlePrev = useCallback(() => {
+    if (currentIndex - 1 < 0) setCurrentIndex(total.length - 1);
+    else setCurrentIndex(currentIndex - 1);
+  }, [currentIndex, total.length, setCurrentIndex]);
+
+  const startTimer = useCallback(() => {
     clearInterval(intervalRef.current);
 
     intervalRef.current = setInterval(() => {
@@ -33,8 +47,8 @@ export default function AudioPLayer({
       } else {
         setTrackProgress(audioRef.current.currentTime);
       }
-    }, [1000]);
-  };
+    }, 1000);
+  }, [handleNext]);
 
   useEffect(() => {
     if (audioRef.current.src) {
@@ -55,7 +69,7 @@ export default function AudioPLayer({
         audioRef.current.pause();
       }
     }
-  }, [isPlaying]);
+  }, [isPlaying, audioSrc, startTimer]);
 
   useEffect(() => {
     audioRef.current.pause();
@@ -70,7 +84,7 @@ export default function AudioPLayer({
     } else {
       isReady.current = true;
     }
-  }, [currentIndex]);
+  }, [currentIndex, audioSrc, startTimer]);
 
   useEffect(() => {
     return () => {
@@ -79,16 +93,7 @@ export default function AudioPLayer({
     };
   }, []);
 
-  const handleNext = () => {
-    if (currentIndex < total.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-    } else setCurrentIndex(0);
-  };
-
-  const handlePrev = () => {
-    if (currentIndex - 1 < 0) setCurrentIndex(total.length - 1);
-    else setCurrentIndex(currentIndex - 1);
-  };
+  
 
   const addZero = (n) => {
     return n > 9 ? "" + n : "0" + n;

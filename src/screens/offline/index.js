@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { getAllOffline, removeOffline } from "../../shared/offlineStore";
 import "./offline.css";
 import { songs } from "../feed";
@@ -34,45 +34,14 @@ export default function Offline() {
     });
   }, []);
 
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.addEventListener("timeupdate", updateProgress);
-      audioRef.current.addEventListener("ended", handleNext);
-    }
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.removeEventListener("timeupdate", updateProgress);
-        audioRef.current.removeEventListener("ended", handleNext);
-      }
-    };
-  }, [audioRef.current]);
-
-  const updateProgress = () => {
+  const updateProgress = useCallback(() => {
     if (audioRef.current) {
       setProgress((audioRef.current.currentTime / audioRef.current.duration) * 100);
     }
-  };
+  }, []);
 
-  const handlePlayPause = () => {
-    if (isPlaying) {
-      audioRef.current.pause();
-    } else {
-      audioRef.current.play();
-    }
-    setIsPlaying(!isPlaying);
-  };
-
-  const handleNext = () => {
-    const nextIndex = (currentIndex + 1) % items.length;
-    playTrack(nextIndex);
-  };
-
-  const handlePrevious = () => {
-    const prevIndex = (currentIndex - 1 + items.length) % items.length;
-    playTrack(prevIndex);
-  };
-
-  const playTrack = (index) => {
+  // Define playTrack before any hooks or callbacks that reference it and memoize for stable deps
+  const playTrack = useCallback((index) => {
     const track = items[index];
     const matchedSong = songs.find((song) => song.title === track.title);
     if (matchedSong) {
@@ -89,6 +58,36 @@ export default function Offline() {
     } else {
       alert("Audio file for this song is not available.");
     }
+  }, [items]);
+
+  const handleNext = useCallback(() => {
+    const nextIndex = (currentIndex + 1) % items.length;
+    playTrack(nextIndex);
+  }, [currentIndex, items.length, playTrack]);
+
+  useEffect(() => {
+    const el = audioRef.current;
+    if (!el) return;
+    el.addEventListener("timeupdate", updateProgress);
+    el.addEventListener("ended", handleNext);
+    return () => {
+      el.removeEventListener("timeupdate", updateProgress);
+      el.removeEventListener("ended", handleNext);
+    };
+  }, [currentTrack, updateProgress, handleNext]);
+
+  const handlePlayPause = () => {
+    if (isPlaying) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play();
+    }
+    setIsPlaying(!isPlaying);
+  };
+
+  const handlePrevious = () => {
+    const prevIndex = (currentIndex - 1 + items.length) % items.length;
+    playTrack(prevIndex);
   };
 
   const requestDelete = (id) => {

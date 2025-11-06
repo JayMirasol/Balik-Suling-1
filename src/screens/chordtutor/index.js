@@ -66,7 +66,7 @@ export default function Chords() {
                 />
               </div>
             </div>
-              <Link to="http://localhost:3000/chordtutor" style={{ color: "#0056b3" }}>← Browse songs to see more</Link>
+              <Link to="/chordtutor" style={{ color: "#0056b3" }}>← Browse songs to see more</Link>
 
           </div>
         </div>

@@ -571,10 +571,7 @@ export default function SongDetail() {
     return t || song.lyrics; // fallback until other translations are added
   }, [song, key, selectedLang]);
 
-  const contentText = useMemo(() => {
-    if (!song) return "";
-    return `${song.title}\nSongwriter: ${song.songwriter}\n\n${displayedLyrics}`;
-  }, [song, displayedLyrics]);
+  // removed unused contentText to satisfy no-unused-vars
 
   const handlePrint = () => {
     if (!song) return;
@@ -817,7 +814,7 @@ export default function SongDetail() {
       </div>
 
       <div style={{ marginTop: 18 }}>
-        <Link to="http://localhost:3000/chordtutor" style={{ color: "#0a58ca" }}>← Back to Kapampangan Chords</Link>
+        <Link to="/chordtutor" style={{ color: "#0a58ca" }}>← Back to Kapampangan Chords</Link>
       </div>
     </div>
   );

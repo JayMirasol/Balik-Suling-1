@@ -105,20 +105,15 @@ export default function ScanScore() {
     }
   };
 
-  const onPing = async () => {
-    try {
-      const { data } = await axios.get(buildUrl("/health"));
-      alert(JSON.stringify(data));
-    } catch (err) {
-      alert(`Ping failed: ${String(err)}`);
-    }
-  };
+  // removed unused onPing helper
 
   // PDF export ---------------------------------------------------------------
   // defined later after chords/progression declarations
 
   // Chords utilities ----------------------------------------------------------
-  const chords = Array.isArray(result?.chords) ? result.chords : [];
+  const chords = useMemo(() => (
+    Array.isArray(result?.chords) ? result.chords : []
+  ), [result?.chords]);
 
   const progression = useMemo(() => {
     if (!result?.ok || !chords.length) return "";
