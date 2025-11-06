@@ -154,48 +154,6 @@ button.offline:active {
   transition: width 0.2s;
 }
 
-/* Make offline cards fully fluid and comfortable on small screens */
-@media (max-width: 640px) {
-  .card.offline {
-    width: 100%;
-    padding: 12px;
-    margin: 0;
-  }
-
-  .card-details.offline {
-    width: 100%;
-  }
-
-  .song-title.offline {
-    font-size: 16px;
-  }
-
-  .song-artist.offline {
-    font-size: 14px;
-  }
-
-  .card-actions.offline {
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-
-  button.offline {
-    width: 100%;
-    padding: 10px 14px;
-    font-size: 15px;
-  }
-}
-
-/* Slightly larger phones / tablets */
-@media (min-width: 641px) and (max-width: 900px) {
-  .card.offline {
-    width: 100%;
-  }
-  .card-actions.offline {
-    gap: 10px;
-  }
-}
-
 @keyframes fadeIn {
   from {
     opacity: 0;
