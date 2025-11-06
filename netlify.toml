@@ -1,0 +1,4 @@
+[functions]
+  directory = "netlify/functions"
+
+# Optional: Cache control for SPA assets can be added later if needed

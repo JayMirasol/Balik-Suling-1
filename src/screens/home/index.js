@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Sidebar from "../../components/sidebar";
-import { setClientToken } from "../../spotify";
+import { setClientToken, SPOTIFY_REDIRECT_URI } from "../../spotify";
 import Login from "../auth/login";
 import Favorites from "../chordscanner";
 import Feed from "../feed";
@@ -26,7 +26,7 @@ export default function Home() {
 
   useEffect(() => {
     const existing = window.localStorage.getItem("token");
-    const hash = window.location.hash; // e.g. #access_token=...&token_type=Bearer&expires_in=3600
+    const hash = window.location.hash; // e.g. #access_token=... (old implicit flow)
 
     if (!existing && hash) {
       // Parse access_token from the hash safely
@@ -40,12 +40,59 @@ export default function Home() {
         // Remove the hash so you don't land on "/#"
         window.history.replaceState(null, "", window.location.pathname);
       }
+    } else if (!existing) {
+      // New PKCE flow: look for ?code= in the URL
+      const searchParams = new URLSearchParams(window.location.search);
+      const code = searchParams.get("code");
+      const error = searchParams.get("error");
+
+      if (error) {
+        // If Spotify sent an error, just clear URL and stay on login
+        window.history.replaceState(null, "", window.location.pathname);
+        setInitializing(false);
+        return;
+      }
+
+      if (code) {
+        const verifier = sessionStorage.getItem("pkce_code_verifier");
+        (async () => {
+          try {
+            const resp = await fetch("/.netlify/functions/spotify-token", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                code,
+                code_verifier: verifier,
+                redirect_uri: SPOTIFY_REDIRECT_URI || window.location.origin,
+              }),
+            });
+            const data = await resp.json();
+            if (data && data.access_token) {
+              window.localStorage.setItem("token", data.access_token);
+              setToken(data.access_token);
+              setClientToken(data.access_token);
+              try { sessionStorage.removeItem("pkce_code_verifier"); } catch {}
+              // Strip ?code= from URL
+              window.history.replaceState(null, "", window.location.pathname);
+            }
+          } catch (e) {
+            // eslint-disable-next-line no-console
+            console.error("Failed to exchange Spotify code:", e);
+          } finally {
+            setInitializing(false);
+          }
+        })();
+        return; // wait until above finishes
+      }
+
+      setInitializing(false);
     } else if (existing) {
       setToken(existing);
       setClientToken(existing);
+      setInitializing(false);
     }
 
-    setInitializing(false); // <- allow routing after hash is handled
+    // setInitializing(false); // moved into branches above
   }, []);
 
   // While we’re checking the hash, render nothing (prevents early redirects that would drop the hash)

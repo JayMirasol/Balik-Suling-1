@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom"; 
-import { loginEndpoint } from "../../spotify";
+import { startSpotifyLoginPKCE } from "../../spotify";
 import "./login.css";
 
 export default function Login() {
@@ -34,9 +34,17 @@ export default function Login() {
         </div>
       </div>
       
-      <a href={loginEndpoint}>
-        <div className="login-btn">LOG IN</div>
-      </a>
+      <button
+        className="login-btn"
+        onClick={(e) => {
+          e.preventDefault();
+          startSpotifyLoginPKCE();
+        }}
+        style={{ cursor: "pointer", border: "none", background: "transparent" }}
+        aria-label="Login with Spotify"
+      >
+        LOG IN
+      </button>
     </div>
   );
 }
