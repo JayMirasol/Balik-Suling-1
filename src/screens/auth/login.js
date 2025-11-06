@@ -35,12 +35,12 @@ export default function Login() {
       </div>
       
       <button
+        type="button"
         className="login-btn"
         onClick={(e) => {
           e.preventDefault();
           startSpotifyLoginPKCE();
         }}
-        style={{ cursor: "pointer", border: "none", background: "transparent" }}
         aria-label="Login with Spotify"
       >
         LOG IN
