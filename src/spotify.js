@@ -3,7 +3,7 @@ import axios from "axios";
 // Spotify OAuth config
 const authEndpoint = "https://accounts.spotify.com/authorize?";
 // Allow overriding via env in production; fallback to current value for dev
-const clientId = process.env.REACT_APP_SPOTIFY_CLIENT_ID || "10ff71b2181a4ee19909431870ef03f4";
+const clientId = process.env.REACT_APP_SPOTIFY_CLIENT_ID || "72bd0b0436ae4dc59963693c418873a7";
 // Use deployed origin by default; overrideable via env. Avoid hardcoding localhost.
 const redirectUri = process.env.REACT_APP_SPOTIFY_REDIRECT_URI || (typeof window !== "undefined" ? window.location.origin : "");
 
