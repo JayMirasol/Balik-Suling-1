@@ -100,11 +100,28 @@ apiClient.interceptors.response.use(
   }
 );
 
+let requestInterceptorId = null;
+
 export const setClientToken = (token) => {
-  apiClient.interceptors.request.use(async function (config) {
-    config.headers.Authorization = "Bearer " + token;
+  if (requestInterceptorId !== null) {
+    apiClient.interceptors.request.eject(requestInterceptorId);
+    requestInterceptorId = null;
+  }
+  requestInterceptorId = apiClient.interceptors.request.use(async function (config) {
+    if (token) {
+      config.headers.Authorization = "Bearer " + token;
+    } else {
+      delete config.headers.Authorization;
+    }
     return config;
   });
+};
+
+export const clearClientToken = () => {
+  if (requestInterceptorId !== null) {
+    apiClient.interceptors.request.eject(requestInterceptorId);
+    requestInterceptorId = null;
+  }
 };
 
 export default apiClient;

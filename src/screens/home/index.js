@@ -95,6 +95,15 @@ export default function Home() {
     // setInitializing(false); // moved into branches above
   }, []);
 
+  // Listen for explicit logout events to clear token immediately
+  useEffect(() => {
+    const onLoggedOut = () => {
+      setToken("");
+    };
+    window.addEventListener("app:loggedOut", onLoggedOut);
+    return () => window.removeEventListener("app:loggedOut", onLoggedOut);
+  }, []);
+
   // While we’re checking the hash, render nothing (prevents early redirects that would drop the hash)
   if (initializing) return null;
 

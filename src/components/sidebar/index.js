@@ -6,7 +6,7 @@ import { MdOfflineShare, MdTranslate } from "react-icons/md";
 import { FaMusic, FaGuitar, FaChevronDown } from "react-icons/fa";
 import { FaSignOutAlt } from "react-icons/fa";
 import { MdSpaceDashboard } from "react-icons/md";
-import apiClient from "../../spotify";
+import apiClient, { clearClientToken } from "../../spotify";
 
 export default function Sidebar() {
   const [image, setImage] = useState(
@@ -42,11 +42,18 @@ export default function Sidebar() {
   };
 
   useEffect(() => {
-    apiClient.get("me").then((response) => {
-      setImage(response.data.images[0].url);
-    }).catch((error) => {
-      console.error("Error fetching user image:", error);
-    });
+    const t = window.localStorage.getItem("token");
+    if (!t) return; // no token → skip fetching profile
+    apiClient
+      .get("me")
+      .then((response) => {
+        const img = response?.data?.images?.[0]?.url;
+        if (img) setImage(img);
+      })
+      .catch((error) => {
+        // Non-fatal; user may have no image or token may be invalid (handled globally)
+        console.error("Error fetching user image:", error);
+      });
   }, []);
 
   const handleLogout = () => {
@@ -55,8 +62,11 @@ export default function Sidebar() {
 
   const confirmLogout = () => {
     window.localStorage.removeItem("token"); // remove token from local storage
+    clearClientToken(); // remove Authorization header interceptor
     setShowLogoutModal(false); // Close modal
-    // Client-side navigate is enough; avoid full reload to prevent Netlify 404 on SPA routes
+    // Notify app to update auth state
+    try { window.dispatchEvent(new Event("app:loggedOut")); } catch {}
+    // Client-side navigate to login
     navigate("/login?logout=true", { replace: true });
   };
 
