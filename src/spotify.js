@@ -2,12 +2,30 @@ import axios from "axios";
 
 // Spotify OAuth config
 const authEndpoint = "https://accounts.spotify.com/authorize?";
-// Allow overriding via env in production; fallback to current value for dev
-const clientId = process.env.REACT_APP_SPOTIFY_CLIENT_ID || "10ff71b2181a4ee19909431870ef03f4";
+
+// IMPORTANT: Do not hardcode a fallback client id. Require env var to avoid using the wrong Spotify app.
+const clientId = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
+
 // Use deployed origin by default; overrideable via env. Avoid hardcoding localhost.
 const redirectUri = process.env.REACT_APP_SPOTIFY_REDIRECT_URI || (typeof window !== "undefined" ? window.location.origin : "");
 
-export const loginEndpoint = `${authEndpoint}client_id=${encodeURIComponent(clientId)}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent([
+// Warn clearly in console if misconfigured (helps diagnose Netlify env issues)
+if (!clientId) {
+  // eslint-disable-next-line no-console
+  console.error(
+    "Missing REACT_APP_SPOTIFY_CLIENT_ID. Set it in your environment (e.g., Netlify site settings)."
+  );
+}
+if (!redirectUri) {
+  // eslint-disable-next-line no-console
+  console.error(
+    "Missing redirect URI. Set REACT_APP_SPOTIFY_REDIRECT_URI or ensure window.location.origin is available."
+  );
+}
+
+export const loginEndpoint = `${authEndpoint}client_id=${encodeURIComponent(
+  clientId || ""
+)}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent([
   "user-read-email",
   "playlist-read-private",
   "playlist-read-collaborative",
