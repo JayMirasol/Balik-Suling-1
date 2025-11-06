@@ -56,10 +56,8 @@ export default function Sidebar() {
   const confirmLogout = () => {
     window.localStorage.removeItem("token"); // remove token from local storage
     setShowLogoutModal(false); // Close modal
-    setTimeout(() => {
-      navigate("/login?logout=true"); // Pass the logout flag to trigger message on login page
-      window.location.reload(); // force refresh to clean up sidebar
-    }, 2000); // Delay for 2 seconds before redirect
+    // Client-side navigate is enough; avoid full reload to prevent Netlify 404 on SPA routes
+    navigate("/login?logout=true", { replace: true });
   };
 
   const cancelLogout = () => {

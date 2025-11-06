@@ -1,4 +1,9 @@
 [functions]
   directory = "netlify/functions"
 
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
 # Optional: Cache control for SPA assets can be added later if needed
