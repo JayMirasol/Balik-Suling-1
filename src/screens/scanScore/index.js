@@ -87,6 +87,13 @@ export default function ScanScore() {
         timeout: 180_000, // allow time for OMR
       });
       setResult(data);
+      
+      // Track successful chord scan
+      if (data && data.ok) {
+        const scannedCount = Number(localStorage.getItem("chordsScannedCount") || 0);
+        localStorage.setItem("chordsScannedCount", String(scannedCount + 1));
+        window.dispatchEvent(new Event("statsUpdated"));
+      }
     } catch (err) {
       console.error("UPLOAD ERROR", {
         message: err?.message,

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // for navigation
 import "./sidebar.css";
 import SidebarButton from "./sidebarButton";
-import { MdOfflineShare, MdTranslate } from "react-icons/md";
+import { MdOfflineShare, MdTranslate, MdFeedback, MdAdminPanelSettings } from "react-icons/md";
 import { FaMusic, FaGuitar, FaChevronDown } from "react-icons/fa";
 import { FaSignOutAlt } from "react-icons/fa";
 import { MdSpaceDashboard } from "react-icons/md";
@@ -44,16 +44,46 @@ export default function Sidebar() {
   useEffect(() => {
     const t = window.localStorage.getItem("token");
     if (!t) return; // no token → skip fetching profile
+    
+    // Check for saved profile image in localStorage first
+    const savedProfile = localStorage.getItem("userProfile");
+    if (savedProfile) {
+      try {
+        const parsed = JSON.parse(savedProfile);
+        if (parsed.imageUrl) {
+          setImage(parsed.imageUrl);
+        }
+      } catch (e) {
+        console.error("Error parsing saved profile:", e);
+      }
+    }
+    
     apiClient
       .get("me")
       .then((response) => {
         const img = response?.data?.images?.[0]?.url;
-        if (img) setImage(img);
+        // Only update if no custom image was saved
+        if (img && !savedProfile) {
+          setImage(img);
+        }
       })
       .catch((error) => {
         // Non-fatal; user may have no image or token may be invalid (handled globally)
         console.error("Error fetching user image:", error);
       });
+      
+    // Listen for profile image updates
+    const handleImageUpdate = (event) => {
+      if (event.detail && event.detail.imageUrl) {
+        setImage(event.detail.imageUrl);
+      }
+    };
+    
+    window.addEventListener("profileImageUpdated", handleImageUpdate);
+    
+    return () => {
+      window.removeEventListener("profileImageUpdated", handleImageUpdate);
+    };
   }, []);
 
   const handleLogout = () => {
@@ -85,13 +115,17 @@ export default function Sidebar() {
 
   return (
     <div className="sidebar-container">
-      <img src={image} className="profile-img" alt="profile" />
+      <div className="profile-section" onClick={() => navigate("/profile")} style={{ cursor: "pointer" }}>
+        <img src={image} className="profile-img" alt="profile" />
+      </div>
       <div>
         <SidebarButton title={translations[language].Home} to="/feed" icon={<MdSpaceDashboard />} />
         <SidebarButton title={translations[language].Tutorials} to="/chordtutor" icon={<FaGuitar />} />
         <SidebarButton title={translations[language].ChordScanner} to="/chordscanner" icon={<FaMusic />} />
         {/* <SidebarButton title={translations[language].Translate} to="/translate" icon={<MdTranslate />} /> */}
         <SidebarButton title={translations[language].SavedOffline} to="/offline" icon={<MdOfflineShare />} />
+        <SidebarButton title="Feedback" to="/feedback" icon={<MdFeedback />} />
+        <SidebarButton title="Admin Panel" to="/admin" icon={<MdAdminPanelSettings />} />
       </div>
 
       {/* Language Mode Button */}

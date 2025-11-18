@@ -651,6 +651,10 @@ export default function SongDetail() {
       setIsSaved(true);
       setSaveType("success");
       setSaveNote("Saved to Offline.");
+      
+      // Dispatch event to update profile stats
+      window.dispatchEvent(new Event("offlineUpdated"));
+      
       setTimeout(() => setSaveNote(""), 3000);
     } catch (error) {
       console.error("Failed to save song offline:", error);

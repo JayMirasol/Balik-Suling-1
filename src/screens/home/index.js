@@ -15,6 +15,9 @@ import BeginnerChords from "../beginnerChords";
 import Translate from "../translate";
 import Tutorials from "../tutorials";
 import Offline from "../offline";
+import Feedback from "../feedback";
+import Profile from "../profile";
+import AdminPanel from "../admin";
 import "./home.css";
 import { PlayerProvider } from "../../components/footerPlayer/PlayerContext";
 import { usePlayer } from "../../components/footerPlayer/PlayerContext";
@@ -141,6 +144,9 @@ export default function Home() {
             <Route path="/translate" element={<Translate />} />
             <Route path="/tutorials" element={<Tutorials />} />
             <Route path="/offline" element={<Offline />} />
+            <Route path="/feedback" element={<Feedback />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/admin" element={<AdminPanel />} />
             <Route path="*" element={<Navigate to="/feed" replace />} />
             </Routes>
           </div>

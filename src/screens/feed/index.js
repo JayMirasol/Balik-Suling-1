@@ -150,6 +150,11 @@ export default function Dashboard() {
                         if (!countedOnceRef.current[title]) {
                           countedOnceRef.current[title] = true;
                           incrementView(title);
+                          
+                          // Track song as learned
+                          const learnedCount = Number(localStorage.getItem("songsLearnedCount") || 0);
+                          localStorage.setItem("songsLearnedCount", String(learnedCount + 1));
+                          window.dispatchEvent(new Event("statsUpdated"));
                         }
                       }}
                       aria-label={`Play ${title}`}

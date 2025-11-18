@@ -105,6 +105,9 @@ export default function Offline() {
       setConfirmOpen(false);
       setPendingId(null);
       showToast("Removed from Offline.", "success");
+      
+      // Dispatch event to update profile stats
+      window.dispatchEvent(new Event("offlineUpdated"));
     } catch (e) {
       console.error("Failed to delete offline item", e);
       setConfirmOpen(false);

@@ -702,10 +702,18 @@ app.get("/dict/lookup", async (req, res) => {
 
 // --- Views -------------------------------------------------------------------
 const VIEWS_FILE = path.join(__dirname, "views.json");
+const FEEDBACK_FILE = path.join(__dirname, "feedback.json");
+const SONGS_FILE = path.join(__dirname, "songs.json");
 
-// Ensure views file exists
+// Ensure files exist
 if (!fs.existsSync(VIEWS_FILE)) {
   fs.writeFileSync(VIEWS_FILE, JSON.stringify({}));
+}
+if (!fs.existsSync(FEEDBACK_FILE)) {
+  fs.writeFileSync(FEEDBACK_FILE, JSON.stringify([]));
+}
+if (!fs.existsSync(SONGS_FILE)) {
+  fs.writeFileSync(SONGS_FILE, JSON.stringify([]));
 }
 
 function readViews() {
@@ -793,6 +801,196 @@ app.post("/api/views/increment", (req, res) => {
   } catch (error) {
     console.error("Error updating views:", error);
     return res.status(500).json({ ok: false, error: "Failed to update views." });
+  }
+});
+
+
+// ============================================================================
+// 4) FEEDBACK ENDPOINTS
+// ============================================================================
+
+// Submit feedback
+app.post("/api/feedback/submit", (req, res) => {
+  try {
+    const { name, email, rating, comment, timestamp } = req.body || {};
+    
+    if (!name || !email || !comment) {
+      return res.status(400).json({ ok: false, error: "Missing required fields" });
+    }
+
+    // Read existing feedback
+    let feedback = [];
+    try {
+      const data = fs.readFileSync(FEEDBACK_FILE, "utf8");
+      feedback = JSON.parse(data || "[]");
+    } catch (e) {
+      feedback = [];
+    }
+
+    // Add new feedback
+    const newFeedback = {
+      id: Date.now(),
+      name,
+      email,
+      rating: Number(rating) || 5,
+      comment,
+      timestamp: timestamp || new Date().toISOString(),
+    };
+
+    feedback.push(newFeedback);
+
+    // Write back
+    fs.writeFileSync(FEEDBACK_FILE, JSON.stringify(feedback, null, 2));
+
+    return res.json({ ok: true, message: "Feedback submitted successfully", feedback: newFeedback });
+  } catch (error) {
+    console.error("Error submitting feedback:", error);
+    return res.status(500).json({ ok: false, error: "Failed to submit feedback" });
+  }
+});
+
+// Get all feedback
+app.get("/api/feedback", (req, res) => {
+  try {
+    const data = fs.existsSync(FEEDBACK_FILE) ? fs.readFileSync(FEEDBACK_FILE, "utf8") : "[]";
+    const feedback = JSON.parse(data || "[]");
+    return res.json({ ok: true, feedback });
+  } catch (error) {
+    console.error("Error fetching feedback:", error);
+    return res.status(500).json({ ok: false, error: "Failed to fetch feedback" });
+  }
+});
+
+// Delete feedback
+app.delete("/api/feedback/:id", (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    let feedback = [];
+    try {
+      const data = fs.readFileSync(FEEDBACK_FILE, "utf8");
+      feedback = JSON.parse(data || "[]");
+    } catch (e) {
+      feedback = [];
+    }
+
+    feedback = feedback.filter(f => f.id !== Number(id));
+    fs.writeFileSync(FEEDBACK_FILE, JSON.stringify(feedback, null, 2));
+
+    return res.json({ ok: true, message: "Feedback deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting feedback:", error);
+    return res.status(500).json({ ok: false, error: "Failed to delete feedback" });
+  }
+});
+
+// ============================================================================
+// 5) SONGS MANAGEMENT ENDPOINTS (Admin)
+// ============================================================================
+
+// Get all songs
+app.get("/api/songs", (req, res) => {
+  try {
+    const data = fs.existsSync(SONGS_FILE) ? fs.readFileSync(SONGS_FILE, "utf8") : "[]";
+    const songs = JSON.parse(data || "[]");
+    return res.json({ ok: true, songs });
+  } catch (error) {
+    console.error("Error fetching songs:", error);
+    return res.status(500).json({ ok: false, error: "Failed to fetch songs" });
+  }
+});
+
+// Add new song
+app.post("/api/songs", (req, res) => {
+  try {
+    const { title, image, audio, path } = req.body || {};
+    
+    if (!title) {
+      return res.status(400).json({ ok: false, error: "Song title is required" });
+    }
+
+    let songs = [];
+    try {
+      const data = fs.readFileSync(SONGS_FILE, "utf8");
+      songs = JSON.parse(data || "[]");
+    } catch (e) {
+      songs = [];
+    }
+
+    const newSong = {
+      id: Date.now(),
+      title,
+      image: image || "",
+      audio: audio || "",
+      path: path || `/chords/${title.toLowerCase().replace(/\s+/g, "-")}`,
+    };
+
+    songs.push(newSong);
+    fs.writeFileSync(SONGS_FILE, JSON.stringify(songs, null, 2));
+
+    return res.json({ ok: true, message: "Song added successfully", song: newSong });
+  } catch (error) {
+    console.error("Error adding song:", error);
+    return res.status(500).json({ ok: false, error: "Failed to add song" });
+  }
+});
+
+// Update song
+app.put("/api/songs/:id", (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, image, audio, path } = req.body || {};
+
+    let songs = [];
+    try {
+      const data = fs.readFileSync(SONGS_FILE, "utf8");
+      songs = JSON.parse(data || "[]");
+    } catch (e) {
+      songs = [];
+    }
+
+    const index = songs.findIndex(s => s.id === Number(id));
+    if (index === -1) {
+      return res.status(404).json({ ok: false, error: "Song not found" });
+    }
+
+    songs[index] = {
+      ...songs[index],
+      title: title || songs[index].title,
+      image: image !== undefined ? image : songs[index].image,
+      audio: audio !== undefined ? audio : songs[index].audio,
+      path: path !== undefined ? path : songs[index].path,
+    };
+
+    fs.writeFileSync(SONGS_FILE, JSON.stringify(songs, null, 2));
+
+    return res.json({ ok: true, message: "Song updated successfully", song: songs[index] });
+  } catch (error) {
+    console.error("Error updating song:", error);
+    return res.status(500).json({ ok: false, error: "Failed to update song" });
+  }
+});
+
+// Delete song
+app.delete("/api/songs/:id", (req, res) => {
+  try {
+    const { id } = req.params;
+
+    let songs = [];
+    try {
+      const data = fs.readFileSync(SONGS_FILE, "utf8");
+      songs = JSON.parse(data || "[]");
+    } catch (e) {
+      songs = [];
+    }
+
+    songs = songs.filter(s => s.id !== Number(id));
+    fs.writeFileSync(SONGS_FILE, JSON.stringify(songs, null, 2));
+
+    return res.json({ ok: true, message: "Song deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting song:", error);
+    return res.status(500).json({ ok: false, error: "Failed to delete song" });
   }
 });
 
