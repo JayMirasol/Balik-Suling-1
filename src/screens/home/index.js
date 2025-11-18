@@ -57,7 +57,12 @@ export default function Home() {
         const verifier = sessionStorage.getItem("pkce_code_verifier");
         (async () => {
           try {
-            const resp = await fetch("/.netlify/functions/spotify-token", {
+            // Use local backend in development, Netlify function in production
+            const tokenEndpoint = process.env.NODE_ENV === 'production' 
+              ? "/.netlify/functions/spotify-token"
+              : `${process.env.REACT_APP_API_BASE || 'http://127.0.0.1:8001'}/spotify-token`;
+            
+            const resp = await fetch(tokenEndpoint, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({

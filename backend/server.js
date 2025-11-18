@@ -105,6 +105,40 @@ app.get("/health", (req, res) =>
   res.json({ ok: true, service: "balik-suling-backend", ts: Date.now() })
 );
 
+// --- Spotify Token Exchange (PKCE) -----------------------------------------
+app.post("/spotify-token", async (req, res) => {
+  try {
+    const { code, code_verifier, redirect_uri } = req.body || {};
+    const client_id = process.env.SPOTIFY_CLIENT_ID || process.env.REACT_APP_SPOTIFY_CLIENT_ID;
+    const redirectUri = process.env.SPOTIFY_REDIRECT_URI || redirect_uri;
+
+    if (!client_id) {
+      return res.status(400).json({ error: "Missing SPOTIFY_CLIENT_ID env" });
+    }
+    if (!code || !code_verifier || !redirectUri) {
+      return res.status(400).json({ error: "Missing code, code_verifier, or redirect_uri" });
+    }
+
+    const body = new URLSearchParams({
+      client_id,
+      grant_type: "authorization_code",
+      code,
+      redirect_uri: redirectUri,
+      code_verifier,
+    });
+
+    const tokenResp = await axios.post("https://accounts.spotify.com/api/token", body.toString(), {
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      validateStatus: null,
+    });
+
+    return res.status(tokenResp.status).json(tokenResp.data);
+  } catch (err) {
+    console.error("SPOTIFY TOKEN ERROR", err);
+    return res.status(500).json({ error: "Internal Error", details: String(err) });
+  }
+});
+
 // ============================================================================
 // 1) SCORE (image/PDF) -> CHORDS  (OMR via Audiveris)
 //    POST /omr/scan  (and alias /chordscan/omr)
