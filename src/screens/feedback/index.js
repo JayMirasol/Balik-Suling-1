@@ -64,7 +64,6 @@ export default function Feedback() {
             <ul>
               <li><strong>Song Library:</strong> Explore our curated collection of authentic Kapampangan folk songs with audio playback</li>
               <li><strong>Chord Scanner:</strong> Upload sheet music and instantly extract chord progressions using advanced OMR technology</li>
-              <li><strong>Music Transcription:</strong> Convert audio files into sheet music for learning and analysis</li>
               <li><strong>Interactive Tutorials:</strong> Learn chords, techniques, and traditional playing styles</li>
               <li><strong>Multi-language Support:</strong> Access content in English, Tagalog, and Kapampangan</li>
               <li><strong>Translation Tools:</strong> Translate song lyrics and preserve linguistic heritage</li>
