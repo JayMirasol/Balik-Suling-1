@@ -11,7 +11,7 @@ const songData = {
 C       G       Am       F
 Atin cu pung singsing
 C       G       Am       F
-Metung yang timpalan
+Metung yang timpukan
 C       G       Am       F
 King indu cu'ng ibat king kapan
 C       G       C
