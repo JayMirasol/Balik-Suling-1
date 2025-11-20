@@ -29,6 +29,36 @@ export default function AdminPanel() {
     audio: "",
     path: "",
   });
+  
+  // Notification state
+  const [notification, setNotification] = useState({
+    show: false,
+    type: "", // 'success', 'error', 'info'
+    message: ""
+  });
+  
+  // Confirmation modal state
+  const [confirmModal, setConfirmModal] = useState({
+    show: false,
+    title: "",
+    message: "",
+    onConfirm: null
+  });
+
+  const showNotification = (type, message, duration = 3000) => {
+    setNotification({ show: true, type, message });
+    setTimeout(() => {
+      setNotification({ show: false, type: "", message: "" });
+    }, duration);
+  };
+  
+  const showConfirmModal = (title, message, onConfirm) => {
+    setConfirmModal({ show: true, title, message, onConfirm });
+  };
+  
+  const closeConfirmModal = () => {
+    setConfirmModal({ show: false, title: "", message: "", onConfirm: null });
+  };
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -74,11 +104,23 @@ export default function AdminPanel() {
   };
 
   const handleDeleteSong = (index) => {
-    if (window.confirm("Are you sure you want to delete this song?")) {
-      const updated = songList.filter((_, i) => i !== index);
-      setSongList(updated);
-      // In a real app, you'd call: await api.delete(`/api/songs/${song.id}`);
-    }
+    const song = songList[index];
+    showConfirmModal(
+      "Delete Song",
+      `Are you sure you want to delete "${song.title}"? This action cannot be undone.`,
+      async () => {
+        try {
+          const updated = songList.filter((_, i) => i !== index);
+          setSongList(updated);
+          // In a real app, you'd call: await api.delete(`/api/songs/${song.id}`);
+          showNotification("success", "Song deleted successfully!");
+        } catch (error) {
+          console.error("Error deleting song:", error);
+          showNotification("error", "Failed to delete song. Please try again.");
+        }
+        closeConfirmModal();
+      }
+    );
   };
 
   const handleSaveSong = () => {
@@ -88,10 +130,12 @@ export default function AdminPanel() {
       updated[editingSong] = songForm;
       setSongList(updated);
       // In real app: await api.put(`/api/songs/${song.id}`, songForm);
+      showNotification("success", "Song updated successfully!");
     } else {
       // Add new song
       setSongList([...songList, songForm]);
       // In real app: await api.post('/api/songs', songForm);
+      showNotification("success", "Song added successfully!");
     }
     closeModal();
   };
@@ -103,11 +147,28 @@ export default function AdminPanel() {
   };
 
   const handleDeleteFeedback = (index) => {
-    if (window.confirm("Are you sure you want to delete this feedback?")) {
-      const updated = feedbackList.filter((_, i) => i !== index);
-      setFeedbackList(updated);
-      // In real app: await api.delete(`/api/feedback/${feedback.id}`);
-    }
+    const feedback = feedbackList[index];
+    showConfirmModal(
+      "Delete Feedback",
+      `Are you sure you want to delete feedback from "${feedback.name}"? This action cannot be undone.`,
+      async () => {
+        try {
+          // Delete from backend
+          await api.delete(`/api/feedback/${feedback.id}`);
+          
+          // Update local state
+          const updated = feedbackList.filter((_, i) => i !== index);
+          setFeedbackList(updated);
+          
+          // Show success notification
+          showNotification("success", "Feedback deleted successfully!");
+        } catch (error) {
+          console.error("Error deleting feedback:", error);
+          showNotification("error", "Failed to delete feedback. Please try again.");
+        }
+        closeConfirmModal();
+      }
+    );
   };
 
   // Login Screen
@@ -336,6 +397,54 @@ export default function AdminPanel() {
           </div>
         </div>
       </div>
+
+      {/* Notification Toast */}
+      {notification.show && (
+        <div className={`notification-toast ${notification.type}`}>
+          <div className="notification-content">
+            <span className="notification-icon">
+              {notification.type === "success" && "✓"}
+              {notification.type === "error" && "✕"}
+              {notification.type === "info" && "ℹ"}
+            </span>
+            <span className="notification-message">{notification.message}</span>
+          </div>
+          <button 
+            className="notification-close" 
+            onClick={() => setNotification({ show: false, type: "", message: "" })}
+          >
+            ×
+          </button>
+        </div>
+      )}
+
+      {/* Confirmation Modal */}
+      {confirmModal.show && (
+        <div className="confirm-modal-overlay" onClick={closeConfirmModal}>
+          <div className="confirm-modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="confirm-modal-header">
+              <h3>{confirmModal.title}</h3>
+            </div>
+            <div className="confirm-modal-body">
+              <p>{confirmModal.message}</p>
+            </div>
+            <div className="confirm-modal-footer">
+              <button 
+                onClick={closeConfirmModal} 
+                className="btn-modal-cancel"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={confirmModal.onConfirm} 
+                className="btn-modal-confirm"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
