@@ -26,18 +26,21 @@ export const songs = [
     image: atinCuPungSingsingImage,
     audio: atinCuPungSingsingAudio,
     path: "/chords/atin-cu-pung-singsing",
+    youtubeLink: "https://www.youtube.com/watch?v=38cbteSAffE", // Add YouTube link here later
   },
   {
     title: "Masayang Kebaitan",
     image: masayangkebaitanImage,
     audio: masayangkebaitanAudio,
     path: "/chords/masayang-kebaitan",
+    youtubeLink: "https://www.youtube.com/watch?v=g7doXhRymUY", // Add YouTube link here later
   },
   {
     title: "O Caca",
     image: ocacaImage,
     audio: ocacaAudio,
     path: "/chords/o-caca",
+    youtubeLink: "https://www.youtube.com/watch?v=FDu-3JjTLnE", // Add YouTube link here later
   },
   {
     title: "Tuknang",
@@ -45,6 +48,7 @@ export const songs = [
     audio: ocacaAudio,
     // audio: tuknangAudio,
     path: "/chords/tuknang",
+    youtubeLink: "https://www.youtube.com/watch?v=FDu-3JjTLnE", // Add YouTube link here later
   },
   {
     title: "Pupul",
@@ -52,12 +56,14 @@ export const songs = [
     audio: masayangkebaitanAudio,
     // audio: pupulAudio,
     path: "/chords/pupul",
+    youtubeLink: "https://www.youtube.com/watch?v=38cbteSAffE", // Add YouTube link here later
   },
   {
     title: "Abe-Abe",
     image: abeabe,
     audio: abeabeAudio,
     path: "/chords/abe-abe",
+    youtubeLink: "https://www.youtube.com/watch?v=Y4zwG40DWiI", // Add YouTube link here later
   },
 ];
 
@@ -170,10 +176,41 @@ export default function Dashboard() {
                 <div className="dashboard-song-details">View details</div>
               </Link>
               
+              {song.youtubeLink && (
+                <a 
+                  href={song.youtubeLink} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="youtube-link"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  🎥 Watch on YouTube
+                </a>
+              )}
+              
               <div className="dashboard-song-views">Listeners: {count}</div>
             </div>
           );
         })}
+      </div>
+      
+      <div className="copyright-notice">
+        <div className="copyright-content">
+          <h3>📚 Educational Purpose & Copyright Notice</h3>
+          <p>
+            All musical content featured in Balik Suling is provided for <strong>educational and cultural preservation purposes only</strong>. 
+            This platform aims to promote and preserve Kapampangan folk music and cultural heritage.
+          </p>
+          <p>
+            We respect the intellectual property rights of all content creators. If you believe any content 
+            infringes on your copyright, please contact us through the Feedback section, and we will promptly 
+            address your concerns.
+          </p>
+          <p className="fair-use">
+            This content may be protected by copyright law and is used under fair use principles for 
+            educational purposes (17 U.S.C. § 107).
+          </p>
+        </div>
       </div>
     </div>
   );

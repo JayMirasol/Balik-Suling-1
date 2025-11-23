@@ -390,7 +390,7 @@ export default function ScanScore() {
         <div>
           <h2 style={styles.title}>Scan Score → Guitar Chords</h2>
           <div style={styles.subtitle}>
-            Upload a printed score (PDF). We’ll run OMR and display measure-by-measure chords.
+            Upload a printed score (PDF or high-quality image). We'll run OMR and display measure-by-measure chords.
           </div>
         </div>
         <div style={styles.row}>
@@ -427,7 +427,8 @@ export default function ScanScore() {
             style={{ display: "inline-block" }}
           />
           <div style={{ marginTop: 8, ...styles.hint }}>
-            Tip: Use a clean, printed page at ~300–400 dpi for best results.
+            Tip: For images (PNG/JPG), use high-resolution scans (~300–400 dpi) with good contrast. 
+            Printed music sheets work best. PDFs are automatically optimized.
           </div>
         </div>
 
@@ -464,10 +465,16 @@ export default function ScanScore() {
           <div style={styles.tipBox}>
             <div style={{ fontWeight: 700, marginBottom: 6 }}>Instructions before you scan:</div>
             <ul style={{ margin: 0, paddingLeft: 18 }}>
+              <li><strong>For PDF:</strong> Works best with digital or clean scanned scores</li>
+              <li><strong>For Images (PNG/JPG):</strong> Use high-resolution (300+ dpi), high-contrast images</li>
               <li>Printed pages (not handwriting)</li>
-              <li>Straight, high-contrast, ~300–400 dpi</li>
-              <li>Full systems visible (not single-staff snippets)</li>
+              <li>Keep the sheet straight and well-lit (if photographing)</li>
+              <li>Ensure full systems are visible (not single-staff snippets)</li>
+              <li>Avoid blurry, skewed, or low-quality photos</li>
             </ul>
+            <div style={{ marginTop: 8, fontSize: 12, fontStyle: 'italic', opacity: 0.8 }}>
+              💡 Tip: If scanning with a phone camera, use document scan apps for better quality
+            </div>
           </div>
         </div>
       )}

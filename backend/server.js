@@ -161,6 +161,33 @@ app.post("/omr/scan", upload.single("file"), async (req, res) => {
     const jobDir = path.join(OMR_OUT_ROOT, String(Date.now()));
     fs.mkdirSync(jobDir, { recursive: true });
 
+    // For images, try to preprocess them for better OCR quality
+    let processedFile = req.file.path;
+    const isImageFile = /\.(png|jpg|jpeg|tif|tiff|bmp)$/i.test(req.file.originalname);
+    
+    if (isImageFile) {
+      try {
+        // Use ImageMagick or similar tool if available to enhance image quality
+        // Convert to high-contrast, high-DPI format that Audiveris prefers
+        const sharp = require('sharp');
+        const enhancedPath = path.join(jobDir, 'enhanced_' + path.basename(req.file.originalname, path.extname(req.file.originalname)) + '.tiff');
+        
+        await sharp(req.file.path)
+          .resize({ width: 2480, height: 3508, fit: 'inside', withoutEnlargement: false }) // A4 at 300 DPI
+          .grayscale()
+          .normalise()
+          .sharpen()
+          .tiff({ compression: 'lzw' })
+          .toFile(enhancedPath);
+        
+        processedFile = enhancedPath;
+        console.log(`Image preprocessed: ${processedFile}`);
+      } catch (preprocessErr) {
+        console.warn('Image preprocessing failed, using original:', preprocessErr);
+        // Continue with original file if preprocessing fails
+      }
+    }
+
     // Build Audiveris command
     let cmd, cmdArgs, useShell = false;
     if (/\.jar$/i.test(AUDIVERIS)) {
@@ -168,10 +195,10 @@ app.post("/omr/scan", upload.single("file"), async (req, res) => {
       const sep = process.platform === "win32" ? ";" : ":";
       const cp = path.join(jarDir, "lib", "*") + sep + AUDIVERIS;
       cmd = "java";
-      cmdArgs = ["-cp", cp, "Audiveris", "-batch", "-export", "-output", jobDir, req.file.path];
+      cmdArgs = ["-cp", cp, "Audiveris", "-batch", "-export", "-output", jobDir, processedFile];
     } else {
       cmd = AUDIVERIS; // .exe/.bat/.cmd
-      cmdArgs = ["-batch", "-export", "-output", jobDir, req.file.path];
+      cmdArgs = ["-batch", "-export", "-output", jobDir, processedFile];
       useShell = /\.bat$|\.cmd$/i.test(AUDIVERIS);
     }
 

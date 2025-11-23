@@ -13,8 +13,10 @@ import { FaCloudDownloadAlt, FaCheckCircle } from "react-icons/fa";
 const SONGS = {
   "atin-cu-pung-singsing": {
     title: "Atin Cu Pung Singsing",
-    songwriter: "Juan Crisostomo Soto",
+    composer: "Juan Crisostomo Soto",
     video: "https://www.youtube.com/embed/41C7yFwLGeo",
+    youtubeLink: "https://www.youtube.com/watch?v=41C7yFwLGeo", // Add YouTube link here later
+    credits: "Tutorial by: MUSICAL CHORDS", // Add creator credits here later
     lyrics: `
 [bersu 1]
 C       G       Am       F
@@ -40,8 +42,10 @@ Caliwan ku king iyong pamikakatawan
 
   "kapampangan-ku": {
     title: "Kapampangan Ku",
-    songwriter: "Juan D. Nepomuceno",
+    composer: "Juan D. Nepomuceno",
     video: "https://www.youtube.com/embed/iQwpE14XHBM",
+    youtubeLink: "https://www.youtube.com/watch?v=iQwpE14XHBM&t=1s", // Add YouTube link here later
+    credits: "Tutorial by: Elee Canlas", // Add creator credits here later
     lyrics: `
 [bersu 1]
 G       C       G       D
@@ -67,8 +71,10 @@ Pamagmaragul keka
 
   "masayang-kebaitan": {
     title: "Masayang Kebaitan",
-    songwriter: "Benigno R. Natividad",
+    composer: "Benigno R. Natividad",
     video: "https://www.youtube.com/embed/g7doXhRymUY",
+    youtubeLink: "https://www.youtube.com/watch?v=g7doXhRymUY", // Add YouTube link here later
+    credits: "Tutorial by: ArtiStaRita Official", // Add creator credits here later
     lyrics: `
 [bersu 1]
 C       G       F       C
@@ -90,8 +96,10 @@ Masayang kebaitan, king arapan
 
   "o-caca": {
     title: "O Caca",
-    songwriter: "Juan D. Nepomuceno",
+    composer: "Juan D. Nepomuceno",
     video: "https://www.youtube.com/embed/3BRDclX1hLE",
+    youtubeLink: "https://www.youtube.com/watch?v=3BRDclX1hLE", // Add YouTube link here later
+    credits: "Tutorial by: Music ang Lyrics", // Add creator credits here later
     lyrics: `
 [bersu 1]
 C       G       F       C
@@ -113,8 +121,10 @@ Pamagbalangyung katuliran
 
   "tuknang": {
     title: "Tuknang",
-    songwriter: "Emmanuel P. Hizon",
+    composer: "Emmanuel P. Hizon",
     video: "",
+    youtubeLink: "", // Add YouTube link here later
+    credits: "Tutorial by: [Creator Name]", // Add creator credits here later
     lyrics: `
 [bersu 1]
 C       G       Am       F
@@ -136,8 +146,10 @@ Pamagpakaung keng salikut
 
   "pu-pul": {
     title: "Pupul",
-    songwriter: "Pedro A. Mabilangan",
+    composer: "Pedro A. Mabilangan",
     video: "",
+    youtubeLink: "", // Add YouTube link here later
+    credits: "Tutorial by: [Creator Name]", // Add creator credits here later
     lyrics: `
 [bersu 1]
 C       G       Am       F
@@ -159,8 +171,10 @@ Pu-pul a kayang pampasigla
 
   "abe-abe": {
     title: "Abe-Abe",
-    songwriter: "Pedro B. Manlapig",
+    composer: "Pedro B. Manlapig",
     video: "https://www.youtube.com/embed/vEBn9WzX4CE",
+    youtubeLink: "https://www.youtube.com/watch?v=vEBn9WzX4CE", // Add YouTube link here later
+    credits: "Tutorial by: Partido Abe Kapampangan", // Add creator credits here later
     lyrics: `
 [bersu 1]
 G       C       G       D
@@ -182,8 +196,10 @@ Abe-abe, katuliran ning kabuntalan
 
   "dakal-salamat": {
     title: "Dakal Salamat",
-    songwriter: "Jose P. David",
+    composer: "Jose P. David",
     video: "",
+    youtubeLink: "", // Add YouTube link here later
+    credits: "Tutorial by: [Creator Name]", // Add creator credits here later
     lyrics: `
 [bersu 1]
 G       C       G       D
@@ -618,7 +634,7 @@ export default function SongDetail() {
           <div class="content">
             <div class="header">
               <h1>${escapeHtml(song.title)}</h1>
-              <div class="meta"><strong>Songwriter:</strong> ${escapeHtml(song.songwriter)}</div>
+              <div class="meta"><strong>Composer:</strong> ${escapeHtml(song.composer)}</div>
             </div>
             <pre>${escapeHtml(displayedLyrics)}</pre>
           </div>
@@ -644,7 +660,7 @@ export default function SongDetail() {
       await saveOffline({
         id: offlineId,
         title: song.title,
-        artist: song.songwriter || "Unknown Artist",
+        artist: song.composer || "Unknown Artist",
         chords: song.lyrics, // store original lyrics; can switch to displayedLyrics if desired
         video: song.video || "",
       });
@@ -678,7 +694,7 @@ export default function SongDetail() {
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 12 }}>
         <div>
           <h1 style={{ margin: 0 }}>{song.title}</h1>
-          <div style={{ marginTop: 6, color: "#999" }}>Songwriter: {song.songwriter}</div>
+          <div style={{ marginTop: 6, color: "#999" }}>Composer: {song.composer}</div>
         </div>
 
         <div style={{ display: "flex", gap: 8 }}>
@@ -799,17 +815,61 @@ export default function SongDetail() {
         {/* Right: Video tutorial */}
         <div style={{ width: 570, minWidth: 300 }}>
           <div style={{ padding: 12, borderRadius: 8, border: "1px solid #eee", background: "#000" }}>
-            <h4 style={{ marginTop: 0, marginBottom: 8 }}>Video Tutorial</h4>
+            <h4 style={{ marginTop: 0, marginBottom: 8, color: "#fff" }}>Video Tutorial</h4>
             {song.video ? (
-              <div style={{ position: "relative", paddingBottom: "56.25%", height: 0 }}>
-                <iframe
-                  src={song.video}
-                  title={`${song.title} tutorial`}
-                  style={{ position: "absolute", left: 0, top: 0, width: "100%", height: "100%", border: 0 }}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              </div>
+              <>
+                <div style={{ position: "relative", paddingBottom: "56.25%", height: 0 }}>
+                  <iframe
+                    src={song.video}
+                    title={`${song.title} tutorial`}
+                    style={{ position: "absolute", left: 0, top: 0, width: "100%", height: "100%", border: 0 }}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                </div>
+                
+                {song.credits && song.credits !== "Tutorial by: [Creator Name]" && (
+                  <p style={{ 
+                    margin: "12px 0 0", 
+                    color: "rgba(255, 255, 255, 0.7)", 
+                    fontSize: 13,
+                    fontStyle: "italic"
+                  }}>
+                    {song.credits}
+                  </p>
+                )}
+                
+                {song.youtubeLink && (
+                  <a 
+                    href={song.youtubeLink} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    style={{
+                      display: "inline-block",
+                      marginTop: 12,
+                      padding: "8px 14px",
+                      background: "rgba(255, 0, 0, 0.1)",
+                      border: "1px solid rgba(255, 0, 0, 0.3)",
+                      borderRadius: 6,
+                      color: "#ff0000",
+                      fontSize: 13,
+                      fontWeight: 600,
+                      textDecoration: "none",
+                      transition: "all 0.3s ease"
+                    }}
+                    onMouseOver={(e) => {
+                      e.target.style.background = "rgba(255, 0, 0, 0.2)";
+                      e.target.style.transform = "translateY(-2px)";
+                    }}
+                    onMouseOut={(e) => {
+                      e.target.style.background = "rgba(255, 0, 0, 0.1)";
+                      e.target.style.transform = "translateY(0)";
+                    }}
+                  >
+                    🎥 Watch on YouTube
+                  </a>
+                )}
+              </>
             ) : (
               <div style={{ color: "#666" }}>No video tutorial available for this song.</div>
             )}

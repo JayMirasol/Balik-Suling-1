@@ -11,8 +11,12 @@
 
 .dashboard-container {
   background: var(--bg);
-  min-height: 100vh;
-  padding: 24px;
+  padding: 50px;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  overflow-y: hidden;
+  overflow-x: hidden;
 }
 
 /* Header area */
@@ -126,6 +130,71 @@
 .dashboard-song-views {
   color: var(--subtext);
   font-size: 13px;
+}
+
+/* YouTube Link */
+.youtube-link {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 6px 12px;
+  background: rgba(255, 0, 0, 0.1);
+  border: 1px solid rgba(255, 0, 0, 0.3);
+  border-radius: 6px;
+  color: #ff0000;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.youtube-link:hover {
+  background: rgba(255, 0, 0, 0.2);
+  border-color: rgba(255, 0, 0, 0.5);
+  transform: translateY(-2px);
+}
+
+/* Copyright Notice */
+.copyright-notice {
+  margin-top: 40px;
+  padding: 24px;
+  background: rgba(29, 185, 84, 0.08);
+  border-radius: 12px;
+  border: 1px solid rgba(29, 185, 84, 0.2);
+}
+
+.copyright-content h3 {
+  color: var(--accent);
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 16px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.copyright-content p {
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0 0 12px 0;
+}
+
+.copyright-content p:last-child {
+  margin-bottom: 0;
+}
+
+.copyright-content strong {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.copyright-content .fair-use {
+  color: var(--subtext);
+  font-size: 12px;
+  font-style: italic;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Card link wraps text, image is separate clickable element */

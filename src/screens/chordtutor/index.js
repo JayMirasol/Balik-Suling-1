@@ -10,14 +10,72 @@ const kapampanganSongs = [
     chords: "C - G - Am - F",
     songwriter: "Juan Crisostomo Soto",
     video: "https://www.youtube.com/embed/glVKFIiEdiM", // replace with real tutorial url
+    youtubeLink: "", // Add YouTube link here later
+    credits: "Tutorial by: MUSICAL CHORDS", // Add creator credits here later
   },
-  { title: "Kapampangan Ku", slug: "kapampangan-ku", chords: "G - D - Em - C", songwriter: "Unknown", video: "" },
-  { title: "Dakal Salamat", slug: "dakal-salamat", chords: "C - G - Em - F", songwriter: "Unknown", video: "" },
-  { title: "Masayang Kebaitan", slug: "masayang-kebaitan", chords: "D - G - A - D", songwriter: "Unknown", video: "" },
-  { title: "O Caca", slug: "o-caca", chords: "C - F - G - C", songwriter: "Unknown", video: "" },
-  { title: "Tuknang", slug: "tuknang", chords: "Am - F - C - G", songwriter: "Unknown", video: "" },
-  { title: "Pupul", slug: "pu-pul", chords: "E - A - B - E", songwriter: "Unknown", video: "" },
-  { title: "Abe-Abe", slug: "abe-abe", chords: "F - Bb - C - F", songwriter: "Unknown", video: "" }
+  { 
+    title: "Kapampangan Ku", 
+    slug: "kapampangan-ku", 
+    chords: "G - D - Em - C", 
+    songwriter: "Unknown", 
+    video: "",
+    youtubeLink: "", // Add YouTube link here later
+    credits: "Tutorial by: [Creator Name]", // Add creator credits here later
+  },
+  { 
+    title: "Dakal Salamat", 
+    slug: "dakal-salamat", 
+    chords: "C - G - Em - F", 
+    songwriter: "Unknown", 
+    video: "",
+    youtubeLink: "", // Add YouTube link here later
+    credits: "Tutorial by: [Creator Name]", // Add creator credits here later
+  },
+  { 
+    title: "Masayang Kebaitan", 
+    slug: "masayang-kebaitan", 
+    chords: "D - G - A - D", 
+    songwriter: "Unknown", 
+    video: "",
+    youtubeLink: "", // Add YouTube link here later
+    credits: "Tutorial by: [Creator Name]", // Add creator credits here later
+  },
+  { 
+    title: "O Caca", 
+    slug: "o-caca", 
+    chords: "C - F - G - C", 
+    songwriter: "Unknown", 
+    video: "",
+    youtubeLink: "", // Add YouTube link here later
+    credits: "Tutorial by: [Creator Name]", // Add creator credits here later
+  },
+  { 
+    title: "Tuknang", 
+    slug: "tuknang", 
+    chords: "Am - F - C - G", 
+    songwriter: "Unknown", 
+    video: "",
+    youtubeLink: "", // Add YouTube link here later
+    credits: "Tutorial by: [Creator Name]", // Add creator credits here later
+  },
+  { 
+    title: "Pupul", 
+    slug: "pu-pul", 
+    chords: "E - A - B - E", 
+    songwriter: "Unknown", 
+    video: "",
+    youtubeLink: "", // Add YouTube link here later
+    credits: "Tutorial by: [Creator Name]", // Add creator credits here later
+  },
+  { 
+    title: "Abe-Abe", 
+    slug: "abe-abe", 
+    chords: "F - Bb - C - F", 
+    songwriter: "Unknown", 
+    video: "",
+    youtubeLink: "", // Add YouTube link here later
+    credits: "Tutorial by: [Creator Name]", // Add creator credits here later
+  }
 ];
 
 export default function Chords() {
@@ -42,6 +100,48 @@ export default function Chords() {
                   <h3 className="song-title" style={{ margin: 0 }}>{song.title}</h3>
                 </Link>
                 <p className="song-chords" style={{ margin: "6px 0 0", color: "#fff" }}>{song.chords}</p>
+                
+                {song.youtubeLink && (
+                  <a 
+                    href={song.youtubeLink} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    style={{
+                      display: "inline-block",
+                      marginTop: 8,
+                      padding: "4px 10px",
+                      background: "rgba(255, 0, 0, 0.1)",
+                      border: "1px solid rgba(255, 0, 0, 0.3)",
+                      borderRadius: 4,
+                      color: "#ff0000",
+                      fontSize: 12,
+                      fontWeight: 600,
+                      textDecoration: "none",
+                      transition: "all 0.3s ease"
+                    }}
+                    onMouseOver={(e) => {
+                      e.target.style.background = "rgba(255, 0, 0, 0.2)";
+                      e.target.style.transform = "translateY(-2px)";
+                    }}
+                    onMouseOut={(e) => {
+                      e.target.style.background = "rgba(255, 0, 0, 0.1)";
+                      e.target.style.transform = "translateY(0)";
+                    }}
+                  >
+                    🎥 Watch Tutorial
+                  </a>
+                )}
+                
+                {song.credits && song.credits !== "Tutorial by: [Creator Name]" && (
+                  <p style={{ 
+                    margin: "6px 0 0", 
+                    color: "rgba(255, 255, 255, 0.6)", 
+                    fontSize: 11,
+                    fontStyle: "italic"
+                  }}>
+                    {song.credits}
+                  </p>
+                )}
               </li>
             ))}
           </ul>
@@ -65,6 +165,28 @@ export default function Chords() {
                   allowFullScreen
                 />
               </div>
+              <p style={{ margin: "8px 0 0", fontSize: 12, color: "#666", fontStyle: "italic" }}>
+                Tutorial by: Simbahan Chords {/* Add creator credits here */}
+              </p>
+              <a 
+                href="https://www.youtube.com/watch?v=glVKFIiEdiM" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                style={{
+                  display: "inline-block",
+                  marginTop: 8,
+                  padding: "6px 12px",
+                  background: "rgba(255, 0, 0, 0.1)",
+                  border: "1px solid rgba(255, 0, 0, 0.3)",
+                  borderRadius: 4,
+                  color: "#ff0000",
+                  fontSize: 13,
+                  fontWeight: 600,
+                  textDecoration: "none"
+                }}
+              >
+                🎥 Watch on YouTube
+              </a>
             </div>
               <Link to="/chordtutor" style={{ color: "#0056b3" }}>← Browse songs to see more</Link>
 

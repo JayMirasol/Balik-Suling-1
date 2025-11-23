@@ -18,6 +18,7 @@ import Offline from "../offline";
 import Feedback from "../feedback";
 import Profile from "../profile";
 import AdminPanel from "../admin";
+import TermsAndConditions from "../terms";
 import "./home.css";
 import { PlayerProvider } from "../../components/footerPlayer/PlayerContext";
 import { usePlayer } from "../../components/footerPlayer/PlayerContext";
@@ -96,7 +97,10 @@ export default function Home() {
       setInitializing(false);
     } else if (existing) {
       setToken(existing);
-      setClientToken(existing);
+      // Only set Spotify client token if it's a Spotify token (not our custom format)
+      if (!existing.startsWith('balik_suling_')) {
+        setClientToken(existing);
+      }
       setInitializing(false);
     }
 
@@ -121,6 +125,7 @@ export default function Home() {
         // Not logged in: show Login; everything else → /login
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/terms" element={<TermsAndConditions />} />
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
@@ -147,6 +152,7 @@ export default function Home() {
             <Route path="/feedback" element={<Feedback />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/admin" element={<AdminPanel />} />
+            <Route path="/terms" element={<TermsAndConditions />} />
             <Route path="*" element={<Navigate to="/feed" replace />} />
             </Routes>
           </div>

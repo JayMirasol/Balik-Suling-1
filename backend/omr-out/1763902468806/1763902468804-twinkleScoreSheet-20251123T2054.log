@@ -1,0 +1,27 @@
+2025-11-23 20:54:33,173 INFO [1763902468804-twinkleScoreSheet]                 Book.java:562  | 1 sheet in C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\uploads\1763902468804-twinkleScoreSheet.png
+2025-11-23 20:54:33,604 INFO []                 Book.java:2531 | Stored /book.xml
+2025-11-23 20:54:33,606 INFO []                 Book.java:2491 | Book stored as C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1763902468806\1763902468804-twinkleScoreSheet.omr
+2025-11-23 20:54:33,613 INFO []                 Book.java:1933 | Book reaching PAGE on sheets:[#1]
+2025-11-23 20:54:33,617 INFO [1763902468804-twinkleScoreSheet]       StepMonitoring.java:98   | LOAD
+2025-11-23 20:54:33,692 INFO [1763902468804-twinkleScoreSheet]            SheetStub.java:1273 | Loaded image #1 850x1100 from C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\uploads\1763902468804-twinkleScoreSheet.png
+2025-11-23 20:54:33,698 INFO [1763902468804-twinkleScoreSheet]       StepMonitoring.java:98   | BINARY
+2025-11-23 20:54:33,946 INFO [1763902468804-twinkleScoreSheet]       StepMonitoring.java:98   | SCALE
+2025-11-23 20:54:33,965 WARN [1763902468804-twinkleScoreSheet]            SheetStub.java:412  | 1763902468804-twinkleScoreSheet
+
+ With a too low interline value of 7 pixels,
+ either this sheet contains no multi-line staves,
+ or the picture resolution is too low (try 300 DPI).
+
+ This interline value is NOT RELIABLE!
+2025-11-23 20:54:33,966 INFO [1763902468804-twinkleScoreSheet]                 Book.java:545  | Created scores: []
+2025-11-23 20:54:33,967 INFO [1763902468804-twinkleScoreSheet]            SheetStub.java:1191 | Sheet 1763902468804-twinkleScoreSheet flagged as invalid.
+2025-11-23 20:54:33,967 INFO [1763902468804-twinkleScoreSheet]            SheetStub.java:1410 | StepException cause detected in [LOAD, BINARY, SCALE, GRID, HEADERS, STEM_SEEDS, BEAMS, LEDGERS, HEADS, STEMS, REDUCTION, CUE_BEAMS, TEXTS, MEASURES, CHORDS, CURVES, SYMBOLS, LINKS, RHYTHMS, PAGE]
+2025-11-23 20:54:33,967 INFO [1763902468804-twinkleScoreSheet]                 Book.java:2550 | Book{1763902468804-twinkleScoreSheet} storing
+2025-11-23 20:54:33,989 INFO [1763902468804-twinkleScoreSheet]                 Book.java:2531 | Stored /book.xml
+2025-11-23 20:54:34,030 INFO [1763902468804-twinkleScoreSheet]           DataHolder.java:348  | Stored /sheet#1/BINARY.png
+2025-11-23 20:54:34,434 INFO [1763902468804-twinkleScoreSheet]                Sheet.java:1583 | Stored /sheet#1/sheet#1.xml
+2025-11-23 20:54:34,435 INFO [1763902468804-twinkleScoreSheet]                 Book.java:2491 | Book stored as C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1763902468806\1763902468804-twinkleScoreSheet.omr
+2025-11-23 20:54:34,470 INFO [1763902468804-twinkleScoreSheet]            SheetStub.java:1660 | Disposed sheet
+2025-11-23 20:54:34,502 INFO [1763902468804-twinkleScoreSheet]                 Book.java:2018 | End of Stub#1 memory: 12,293,328
+2025-11-23 20:54:34,503 INFO [1763902468804-twinkleScoreSheet]                 Book.java:2025 | Book processed.
+2025-11-23 20:54:34,504 INFO [1763902468804-twinkleScoreSheet]                 Book.java:599  | Could not export since transcription did not complete successfully

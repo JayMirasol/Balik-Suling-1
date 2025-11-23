@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"; // for navigation
 import "./sidebar.css";
 import SidebarButton from "./sidebarButton";
 import { MdOfflineShare, MdTranslate, MdFeedback, MdAdminPanelSettings } from "react-icons/md";
-import { FaMusic, FaGuitar, FaChevronDown } from "react-icons/fa";
+import { FaMusic, FaGuitar, FaChevronDown, FaFileContract } from "react-icons/fa";
 import { FaSignOutAlt } from "react-icons/fa";
 import { MdSpaceDashboard } from "react-icons/md";
 import apiClient, { clearClientToken } from "../../spotify";
@@ -45,7 +45,21 @@ export default function Sidebar() {
     const t = window.localStorage.getItem("token");
     if (!t) return; // no token → skip fetching profile
     
-    // Check for saved profile image in localStorage first
+    // Check for current user first (from Google/email login)
+    const currentUser = localStorage.getItem("currentUser");
+    if (currentUser) {
+      try {
+        const userData = JSON.parse(currentUser);
+        const userImage = userData.picture || userData.imageUrl;
+        if (userImage) {
+          setImage(userImage);
+        }
+      } catch (e) {
+        console.error("Error parsing current user:", e);
+      }
+    }
+    
+    // Check for saved profile image in localStorage
     const savedProfile = localStorage.getItem("userProfile");
     if (savedProfile) {
       try {
@@ -58,19 +72,22 @@ export default function Sidebar() {
       }
     }
     
-    apiClient
-      .get("me")
-      .then((response) => {
-        const img = response?.data?.images?.[0]?.url;
-        // Only update if no custom image was saved
-        if (img && !savedProfile) {
-          setImage(img);
-        }
-      })
-      .catch((error) => {
-        // Non-fatal; user may have no image or token may be invalid (handled globally)
-        console.error("Error fetching user image:", error);
-      });
+    // Only try Spotify API if token is not our custom format
+    if (!t.startsWith('balik_suling_')) {
+      apiClient
+        .get("me")
+        .then((response) => {
+          const img = response?.data?.images?.[0]?.url;
+          // Only update if no custom image was saved
+          if (img && !savedProfile && !currentUser) {
+            setImage(img);
+          }
+        })
+        .catch((error) => {
+          // Non-fatal; user may have no image or token may be invalid
+          console.error("Error fetching user image:", error);
+        });
+    }
       
     // Listen for profile image updates
     const handleImageUpdate = (event) => {
@@ -92,6 +109,7 @@ export default function Sidebar() {
 
   const confirmLogout = () => {
     window.localStorage.removeItem("token"); // remove token from local storage
+    window.localStorage.removeItem("currentUser"); // remove current user data
     clearClientToken(); // remove Authorization header interceptor
     setShowLogoutModal(false); // Close modal
     // Notify app to update auth state
@@ -126,6 +144,7 @@ export default function Sidebar() {
         <SidebarButton title={translations[language].SavedOffline} to="/offline" icon={<MdOfflineShare />} />
         <SidebarButton title="Feedback" to="/feedback" icon={<MdFeedback />} />
         <SidebarButton title="Admin Panel" to="/admin" icon={<MdAdminPanelSettings />} />
+        <SidebarButton title="Terms & Conditions" to="/terms" icon={<FaFileContract />} />
       </div>
 
       {/* Language Mode Button */}

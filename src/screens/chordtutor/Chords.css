@@ -1,5 +1,7 @@
 .chords-container {
-    padding: 20px;
+    padding: 50px;
+    overflow: hidden;
+    width: 100%;
   }
   
   .chords-title {

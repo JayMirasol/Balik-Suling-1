@@ -70,41 +70,94 @@ export default function Profile() {
 
   const fetchProfile = async () => {
     try {
-      // Check if there's a saved profile in localStorage first
-      const savedProfile = localStorage.getItem("userProfile");
+      // Get current user from localStorage (set during login)
+      const currentUser = localStorage.getItem("currentUser");
       
-      const response = await apiClient.get("me");
-      const data = response.data;
-      
-      let profileData = {
-        name: data.display_name || "",
-        email: data.email || "",
-        country: data.country || "",
-        spotifyId: data.id || "",
-        imageUrl: data.images?.[0]?.url || "https://static.vecteezy.com/system/resources/previews/019/879/186/large_2x/user-icon-on-transparent-background-free-png.png",
-      };
-
-      // Merge with saved profile data (prioritize localStorage for custom fields)
-      if (savedProfile) {
+      if (currentUser) {
         try {
-          const parsed = JSON.parse(savedProfile);
-          profileData = {
-            ...profileData,
-            ...parsed,
-            // Keep Spotify ID from API (not editable)
-            spotifyId: data.id || "",
+          const userData = JSON.parse(currentUser);
+          
+          let profileData = {
+            name: userData.name || "",
+            email: userData.email || "",
+            country: userData.country || "",
+            spotifyId: userData.isGoogleAuth ? "Google Account" : "Email Account",
+            imageUrl: userData.picture || userData.imageUrl || "https://static.vecteezy.com/system/resources/previews/019/879/186/large_2x/user-icon-on-transparent-background-free-png.png",
           };
+
+          // Check if there's additional saved profile data in localStorage
+          const savedProfile = localStorage.getItem("userProfile");
+          if (savedProfile) {
+            try {
+              const parsed = JSON.parse(savedProfile);
+              profileData = {
+                ...profileData,
+                ...parsed,
+                // Keep auth type
+                spotifyId: userData.isGoogleAuth ? "Google Account" : "Email Account",
+              };
+            } catch (e) {
+              console.error("Error parsing saved profile:", e);
+            }
+          }
+
+          setProfile(profileData);
+          setEditedProfile(profileData);
+          setLoading(false);
+          
+          // Update sidebar image
+          window.dispatchEvent(new CustomEvent("profileImageUpdated", { detail: { imageUrl: profileData.imageUrl } }));
+          return;
         } catch (e) {
-          console.error("Error parsing saved profile:", e);
+          console.error("Error parsing current user:", e);
         }
       }
-
-      setProfile(profileData);
-      setEditedProfile(profileData);
-      setLoading(false);
       
-      // Update sidebar image
-      window.dispatchEvent(new CustomEvent("profileImageUpdated", { detail: { imageUrl: profileData.imageUrl } }));
+      // Fallback: Try Spotify API if available (for backward compatibility)
+      try {
+        const response = await apiClient.get("me");
+        const data = response.data;
+        
+        let profileData = {
+          name: data.display_name || "",
+          email: data.email || "",
+          country: data.country || "",
+          spotifyId: data.id || "",
+          imageUrl: data.images?.[0]?.url || "https://static.vecteezy.com/system/resources/previews/019/879/186/large_2x/user-icon-on-transparent-background-free-png.png",
+        };
+
+        // Merge with saved profile data
+        const savedProfile = localStorage.getItem("userProfile");
+        if (savedProfile) {
+          try {
+            const parsed = JSON.parse(savedProfile);
+            profileData = {
+              ...profileData,
+              ...parsed,
+              spotifyId: data.id || "",
+            };
+          } catch (e) {
+            console.error("Error parsing saved profile:", e);
+          }
+        }
+
+        setProfile(profileData);
+        setEditedProfile(profileData);
+        setLoading(false);
+        
+        window.dispatchEvent(new CustomEvent("profileImageUpdated", { detail: { imageUrl: profileData.imageUrl } }));
+      } catch (spotifyError) {
+        console.error("No user data available:", spotifyError);
+        // Set default profile if everything fails
+        setProfile({
+          name: "User",
+          email: "",
+          country: "",
+          spotifyId: "Not connected",
+          imageUrl: "https://static.vecteezy.com/system/resources/previews/019/879/186/large_2x/user-icon-on-transparent-background-free-png.png",
+        });
+        setLoading(false);
+      }
     } catch (error) {
       console.error("Error fetching profile:", error);
       setLoading(false);
@@ -272,7 +325,7 @@ export default function Profile() {
             </div>
 
             <div className="detail-group">
-              <label>Spotify ID</label>
+              <label>Account Type</label>
               <p className="detail-value spotify-id">{profile.spotifyId || "Not connected"}</p>
             </div>
           </div>
@@ -296,8 +349,8 @@ export default function Profile() {
 
           <div className="profile-info-note">
             <p>
-              <strong>Note:</strong> Your profile is connected to Spotify. 
-              Some information is managed through your Spotify account settings.
+              <strong>Note:</strong> You can edit your profile information here. 
+              Changes are saved locally to your device.
             </p>
           </div>
         </div>
