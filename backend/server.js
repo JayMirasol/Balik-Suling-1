@@ -378,6 +378,95 @@ app.post("/audio/score", upload.single("file"), async (req, res) => {
   }
 });
 
+// ============================================================================
+// 2b) AUDIO -> GUITAR CHORDS (Chord Detection)
+//     POST /audio/chords
+// ============================================================================
+app.post("/audio/chords", upload.single("file"), async (req, res) => {
+  try {
+    if (!req.file) return res.status(400).json({ ok: false, error: "Empty upload" });
+    if (!/^audio\//.test(req.file.mimetype || "") && !/\.(mp3|wav|m4a|flac|ogg|aac)$/i.test(req.file.originalname)) {
+      return res.status(400).json({ ok: false, error: "Unsupported audio type" });
+    }
+
+    const audioPath = req.file.path;
+    const scriptPath = path.join(__dirname, "py", "audio_chord_detection.py");
+    
+    // Check if Python script exists
+    if (!fs.existsSync(scriptPath)) {
+      return res.status(500).json({
+        ok: false,
+        error: "Chord detection script not found. Please ensure audio_chord_detection.py exists in backend/py/",
+      });
+    }
+
+    // Execute Python script for chord detection
+    const pythonExec = process.env.PYTHON_EXECUTABLE || "python";
+    const proc = spawn(pythonExec, [scriptPath, audioPath]);
+    
+    let stdout = "";
+    let stderr = "";
+
+    proc.stdout.on("data", (chunk) => (stdout += chunk.toString()));
+    proc.stderr.on("data", (chunk) => (stderr += chunk.toString()));
+
+    proc.on("close", (code) => {
+      // Clean up uploaded file
+      try {
+        fs.unlinkSync(audioPath);
+      } catch (_) {}
+
+      if (code !== 0) {
+        console.error("AUDIO CHORD DETECTION ERROR", { code, stderr });
+        return res.status(500).json({
+          ok: false,
+          error: `Chord detection failed (exit code ${code})`,
+          details: stderr || stdout,
+        });
+      }
+
+      try {
+        const result = JSON.parse(stdout);
+        
+        if (!result.ok) {
+          return res.status(400).json(result);
+        }
+
+        // Format chords for display (similar to OMR output)
+        const measures = result.chords.map((c, i) => ({
+          measure: i + 1,
+          time: c.time,
+          chord: c.chord,
+          duration: c.duration,
+        }));
+
+        res.json({
+          ok: true,
+          summary: {
+            filename: req.file.originalname,
+            bytes: req.file.size,
+            duration: result.summary.duration,
+            total_segments: result.summary.total_segments,
+            unique_chords: result.summary.unique_chords,
+          },
+          measures,
+          progression: result.progression,
+        });
+      } catch (parseErr) {
+        console.error("Failed to parse Python output", parseErr, stdout);
+        res.status(500).json({
+          ok: false,
+          error: "Failed to parse chord detection output",
+          details: stdout,
+        });
+      }
+    });
+  } catch (err) {
+    console.error("AUDIO->CHORDS ERROR", err);
+    res.status(500).json({ ok: false, error: String(err) });
+  }
+});
+
 // --- Helper: generate a simple MusicXML lead-sheet with chord symbols -------
 function buildChordLeadSheetXML(title, chords, opts = {}) {
   const beatsPerBar = opts.beatsPerBar || 4;
