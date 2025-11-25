@@ -5,6 +5,7 @@ import axios from "axios";
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib/dist/pdf-lib.esm.js";
 
 export default function ScanScore() {
+  const [mode, setMode] = useState("score"); // "score" or "audio"
   const [file, setFile] = useState(null);
   const [objectUrl, setObjectUrl] = useState(null); // for image/pdf preview
   const [result, setResult] = useState(null);
@@ -27,6 +28,7 @@ export default function ScanScore() {
 
   const isImage = (f) => !!f && f.type?.startsWith("image/");
   const isPdf = (f) => !!f && (f.type === "application/pdf" || /\.pdf$/i.test(f.name || ""));
+  const isAudio = (f) => !!f && (f.type?.startsWith("audio/") || /\.(mp3|wav|m4a|flac|ogg|aac)$/i.test(f.name || ""));
   const ext = (f) => (f?.name || "").split(".").pop()?.toLowerCase() || "";
 
   const buildUrl = (p) => (base ? `${base}${p}` : p);
@@ -39,6 +41,11 @@ export default function ScanScore() {
     setBusy(false);
   };
 
+  const switchMode = (newMode) => {
+    setMode(newMode);
+    reset();
+  };
+
   const setChosenFile = (f) => {
     if (!f) {
       reset();
@@ -48,8 +55,8 @@ export default function ScanScore() {
     setResult(null);
     if (objectUrl) URL.revokeObjectURL(objectUrl);
 
-    // Preview images and PDFs
-    if (isImage(f) || isPdf(f)) {
+    // Preview images, PDFs, and audio
+    if (isImage(f) || isPdf(f) || isAudio(f)) {
       const url = URL.createObjectURL(f);
       setObjectUrl(url);
     } else {
@@ -81,10 +88,14 @@ export default function ScanScore() {
     try {
       const formData = new FormData();
       formData.append("file", file);
-      const url = buildUrl("/omr/scan");
+      
+      // Choose endpoint based on mode
+      const endpoint = mode === "audio" ? "/audio/chords" : "/omr/scan";
+      const url = buildUrl(endpoint);
+      
       const { data } = await axios.post(url, formData, {
         headers: { "Content-Type": "multipart/form-data" },
-        timeout: 180_000, // allow time for OMR
+        timeout: 180_000, // allow time for processing
       });
       setResult(data);
       
@@ -118,12 +129,20 @@ export default function ScanScore() {
   // defined later after chords/progression declarations
 
   // Chords utilities ----------------------------------------------------------
-  const chords = useMemo(() => (
-    Array.isArray(result?.chords) ? result.chords : []
-  ), [result?.chords]);
+  const chords = useMemo(() => {
+    // Handle both 'chords' (OMR) and 'measures' (audio) response formats
+    if (Array.isArray(result?.chords)) return result.chords;
+    if (Array.isArray(result?.measures)) return result.measures;
+    return [];
+  }, [result?.chords, result?.measures]);
 
   const progression = useMemo(() => {
-    if (!result?.ok || !chords.length) return "";
+    if (!result?.ok) return "";
+    // Use progression from response if available, otherwise build from chords
+    if (result.progression && result.progression !== "N.C.") {
+      return result.progression;
+    }
+    if (!chords.length) return "";
     return chords.map((m) => m.chord || "—").join(" | ");
   }, [result, chords]);
 
@@ -388,15 +407,16 @@ export default function ScanScore() {
     <div style={styles.page}>
       <div style={styles.header}>
         <div>
-          <h2 style={styles.title}>Scan Score → Guitar Chords</h2>
+          <h2 style={styles.title}>
+            {mode === "score" ? "Scan Score → Guitar Chords" : "Audio → Guitar Chords"}
+          </h2>
           <div style={styles.subtitle}>
-            Upload a printed score (PDF or high-quality image). We'll run OMR and display measure-by-measure chords.
+            {mode === "score"
+              ? "Upload a printed score (PDF or high-quality image). We'll run OMR and display measure-by-measure chords."
+              : "Upload an audio file (MP3, WAV, etc.). We'll detect chords with timestamps."}
           </div>
         </div>
         <div style={styles.row}>
-          {/* <button type="button" style={styles.buttonGhost} onClick={onPing}>
-            Test API
-          </button> */}
           <button
             type="button"
             style={{ ...styles.buttonGhost }}
@@ -408,6 +428,32 @@ export default function ScanScore() {
         </div>
       </div>
 
+      {/* Mode Toggle */}
+      <div style={{ marginBottom: 16, display: 'flex', gap: 8 }}>
+        <button
+          type="button"
+          onClick={() => switchMode("score")}
+          style={{
+            ...styles.button,
+            ...(mode === "score" ? { background: "#2a6", color: "#fff", borderColor: "#2a6" } : {})
+          }}
+          disabled={busy}
+        >
+          📄 Score Sheet
+        </button>
+        <button
+          type="button"
+          onClick={() => switchMode("audio")}
+          style={{
+            ...styles.button,
+            ...(mode === "audio" ? { background: "#2a6", color: "#fff", borderColor: "#2a6" } : {})
+          }}
+          disabled={busy}
+        >
+          🎵 Audio File
+        </button>
+      </div>
+
       {/* File input + dropzone */}
       <form onSubmit={onUpload}>
         <div
@@ -415,20 +461,24 @@ export default function ScanScore() {
           onDragLeave={onDragLeave}
           onDrop={onDrop}
           style={styles.dropzone}
-          aria-label="Drop a score file here"
+          aria-label="Drop a file here"
         >
           <div style={{ marginBottom: 8 }}>
-            <strong>Drop a score file here</strong> — or choose a file:
+            <strong>Drop a {mode === "score" ? "score" : "audio"} file here</strong> — or choose a file:
           </div>
           <input
             type="file"
-            accept="image/*,.pdf,.omr"
+            accept={mode === "score" ? "image/*,.pdf,.omr" : "audio/*,.mp3,.wav,.m4a,.flac,.ogg,.aac"}
             onChange={onFileChange}
             style={{ display: "inline-block" }}
           />
           <div style={{ marginTop: 8, ...styles.hint }}>
-            Tip: For images (PNG/JPG), use high-resolution scans (~300–400 dpi) with good contrast. 
-            Printed music sheets work best. PDFs are automatically optimized.
+            {mode === "score" ? (
+              <>Tip: For images (PNG/JPG), use high-resolution scans (~300–400 dpi) with good contrast. 
+              Printed music sheets work best. PDFs are automatically optimized.</>
+            ) : (
+              <>Tip: Clear recordings work best. Instrumental tracks preferred. Avoid heavy distortion or background noise.</>
+            )}
           </div>
         </div>
 
@@ -449,31 +499,43 @@ export default function ScanScore() {
             disabled={!file || busy}
             style={{ ...styles.buttonPrimary, ...(busy || !file ? styles.buttonDisabled : {}) }}
           >
-            {busy ? "Scanning…" : "Scan"}
+            {busy ? (mode === "audio" ? "Analyzing…" : "Scanning…") : (mode === "audio" ? "Analyze Audio" : "Scan")}
           </button>
         </div>
       </form>
 
-      {/* Preview (image or PDF) */}
+      {/* Preview (image, PDF, or audio) */}
       {objectUrl && (
         <div style={styles.previewWrap}>
           {isImage(file) ? (
             <img src={objectUrl} alt="Preview" style={styles.previewImg} />
           ) : isPdf(file) ? (
             <embed src={objectUrl} type="application/pdf" style={styles.previewPdf} />
+          ) : isAudio(file) ? (
+            <audio controls src={objectUrl} style={{ width: '100%', marginTop: 12 }} />
           ) : null}
           <div style={styles.tipBox}>
-            <div style={{ fontWeight: 700, marginBottom: 6 }}>Instructions before you scan:</div>
-            <ul style={{ margin: 0, paddingLeft: 18 }}>
-              <li><strong>For PDF:</strong> Works best with digital or clean scanned scores</li>
-              <li><strong>For Images (PNG/JPG):</strong> Use high-resolution (300+ dpi), high-contrast images</li>
-              <li>Printed pages (not handwriting)</li>
-              <li>Keep the sheet straight and well-lit (if photographing)</li>
-              <li>Ensure full systems are visible (not single-staff snippets)</li>
-              <li>Avoid blurry, skewed, or low-quality photos</li>
-            </ul>
+            <div style={{ fontWeight: 700, marginBottom: 6 }}>Instructions before you {mode === "audio" ? "analyze" : "scan"}:</div>
+            {mode === "score" ? (
+              <ul style={{ margin: 0, paddingLeft: 18 }}>
+                <li><strong>For PDF:</strong> Works best with digital or clean scanned scores</li>
+                <li><strong>For Images (PNG/JPG):</strong> Use high-resolution (300+ dpi), high-contrast images</li>
+                <li>Printed pages (not handwriting)</li>
+                <li>Keep the sheet straight and well-lit (if photographing)</li>
+                <li>Ensure full systems are visible (not single-staff snippets)</li>
+                <li>Avoid blurry, skewed, or low-quality photos</li>
+              </ul>
+            ) : (
+              <ul style={{ margin: 0, paddingLeft: 18 }}>
+                <li><strong>Clear audio:</strong> Works best with clean recordings</li>
+                <li><strong>Instrumental preferred:</strong> Vocals can interfere with chord detection</li>
+                <li>Avoid heavy distortion or excessive reverb</li>
+                <li>Good signal-to-noise ratio improves accuracy</li>
+                <li>Supported formats: MP3, WAV, M4A, FLAC, OGG, AAC</li>
+              </ul>
+            )}
             <div style={{ marginTop: 8, fontSize: 12, fontStyle: 'italic', opacity: 0.8 }}>
-              💡 Tip: If scanning with a phone camera, use document scan apps for better quality
+              💡 Tip: {mode === "score" ? "If scanning with a phone camera, use document scan apps for better quality" : "Studio recordings give more accurate results than live performances"}
             </div>
           </div>
         </div>
@@ -489,12 +551,22 @@ export default function ScanScore() {
               </div>
 
               <div>
-                <span style={styles.label}>Score Sheet:</span>{" "}
+                <span style={styles.label}>{mode === "audio" ? "Audio File:" : "Score Sheet:"}</span>{" "}
                 <strong>{result.summary?.filename ?? "—"}</strong>
               </div>
               <div>
                 <span style={styles.label}>Size:</span> {formatBytes(result.summary?.bytes)}
               </div>
+              {mode === "audio" && result.summary?.duration && (
+                <div>
+                  <span style={styles.label}>Duration:</span> {result.summary.duration}s
+                </div>
+              )}
+              {mode === "audio" && result.summary?.unique_chords && (
+                <div>
+                  <span style={styles.label}>Unique Chords:</span> {result.summary.unique_chords}
+                </div>
+              )}
 
               {/* PDF export */}
               <div style={{ marginTop: 8 }}>
@@ -506,7 +578,9 @@ export default function ScanScore() {
               {/* Chords */}
               {chords.length ? (
                 <>
-                  <div style={styles.chordsHeader}>Converted Guitar Chords</div>
+                  <div style={styles.chordsHeader}>
+                    {mode === "audio" ? "Detected Guitar Chords" : "Converted Guitar Chords"}
+                  </div>
 
                   {/* Grid view (4 measures per row) */}
                   <div>
@@ -515,12 +589,26 @@ export default function ScanScore() {
                         {row.map((m) => (
                           <div key={m.measure} style={styles.chordCell}>
                             <div>
-                              <span style={{ opacity: 0.7 }}>m{String(m.measure).padStart(2, "0")}:</span>{" "}
-                              <strong>{m.chord || "—"}</strong>
+                              {mode === "audio" && m.time !== undefined ? (
+                                <>
+                                  <span style={{ opacity: 0.7 }}>{m.time}s:</span>{" "}
+                                  <strong>{m.chord || "—"}</strong>
+                                </>
+                              ) : (
+                                <>
+                                  <span style={{ opacity: 0.7 }}>m{String(m.measure).padStart(2, "0")}:</span>{" "}
+                                  <strong>{m.chord || "—"}</strong>
+                                </>
+                              )}
                             </div>
                             {Array.isArray(m.notes) && m.notes.length > 0 && (
                               <div style={{ opacity: 0.75, fontSize: 12 }}>
                                 notes: [{m.notes.join(", ")}]
+                              </div>
+                            )}
+                            {mode === "audio" && m.duration && (
+                              <div style={{ opacity: 0.6, fontSize: 11 }}>
+                                ({m.duration}s)
                               </div>
                             )}
                           </div>
