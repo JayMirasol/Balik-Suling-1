@@ -1,0 +1,114 @@
+2025-12-03 23:42:35,067 INFO [enhanced_sample]                 Book.java:562  | 1 sheet in C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1764776548635\enhanced_sample.tiff
+2025-12-03 23:42:35,459 INFO []                 Book.java:2531 | Stored /book.xml
+2025-12-03 23:42:35,461 INFO []                 Book.java:2491 | Book stored as C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1764776548635\enhanced_sample.omr
+2025-12-03 23:42:35,481 INFO []                 Book.java:1933 | Book reaching PAGE on sheets:[#1]
+2025-12-03 23:42:35,483 INFO [enhanced_sample]       StepMonitoring.java:98   | LOAD
+2025-12-03 23:42:35,747 INFO [enhanced_sample]            SheetStub.java:1273 | Loaded image #1 3300x4668 from C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1764776548635\enhanced_sample.tiff
+2025-12-03 23:42:35,754 INFO [enhanced_sample]            ImageUtil.java:124  | Converting max RGB to gray
+2025-12-03 23:42:36,234 INFO [enhanced_sample]       StepMonitoring.java:98   | BINARY
+2025-12-03 23:42:37,957 INFO [enhanced_sample]       StepMonitoring.java:98   | SCALE
+2025-12-03 23:42:38,009 INFO [enhanced_sample]         ScaleBuilder.java:241  | Beam  guessed height: 12 -- 0.50 of 25 interline
+2025-12-03 23:42:38,012 INFO [enhanced_sample]         ScaleBuilder.java:264  | Beam measured height: 14 -- 0.39 of [7..25] range at 272% of needed quorum
+2025-12-03 23:42:38,013 INFO [enhanced_sample]            ScaleStep.java:65   | Scale{ interline(23,25,27) line(3,4,6) beam(14)}
+2025-12-03 23:42:38,015 INFO [enhanced_sample]       StepMonitoring.java:98   | GRID
+2025-12-03 23:42:39,661 INFO [enhanced_sample]       LinesRetriever.java:1500 | Global slope: 0.00262
+2025-12-03 23:42:39,772 INFO [enhanced_sample]    ClustersRetriever.java:328  | Retrieved raw line clusters: 8 of sizes [5] with interline(23,25,27)
+2025-12-03 23:42:41,680 INFO [enhanced_sample]            PeakGraph.java:310  | Systems: #1[1, 2] #2[3, 4, 5] #3[6, 7, 8]
+2025-12-03 23:42:43,992 INFO [enhanced_sample]        SystemManager.java:134  | Indentation detected for system #1
+2025-12-03 23:42:43,993 INFO [enhanced_sample]        SystemManager.java:779  | 2 parts along 3 systems
+2025-12-03 23:42:43,994 INFO [enhanced_sample]                 Book.java:545  | Created scores: [{Score 1}]
+2025-12-03 23:42:43,995 INFO [enhanced_sample]       StepMonitoring.java:98   | HEADERS
+2025-12-03 23:42:44,503 INFO []      BasicClassifier.java:277  | Classifier loaded XML norms.
+2025-12-03 23:42:44,510 INFO []   AbstractClassifier.java:396  | Classifier data loaded from default uri jar:file:/C:/Program%20Files/Audiveris/app/audiveris.jar!/res/basic-classifier.zip
+2025-12-03 23:42:46,035 INFO [enhanced_sample]           KeyBuilder.java:1380 | Staff#5 key replication failed.
+2025-12-03 23:42:46,306 INFO [enhanced_sample]           KeyBuilder.java:1380 | Staff#7 key replication failed.
+2025-12-03 23:42:46,310 INFO [enhanced_sample]       StepMonitoring.java:98   | STEM_SEEDS
+2025-12-03 23:42:46,458 INFO [enhanced_sample]        StemSeedsStep.java:86   | stem(4 max:6)
+2025-12-03 23:42:46,605 INFO [enhanced_sample]       StepMonitoring.java:98   | BEAMS
+2025-12-03 23:42:58,314 INFO [enhanced_sample]       StepMonitoring.java:98   | LEDGERS
+2025-12-03 23:43:01,240 INFO [enhanced_sample]       StepMonitoring.java:98   | HEADS
+2025-12-03 23:43:09,886 INFO [enhanced_sample]        HeadSeedTally.java:235  | Scale information: HeadSeeds{NOTEHEAD_BLACK[L:0.6,R:1.0]}
+2025-12-03 23:43:09,888 INFO [enhanced_sample]       StepMonitoring.java:98   | STEMS
+2025-12-03 23:43:15,011 INFO [enhanced_sample]       StepMonitoring.java:98   | REDUCTION
+2025-12-03 23:43:15,220 INFO [enhanced_sample]        ReductionStep.java:105  | Stems free length median value: 83 pixels, 3.3 interlines
+2025-12-03 23:43:15,230 INFO [enhanced_sample]       StepMonitoring.java:98   | CUE_BEAMS
+2025-12-03 23:43:15,231 INFO [enhanced_sample]         CueBeamsStep.java:81   | Step CUE_BEAMS is skipped because small heads switch is off
+2025-12-03 23:43:15,232 INFO [enhanced_sample]       StepMonitoring.java:98   | TEXTS
+2025-12-03 23:43:22,062 INFO [enhanced_sample]       MetronomeInter.java:1408 | Metronome. Non recognized note for glyph#5582
+2025-12-03 23:43:22,707 INFO [enhanced_sample]       StepMonitoring.java:98   | MEASURES
+2025-12-03 23:43:22,726 INFO [enhanced_sample]                 Page.java:307  | 9 raw measures: [2 in system#1, 4 in system#2, 3 in system#3]
+2025-12-03 23:43:22,728 INFO [enhanced_sample]       StepMonitoring.java:98   | CHORDS
+2025-12-03 23:43:22,759 INFO [enhanced_sample]       StepMonitoring.java:98   | CURVES
+2025-12-03 23:43:25,922 INFO [enhanced_sample]         SlursBuilder.java:240  | Slurs: 23
+2025-12-03 23:43:25,976 INFO [enhanced_sample]      SegmentsBuilder.java:155  | Segments: 4
+2025-12-03 23:43:25,989 INFO [enhanced_sample]       StepMonitoring.java:98   | SYMBOLS
+2025-12-03 23:43:30,457 INFO [enhanced_sample]       StepMonitoring.java:98   | LINKS
+2025-12-03 23:43:30,562 INFO [enhanced_sample]        SymbolsLinker.java:257  | No chord linked to OctaveShiftInter#8531{(0.737) staff:6 OTTAVA ALTA}
+2025-12-03 23:43:30,598 INFO [enhanced_sample]       StepMonitoring.java:98   | RHYTHMS
+2025-12-03 23:43:30,650 INFO [enhanced_sample]        MeasureRhythm.java:1045 | Measure{#2} No timeOffset for HeadChordInter#6798{(0.932/0.932) staff:2 slot#7 dur:1/4}
+2025-12-03 23:43:30,653 INFO [enhanced_sample]          StackRhythm.java:224  | S1 MeasureStack#2 no correct rhythm
+2025-12-03 23:43:30,674 INFO [enhanced_sample]        MeasureRhythm.java:1277 | Measure{#4P2} Time inconsistency in {7/8=[HeadChordInter#6858{(0.966/0.966) staff:5 slot#8 off:7/8 dur:1/8}], 1=[HeadChordInter#6831{(0.938/0.938) staff:4 slot#8 off:1 dur:1/8}]}
+2025-12-03 23:43:30,689 INFO [enhanced_sample]        MeasureRhythm.java:1277 | Measure{#5P2} Time inconsistency in {5/4=[HeadChordInter#6871{(0.962/0.962) staff:5 slot#11 off:5/4 dur:1/8}], 11/8=[HeadChordInter#6842{(0.957/0.957) staff:4 slot#11 off:11/8 dur:1/8}]}
+2025-12-03 23:43:30,706 INFO [enhanced_sample]                Voice.java:257  | Measure{#6P2} Voice{#2 excess:1/8} too long
+2025-12-03 23:43:30,707 INFO [enhanced_sample]                Voice.java:257  | Measure{#6P2} Voice{#5 excess:1/2} too long
+2025-12-03 23:43:30,707 INFO [enhanced_sample]                Voice.java:257  | Measure{#6P2} Voice{#3 excess:1/2} too long
+2025-12-03 23:43:30,708 INFO [enhanced_sample]          StackRhythm.java:224  | S2 MeasureStack#6 no correct rhythm
+2025-12-03 23:43:30,725 INFO [enhanced_sample]        MeasureRhythm.java:1045 | Measure{#8P1} No timeOffset for HeadChordInter#6890{(0.932/0.932) staff:6 slot#4 dur:1/8}
+2025-12-03 23:43:30,732 INFO [enhanced_sample]        MeasureRhythm.java:1045 | Measure{#8P2} No timeOffset for HeadChordInter#6908{(0.938/0.938) staff:7 slot#7 dur:1/8}
+2025-12-03 23:43:30,733 INFO [enhanced_sample]        MeasureRhythm.java:1045 | Measure{#8P2} No timeOffset for HeadChordInter#6937{(0.963/0.963) staff:8 slot#7 dur:1/8}
+2025-12-03 23:43:30,735 INFO [enhanced_sample]        MeasureRhythm.java:1045 | Measure{#8P2} No timeOffset for HeadChordInter#6938{(0.645/0.645) staff:8 slot#7 dur:1/2}
+2025-12-03 23:43:30,737 INFO [enhanced_sample]          StackRhythm.java:224  | S3 MeasureStack#8 no correct rhythm
+2025-12-03 23:43:30,740 INFO [enhanced_sample]        MeasureRhythm.java:1045 | Measure{#9P1} No timeOffset for HeadChordInter#6899{(0.937/0.937) staff:6 slot#7 dur:1/4}
+2025-12-03 23:43:30,741 INFO [enhanced_sample]   AbstractChordInter.java:627  | Measure{#9P1} No timeOffset for HeadChordInter#6899{(0.937/0.937) staff:6 slot#7 dur:1/4}
+2025-12-03 23:43:30,743 INFO [enhanced_sample]                Voice.java:257  | Measure{#9P1} Voice{#1 excess:5/8} too long
+2025-12-03 23:43:30,751 INFO [enhanced_sample]        MeasureRhythm.java:1045 | Measure{#9P2} No timeOffset for HeadChordInter#6917{(0.939/0.939) staff:7 slot#10 dur:1/4}
+2025-12-03 23:43:30,753 INFO [enhanced_sample]        MeasureRhythm.java:1045 | Measure{#9P2} No timeOffset for HeadChordInter#6953{(0.956/0.956) staff:8 slot#10 dur:1/8}
+2025-12-03 23:43:30,754 INFO [enhanced_sample]   AbstractChordInter.java:627  | Measure{#9P2} No timeOffset for HeadChordInter#6917{(0.939/0.939) staff:7 slot#10 dur:1/4}
+2025-12-03 23:43:30,755 INFO [enhanced_sample]   AbstractChordInter.java:627  | Measure{#9P2} No timeOffset for HeadChordInter#6955{(0.936/0.936) staff:8 slot#12 dur:1/8}
+2025-12-03 23:43:30,755 INFO [enhanced_sample]                Voice.java:257  | Measure{#9P2} Voice{#1 excess:3/8} too long
+2025-12-03 23:43:30,756 INFO [enhanced_sample]                Voice.java:257  | Measure{#9P2} Voice{#7 excess:3/8} too long
+2025-12-03 23:43:30,756 INFO [enhanced_sample]                Voice.java:257  | Measure{#9P2} Voice{#8 excess:3/4} too long
+2025-12-03 23:43:30,757 INFO [enhanced_sample]          StackRhythm.java:224  | S3 MeasureStack#9 no correct rhythm
+2025-12-03 23:43:30,758 INFO [enhanced_sample]       StepMonitoring.java:98   | PAGE
+2025-12-03 23:43:30,771 INFO [enhanced_sample]                Voice.java:257  | Measure{#6P2} Voice{#2 excess:1/8} too long
+2025-12-03 23:43:30,772 INFO [enhanced_sample]                Voice.java:257  | Measure{#6P2} Voice{#3 excess:1/2} too long
+2025-12-03 23:43:30,773 INFO [enhanced_sample]                Voice.java:257  | Measure{#6P2} Voice{#5 excess:1/2} too long
+2025-12-03 23:43:30,773 INFO [enhanced_sample]                Voice.java:257  | Measure{#9P1} Voice{#1 excess:5/8} too long
+2025-12-03 23:43:30,774 INFO [enhanced_sample]                Voice.java:257  | Measure{#9P2} Voice{#1 excess:3/8} too long
+2025-12-03 23:43:30,775 INFO [enhanced_sample]                Voice.java:257  | Measure{#9P2} Voice{#7 excess:3/8} too long
+2025-12-03 23:43:30,775 INFO [enhanced_sample]                Voice.java:257  | Measure{#9P2} Voice{#8 excess:3/4} too long
+2025-12-03 23:43:30,777 INFO [enhanced_sample]                 Book.java:2550 | Book{enhanced_sample} storing
+2025-12-03 23:43:30,862 INFO [enhanced_sample]                 Book.java:2531 | Stored /book.xml
+2025-12-03 23:43:31,184 INFO [enhanced_sample]           DataHolder.java:348  | Stored /sheet#1/BINARY.png
+2025-12-03 23:43:32,711 INFO [enhanced_sample]                Sheet.java:1583 | Stored /sheet#1/sheet#1.xml
+2025-12-03 23:43:32,711 INFO [enhanced_sample]                 Book.java:2491 | Book stored as C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1764776548635\enhanced_sample.omr
+2025-12-03 23:43:32,720 INFO [enhanced_sample]            SheetStub.java:1660 | Disposed sheet
+2025-12-03 23:43:32,809 INFO [enhanced_sample]                 Book.java:2018 | End of Stub#1 memory: 31,459,744
+2025-12-03 23:43:32,810 INFO [enhanced_sample]                 Book.java:2025 | Book processed.
+2025-12-03 23:43:35,367 INFO [enhanced_sample]            SheetStub.java:997  | Loaded /sheet#1/sheet#1.xml
+2025-12-03 23:43:36,214 INFO [enhanced_sample]      PartwiseBuilder.java:2661 | Exporting sheet(s): [#1]
+2025-12-03 23:43:36,215 INFO [enhanced_sample]                 Part.java:351  | Sheet#1 System#1 Part#2{ staves[1,2] configs:[5,5]} dummyPart id: 1
+2025-12-03 23:43:36,243 INFO [enhanced_sample]       MetronomeInter.java:701  | No beat unit in metronome line "Freely =50]" str: "Freely"
+2025-12-03 23:43:36,244 WARN [enhanced_sample]      PartwiseBuilder.java:1586 | Error visiting MetronomeInter#5584{ FROZEN(0.644/0.644) staff:1 METRONOME mFont:BS-59 Metronome bpm1:50} in {Page#1.1}
+java.lang.NullPointerException: Cannot invoke "org.audiveris.omr.sig.inter.BeatUnitInter$Note.toMusicXml()" because "note" is null
+	at org.audiveris.omr.score.PartwiseBuilder.processDirection(PartwiseBuilder.java:1545)
+	at org.audiveris.omr.score.PartwiseBuilder.processNote(PartwiseBuilder.java:2221)
+	at org.audiveris.omr.score.PartwiseBuilder.processChord(PartwiseBuilder.java:1365)
+	at org.audiveris.omr.score.PartwiseBuilder.processMeasure(PartwiseBuilder.java:2052)
+	at org.audiveris.omr.score.PartwiseBuilder.processPart(PartwiseBuilder.java:2632)
+	at org.audiveris.omr.score.PartwiseBuilder.processSystem(PartwiseBuilder.java:3132)
+	at org.audiveris.omr.score.PartwiseBuilder.processLogicalPart(PartwiseBuilder.java:1845)
+	at org.audiveris.omr.score.PartwiseBuilder.processStub(PartwiseBuilder.java:3083)
+	at org.audiveris.omr.score.PartwiseBuilder.processPartList(PartwiseBuilder.java:2664)
+	at org.audiveris.omr.score.PartwiseBuilder.processScore(PartwiseBuilder.java:2895)
+	at org.audiveris.omr.score.PartwiseBuilder.build(PartwiseBuilder.java:3451)
+	at org.audiveris.omr.score.ScoreExporter.export(ScoreExporter.java:122)
+	at org.audiveris.omr.score.ScoreExporter.export(ScoreExporter.java:163)
+	at org.audiveris.omr.sheet.Book.export(Book.java:633)
+	at org.audiveris.omr.CLI$ProcessingTask.processBook(CLI.java:896)
+	at org.audiveris.omr.CLI$CliTask.call(CLI.java:504)
+	at org.audiveris.omr.Main.runBatchTasks(Main.java:371)
+	at org.audiveris.omr.Main.main(Main.java:260)
+	at Audiveris.main(Audiveris.java:50)
+2025-12-03 23:43:36,469 INFO [enhanced_sample]        ScoreExporter.java:164  | Score enhanced_sample exported to C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1764776548635\enhanced_sample.mxl
+2025-12-03 23:43:36,564 INFO [enhanced_sample]                Score.java:181  | Closing {Score 1}

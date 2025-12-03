@@ -163,68 +163,142 @@ app.post("/omr/scan", upload.single("file"), async (req, res) => {
 
     // For images, apply advanced preprocessing for optimal OMR quality
     let processedFile = req.file.path;
+    let preprocessedFiles = []; // Track all preprocessing attempts
     const isImageFile = /\.(png|jpg|jpeg|tif|tiff|bmp)$/i.test(req.file.originalname);
     
     if (isImageFile) {
+      const sharp = require('sharp');
+      const image = sharp(req.file.path);
+      const metadata = await image.metadata();
+      console.log(`Original image: ${metadata.width}x${metadata.height}, format: ${metadata.format}, channels: ${metadata.channels}, DPI: ${metadata.density || 'unknown'}`);
+      
+      const isPNG = /\.png$/i.test(req.file.originalname);
+      const hasAlpha = metadata.channels === 4 || metadata.hasAlpha;
+      
+      // Check if image is too small
+      const estimatedDPI = Math.round(metadata.width / 8.27); // Assume A4 width
+      console.log(`Estimated DPI: ~${estimatedDPI}`);
+      
+      if (estimatedDPI < 150) {
+        console.warn(`⚠ Very low resolution detected (~${estimatedDPI} DPI). Results may be poor.`);
+      }
+      
+      if (isPNG && hasAlpha) {
+        console.log(`⚠ PNG with transparency detected - will flatten to white background`);
+      }
+      
       try {
-        const sharp = require('sharp');
-        const enhancedPath = path.join(jobDir, 'enhanced_' + path.basename(req.file.originalname, path.extname(req.file.originalname)) + '.tiff');
+        // Helper function to create preprocessing pipeline
+        const createPipeline = (inputPath) => {
+          let pipeline = sharp(inputPath);
+          
+          // CRITICAL: For PNG files, remove alpha channel and flatten to white background
+          if (isPNG || hasAlpha) {
+            pipeline = pipeline.flatten({ background: { r: 255, g: 255, b: 255 } });
+          }
+          
+          // Ensure we're working with RGB first, then convert to grayscale
+          pipeline = pipeline.toColorspace('srgb');
+          
+          return pipeline;
+        };
         
-        // Load the image and get metadata
-        const image = sharp(req.file.path);
-        const metadata = await image.metadata();
-        console.log(`Original image: ${metadata.width}x${metadata.height}, format: ${metadata.format}`);
-        
-        // Advanced preprocessing pipeline for music sheet recognition
-        await image
-          // 1. Resize to optimal DPI for Audiveris (A4 at 400 DPI for better accuracy)
+        // Strategy 1: High-contrast aggressive preprocessing (best for low-quality scans)
+        const enhancedPath1 = path.join(jobDir, 'enhanced_aggressive.tiff');
+        await createPipeline(req.file.path)
           .resize({ 
-            width: 3300,  // A4 width at 400 DPI
-            height: 4677, // A4 height at 400 DPI
+            width: 3300,
+            height: 4677,
             fit: 'inside', 
             withoutEnlargement: false,
-            kernel: 'lanczos3' // High-quality resampling
+            kernel: 'lanczos3'
           })
-          // 2. Rotate to correct orientation if needed (straighten)
           .rotate()
-          // 3. Convert to grayscale for consistent processing
           .grayscale()
-          // 4. Remove noise while preserving edges (important for staff lines)
           .median(3)
-          // 5. Enhance contrast adaptively
-          .normalise({
-            lower: 1,  // Lower percentile for black point
-            upper: 99  // Upper percentile for white point
-          })
-          // 6. Enhance local contrast (CLAHE-like effect)
-          .linear(1.2, -10)
-          // 7. Sharpen to enhance staff lines and note heads
-          .sharpen({
-            sigma: 1.5,     // Moderate sharpening
-            m1: 1.0,        // Sharpening amount
-            m2: 0.5,        // Sharpening threshold
-            x1: 2,          // Flat area threshold
-            y2: 10,         // Maximum brightening
-            y3: 20          // Maximum darkening
-          })
-          // 8. Apply threshold for binary-like image (better for line detection)
-          .threshold(128, { grayscale: false })
-          // 9. Save as high-quality TIFF
-          .tiff({ 
-            compression: 'lzw',
-            quality: 100,
-            predictor: 'horizontal'
-          })
-          .toFile(enhancedPath);
+          .normalise({ lower: 1, upper: 99 })
+          .linear(1.3, -15) // More aggressive contrast
+          .sharpen({ sigma: 2.0, m1: 1.2, m2: 0.4 }) // Stronger sharpening
+          .threshold(120) // Lower threshold for more black
+          .tiff({ compression: 'lzw', quality: 100 })
+          .toFile(enhancedPath1);
+        preprocessedFiles.push(enhancedPath1);
+        console.log(`✓ Created aggressive preprocessing: ${enhancedPath1}`);
         
-        processedFile = enhancedPath;
-        console.log(`✓ Image preprocessing complete: ${enhancedPath}`);
-        console.log(`  - Noise reduction applied`);
-        console.log(`  - Contrast enhanced`);
-        console.log(`  - Staff lines optimized`);
+        // Strategy 2: Moderate preprocessing (balanced) - Best for most cases
+        const enhancedPath2 = path.join(jobDir, 'enhanced_balanced.tiff');
+        await createPipeline(req.file.path)
+          .resize({ 
+            width: 3300,
+            height: 4677,
+            fit: 'inside', 
+            withoutEnlargement: false,
+            kernel: 'lanczos3'
+          })
+          .rotate()
+          .grayscale()
+          .median(3)
+          .normalise({ lower: 2, upper: 98 })
+          .linear(1.2, -10)
+          .sharpen({ sigma: 1.5, m1: 1.0, m2: 0.5 })
+          .threshold(128)
+          .tiff({ compression: 'lzw', quality: 100 })
+          .toFile(enhancedPath2);
+        preprocessedFiles.push(enhancedPath2);
+        console.log(`✓ Created balanced preprocessing: ${enhancedPath2}`);
+        
+        // Strategy 3: Gentle preprocessing (for high-quality scans)
+        const enhancedPath3 = path.join(jobDir, 'enhanced_gentle.tiff');
+        await createPipeline(req.file.path)
+          .resize({ 
+            width: 3300,
+            height: 4677,
+            fit: 'inside', 
+            withoutEnlargement: false,
+            kernel: 'lanczos3'
+          })
+          .rotate()
+          .grayscale()
+          .normalise({ lower: 5, upper: 95 })
+          .sharpen({ sigma: 1.0 })
+          .tiff({ compression: 'lzw', quality: 100 })
+          .toFile(enhancedPath3);
+        preprocessedFiles.push(enhancedPath3);
+        console.log(`✓ Created gentle preprocessing: ${enhancedPath3}`);
+        
+        // Strategy 4: Special PNG handling without threshold (for screenshots/digital PNGs)
+        if (isPNG) {
+          const enhancedPath4 = path.join(jobDir, 'enhanced_png_special.tiff');
+          await createPipeline(req.file.path)
+            .resize({ 
+              width: 3300,
+              height: 4677,
+              fit: 'inside', 
+              withoutEnlargement: false,
+              kernel: 'lanczos3'
+            })
+            .rotate()
+            .grayscale()
+            .normalise({ lower: 3, upper: 97 })
+            .linear(1.15, -8) // Gentler contrast for digital images
+            .sharpen({ sigma: 1.2 })
+            // No threshold - keep grayscale for digital images
+            .tiff({ compression: 'lzw', quality: 100 })
+            .toFile(enhancedPath4);
+          preprocessedFiles.push(enhancedPath4);
+          console.log(`✓ Created PNG-specific preprocessing: ${enhancedPath4}`);
+          
+          // For PNG, try PNG-specific version first
+          processedFile = enhancedPath4;
+        } else {
+          // Use balanced as primary for JPG
+          processedFile = enhancedPath2;
+        }
+        
+        console.log(`✓ Image preprocessing complete with ${preprocessedFiles.length} strategies`);
       } catch (preprocessErr) {
         console.warn('⚠ Image preprocessing failed, using original:', preprocessErr);
-        // Continue with original file if preprocessing fails
+        preprocessedFiles = [];
       }
     }
 
@@ -270,11 +344,84 @@ app.post("/omr/scan", upload.single("file"), async (req, res) => {
         candidates.push(...listFilesRecursive(d, [".mxl", ".musicxml", ".xml"]));
       }
     }
-    const musicxmlPath = mostRecent(candidates);
+    let musicxmlPath = mostRecent(candidates);
+    
+    // If no output found and we have multiple preprocessing attempts, try them
+    if (!musicxmlPath && preprocessedFiles.length > 0) {
+      console.log('⚠ First attempt failed, trying alternative preprocessing strategies...');
+      
+      for (let i = 0; i < preprocessedFiles.length; i++) {
+        const altFile = preprocessedFiles[i];
+        if (altFile === processedFile) continue; // Already tried this one
+        
+        console.log(`Attempting with: ${path.basename(altFile)}`);
+        
+        // Run Audiveris again with alternative preprocessing
+        let altCmd = cmd;
+        let altCmdArgs = [...cmdArgs];
+        altCmdArgs[altCmdArgs.length - 1] = altFile; // Replace file path
+        
+        try {
+          const altProc = spawn(altCmd, altCmdArgs, { shell: useShell });
+          const altKillAt = setTimeout(() => { try { altProc.kill("SIGKILL"); } catch {} }, 90_000);
+          await new Promise((resolve) => altProc.on("exit", resolve));
+          clearTimeout(altKillAt);
+          
+          // Check for new output
+          candidates = listFilesRecursive(jobDir, [".mxl", ".musicxml", ".xml"]);
+          if (candidates.length) {
+            musicxmlPath = mostRecent(candidates);
+            if (musicxmlPath) {
+              console.log(`✓ Success with alternative preprocessing: ${path.basename(altFile)}`);
+              break;
+            }
+          }
+        } catch (altErr) {
+          console.warn(`Alternative attempt failed:`, altErr.message);
+        }
+      }
+    }
+    
     if (!musicxmlPath) {
+      // Provide detailed diagnostic information
+      const diagnostics = [];
+      diagnostics.push('Could not extract musical notation from the uploaded file.');
+      
+      if (isImageFile) {
+        const sharp = require('sharp');
+        try {
+          const metadata = await sharp(req.file.path).metadata();
+          const estimatedDPI = Math.round(metadata.width / 8.27);
+          
+          if (estimatedDPI < 200) {
+            diagnostics.push(`• Resolution too low (~${estimatedDPI} DPI). Scan at 300-400 DPI.`);
+          } else {
+            diagnostics.push(`• Resolution appears adequate (~${estimatedDPI} DPI).`);
+          }
+        } catch (err) {
+          diagnostics.push('• Unable to analyze image metadata.');
+        }
+        
+        diagnostics.push('• Ensure the image contains printed music notation (not chord charts or tabs).');
+        diagnostics.push('• Make sure staff lines are clearly visible and continuous.');
+        diagnostics.push('• Avoid handwritten music - OMR works with printed scores only.');
+        diagnostics.push('• Try scanning in black & white mode with high contrast.');
+        diagnostics.push('• Ensure the page is straight (not skewed or rotated).');
+      } else {
+        diagnostics.push('• PDF might not contain valid music notation.');
+        diagnostics.push('• Try converting to a high-quality image (PNG at 300+ DPI).');
+      }
+      
       return res.json({
         ok: false,
-        error: "Could not extract notation (not a valid score, or OMR didn’t detect staves/notes). Try ~300–400 dpi.",
+        error: diagnostics.join('\n'),
+        details: `Audiveris could not detect staves or notes. Exit code: ${code}`,
+        suggestions: [
+          'Use a scanner or document scanning app at 300-400 DPI',
+          'Ensure good lighting and contrast',
+          'Verify the file contains actual music notation with staff lines',
+          'Try a different page or section of the score'
+        ]
       });
     }
 
@@ -300,9 +447,13 @@ app.post("/omr/scan", upload.single("file"), async (req, res) => {
     }
 
     const chords = [];
+    let totalNotes = 0;
+    
     for (const m of measures) {
       const measureNo = Number(m?.number || 0);
       const notes = vArray(m?.note).filter((n) => !("rest" in n));
+      totalNotes += notes.length;
+      
       const pcs = [];
       for (const n of notes) {
         const pc = pickPitchClassFromMusicXmlNote(n);
@@ -314,11 +465,34 @@ app.post("/omr/scan", upload.single("file"), async (req, res) => {
     }
 
     const anyChord = chords.some((c) => c.chord);
+    const anyNotes = totalNotes > 0;
+    
+    console.log(`Detected ${measures.length} measures, ${totalNotes} notes, ${chords.filter(c => c.chord).length} chords`);
+    
     if (!anyChord) {
+      // If we detected notes but couldn't identify chords
+      if (anyNotes) {
+        return res.json({
+          ok: true, // Still return success since we got notes
+          warning: 'Musical notation detected, but chord recognition was limited. This may be due to complex harmony, incomplete chords, or non-standard notation.',
+          summary: { 
+            filename: req.file.originalname, 
+            bytes: req.file.size,
+            measures: measures.length,
+            notes: totalNotes,
+            chordsDetected: 0
+          },
+          musicxmlUrl: "/omr-out/" + path.relative(OMR_OUT_ROOT, musicxmlPath).replace(/\\/g, "/"),
+          chords,
+        });
+      }
+      
+      // No notes or chords detected at all
       return res.json({
         ok: false,
-        error: "Could not recognize chord content. Use a printed, straight page at ~300–400 dpi (no handwriting).",
+        error: "Musical notation was extracted, but no recognizable chords were found.\n\nPossible reasons:\n• The score may contain single melody lines (not chords)\n• Notation may be incomplete or unclear\n• This might be a monophonic piece (one note at a time)\n• Try a section with more harmonic content",
         chords,
+        details: `Found ${measures.length} measures with ${totalNotes} notes, but chord detection failed.`
       });
     }
 

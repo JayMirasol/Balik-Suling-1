@@ -1,0 +1,28 @@
+2025-12-03 23:20:49,073 INFO [enhanced_score_0]                 Book.java:562  | 1 sheet in C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1764775242085\enhanced_score_0.tiff
+2025-12-03 23:20:49,426 INFO []                 Book.java:2531 | Stored /book.xml
+2025-12-03 23:20:49,427 INFO []                 Book.java:2491 | Book stored as C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1764775242085\enhanced_score_0.omr
+2025-12-03 23:20:49,464 INFO []                 Book.java:1933 | Book reaching PAGE on sheets:[#1]
+2025-12-03 23:20:49,468 INFO [enhanced_score_0]       StepMonitoring.java:98   | LOAD
+2025-12-03 23:20:49,742 INFO [enhanced_score_0]            SheetStub.java:1273 | Loaded image #1 3300x4271 from C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1764775242085\enhanced_score_0.tiff
+2025-12-03 23:20:49,748 INFO [enhanced_score_0]            ImageUtil.java:124  | Converting max RGB to gray
+2025-12-03 23:20:50,182 INFO [enhanced_score_0]       StepMonitoring.java:98   | BINARY
+2025-12-03 23:20:51,650 INFO [enhanced_score_0]       StepMonitoring.java:98   | SCALE
+2025-12-03 23:20:51,678 INFO [enhanced_score_0]         ScaleBuilder.java:241  | Beam  guessed height: 13 -- 0.50 of 26 interline
+2025-12-03 23:20:51,680 INFO [enhanced_score_0]         ScaleBuilder.java:264  | Beam measured height: 13 -- 0.32 of [7..26] range at 749% of needed quorum
+2025-12-03 23:20:51,681 INFO [enhanced_score_0]            ScaleStep.java:65   | Scale{ interline(24,26,27) line(2,4,6) beam(13)}
+2025-12-03 23:20:51,682 INFO [enhanced_score_0]       StepMonitoring.java:98   | GRID
+2025-12-03 23:20:52,190 INFO [enhanced_score_0]       LinesRetriever.java:1500 | Global slope: 0.00021
+2025-12-03 23:20:52,248 INFO [enhanced_score_0]    ClustersRetriever.java:328  | Retrieved raw line clusters: 0 of sizes [5] with interline(24,26,27)
+2025-12-03 23:20:52,365 WARN [enhanced_score_0]            PeakGraph.java:305  | No system found
+2025-12-03 23:20:52,366 INFO [enhanced_score_0]                 Book.java:545  | Created scores: []
+2025-12-03 23:20:52,367 INFO [enhanced_score_0]            SheetStub.java:1191 | Sheet enhanced_score_0 flagged as invalid.
+2025-12-03 23:20:52,368 INFO [enhanced_score_0]            SheetStub.java:1410 | StepException cause detected in [LOAD, BINARY, SCALE, GRID, HEADERS, STEM_SEEDS, BEAMS, LEDGERS, HEADS, STEMS, REDUCTION, CUE_BEAMS, TEXTS, MEASURES, CHORDS, CURVES, SYMBOLS, LINKS, RHYTHMS, PAGE]
+2025-12-03 23:20:52,368 INFO [enhanced_score_0]                 Book.java:2550 | Book{enhanced_score_0} storing
+2025-12-03 23:20:52,408 INFO [enhanced_score_0]                 Book.java:2531 | Stored /book.xml
+2025-12-03 23:20:52,613 INFO [enhanced_score_0]           DataHolder.java:348  | Stored /sheet#1/BINARY.png
+2025-12-03 23:20:53,021 INFO [enhanced_score_0]                Sheet.java:1583 | Stored /sheet#1/sheet#1.xml
+2025-12-03 23:20:53,022 INFO [enhanced_score_0]                 Book.java:2491 | Book stored as C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1764775242085\enhanced_score_0.omr
+2025-12-03 23:20:53,029 INFO [enhanced_score_0]            SheetStub.java:1660 | Disposed sheet
+2025-12-03 23:20:53,064 INFO [enhanced_score_0]                 Book.java:2018 | End of Stub#1 memory: 14,859,144
+2025-12-03 23:20:53,066 INFO [enhanced_score_0]                 Book.java:2025 | Book processed.
+2025-12-03 23:20:53,066 INFO [enhanced_score_0]                 Book.java:599  | Could not export since transcription did not complete successfully

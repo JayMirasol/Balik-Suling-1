@@ -992,13 +992,45 @@ export default function ScanScore() {
               <div style={{ marginBottom: 6 }}>
                 <span style={styles.labelFailed}>Upload failed !</span>
               </div>
-              <pre style={{ whiteSpace: "pre-wrap", margin: 0 }}>{String(result.error)}</pre>
+              <div style={{ 
+                background: '#fff3e0', 
+                padding: 12, 
+                borderRadius: 8, 
+                borderLeft: '4px solid #ff9800',
+                marginBottom: 10
+              }}>
+                <pre style={{ 
+                  whiteSpace: "pre-wrap", 
+                  margin: 0, 
+                  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+                  fontSize: 14,
+                  lineHeight: 1.6
+                }}>{String(result.error)}</pre>
+              </div>
+
+              {/* Show suggestions if available */}
+              {result.suggestions && Array.isArray(result.suggestions) && (
+                <div style={{
+                  background: '#e3f2fd',
+                  padding: 12,
+                  borderRadius: 8,
+                  borderLeft: '4px solid #2196f3',
+                  marginBottom: 10
+                }}>
+                  <div style={{ fontWeight: 700, marginBottom: 8, color: '#1976d2' }}>💡 Suggestions:</div>
+                  <ul style={{ margin: 0, paddingLeft: 20, fontSize: 13 }}>
+                    {result.suggestions.map((sug, i) => (
+                      <li key={i} style={{ marginBottom: 4 }}>{sug}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
               {/* Optional details from backend (Audiveris logs) */}
               {result.details && (
                 <div style={styles.details}>
-                  <div style={{ fontWeight: 700, marginBottom: 6 }}>Details</div>
-                  <pre style={{ whiteSpace: "pre-wrap", margin: 0 }}>{String(result.details)}</pre>
+                  <div style={{ fontWeight: 700, marginBottom: 6 }}>Technical Details</div>
+                  <pre style={{ whiteSpace: "pre-wrap", margin: 0, fontSize: 12, opacity: 0.8 }}>{String(result.details)}</pre>
                 </div>
               )}
             </>

@@ -1,0 +1,28 @@
+2025-12-03 22:40:27,166 INFO [enhanced_allofme]                 Book.java:562  | 1 sheet in C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1764772808642\enhanced_allofme.tiff
+2025-12-03 22:40:27,805 INFO []                 Book.java:2531 | Stored /book.xml
+2025-12-03 22:40:27,806 INFO []                 Book.java:2491 | Book stored as C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1764772808642\enhanced_allofme.omr
+2025-12-03 22:40:27,818 INFO []                 Book.java:1933 | Book reaching PAGE on sheets:[#1]
+2025-12-03 22:40:27,821 INFO [enhanced_allofme]       StepMonitoring.java:98   | LOAD
+2025-12-03 22:40:28,138 INFO [enhanced_allofme]            SheetStub.java:1273 | Loaded image #1 3300x4271 from C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1764772808642\enhanced_allofme.tiff
+2025-12-03 22:40:28,145 INFO [enhanced_allofme]            ImageUtil.java:124  | Converting max RGB to gray
+2025-12-03 22:40:28,588 INFO [enhanced_allofme]       StepMonitoring.java:98   | BINARY
+2025-12-03 22:40:30,213 INFO [enhanced_allofme]       StepMonitoring.java:98   | SCALE
+2025-12-03 22:40:30,244 INFO [enhanced_allofme]         ScaleBuilder.java:241  | Beam  guessed height: 14 -- 0.50 of 28 interline
+2025-12-03 22:40:30,246 INFO [enhanced_allofme]         ScaleBuilder.java:264  | Beam measured height: 14 -- 0.30 of [8..28] range at 463% of needed quorum
+2025-12-03 22:40:30,248 INFO [enhanced_allofme]            ScaleStep.java:65   | Scale{ interline(26,28,30) line(3,4,6) beam(14)}
+2025-12-03 22:40:30,251 INFO [enhanced_allofme]       StepMonitoring.java:98   | GRID
+2025-12-03 22:40:30,930 INFO [enhanced_allofme]       LinesRetriever.java:1500 | Global slope: 0.00000
+2025-12-03 22:40:30,967 INFO [enhanced_allofme]    ClustersRetriever.java:328  | Retrieved raw line clusters: 0 of sizes [5] with interline(26,28,30)
+2025-12-03 22:40:31,266 WARN [enhanced_allofme]            PeakGraph.java:305  | No system found
+2025-12-03 22:40:31,268 INFO [enhanced_allofme]                 Book.java:545  | Created scores: []
+2025-12-03 22:40:31,269 INFO [enhanced_allofme]            SheetStub.java:1191 | Sheet enhanced_allofme flagged as invalid.
+2025-12-03 22:40:31,271 INFO [enhanced_allofme]            SheetStub.java:1410 | StepException cause detected in [LOAD, BINARY, SCALE, GRID, HEADERS, STEM_SEEDS, BEAMS, LEDGERS, HEADS, STEMS, REDUCTION, CUE_BEAMS, TEXTS, MEASURES, CHORDS, CURVES, SYMBOLS, LINKS, RHYTHMS, PAGE]
+2025-12-03 22:40:31,272 INFO [enhanced_allofme]                 Book.java:2550 | Book{enhanced_allofme} storing
+2025-12-03 22:40:31,328 INFO [enhanced_allofme]                 Book.java:2531 | Stored /book.xml
+2025-12-03 22:40:31,624 INFO [enhanced_allofme]           DataHolder.java:348  | Stored /sheet#1/BINARY.png
+2025-12-03 22:40:32,139 INFO [enhanced_allofme]                Sheet.java:1583 | Stored /sheet#1/sheet#1.xml
+2025-12-03 22:40:32,139 INFO [enhanced_allofme]                 Book.java:2491 | Book stored as C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1764772808642\enhanced_allofme.omr
+2025-12-03 22:40:32,146 INFO [enhanced_allofme]            SheetStub.java:1660 | Disposed sheet
+2025-12-03 22:40:32,190 INFO [enhanced_allofme]                 Book.java:2018 | End of Stub#1 memory: 12,751,424
+2025-12-03 22:40:32,192 INFO [enhanced_allofme]                 Book.java:2025 | Book processed.
+2025-12-03 22:40:32,192 INFO [enhanced_allofme]                 Book.java:599  | Could not export since transcription did not complete successfully
