@@ -1,0 +1,59 @@
+2025-12-03 19:32:21,202 INFO [enhanced_twinkleScoreSheet]                 Book.java:562  | 1 sheet in C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1764761537123\enhanced_twinkleScoreSheet.tiff
+2025-12-03 19:32:21,507 INFO []                 Book.java:2531 | Stored /book.xml
+2025-12-03 19:32:21,508 INFO []                 Book.java:2491 | Book stored as C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1764761537123\enhanced_twinkleScoreSheet.omr
+2025-12-03 19:32:21,519 INFO []                 Book.java:1933 | Book reaching PAGE on sheets:[#1]
+2025-12-03 19:32:21,521 INFO [enhanced_twinkleScoreSheet]       StepMonitoring.java:98   | LOAD
+2025-12-03 19:32:21,770 INFO [enhanced_twinkleScoreSheet]            SheetStub.java:1273 | Loaded image #1 2480x3209 from C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1764761537123\enhanced_twinkleScoreSheet.tiff
+2025-12-03 19:32:21,775 INFO [enhanced_twinkleScoreSheet]            ImageUtil.java:124  | Converting max RGB to gray
+2025-12-03 19:32:22,071 INFO [enhanced_twinkleScoreSheet]       StepMonitoring.java:98   | BINARY
+2025-12-03 19:32:23,095 INFO [enhanced_twinkleScoreSheet]       StepMonitoring.java:98   | SCALE
+2025-12-03 19:32:23,147 INFO [enhanced_twinkleScoreSheet]         ScaleBuilder.java:241  | Beam  guessed height: 10 -- 0.50 of 20 interline
+2025-12-03 19:32:23,150 INFO [enhanced_twinkleScoreSheet]         ScaleBuilder.java:264  | Beam measured height: 13 -- 0.46 of [7..20] range at 54% of needed quorum
+2025-12-03 19:32:23,151 WARN [enhanced_twinkleScoreSheet]         ScaleBuilder.java:293  | No reliable beam height found, guessed value: 10
+2025-12-03 19:32:23,152 INFO [enhanced_twinkleScoreSheet]            ScaleStep.java:65   | Scale{ interline(20,20,21) line(5,7,7) beam(10 extra)}
+2025-12-03 19:32:23,154 INFO [enhanced_twinkleScoreSheet]       StepMonitoring.java:98   | GRID
+2025-12-03 19:32:24,100 INFO [enhanced_twinkleScoreSheet]       LinesRetriever.java:1500 | Global slope: 0.00064
+2025-12-03 19:32:24,152 INFO [enhanced_twinkleScoreSheet]    ClustersRetriever.java:328  | Retrieved raw line clusters: 6 of sizes [5] with interline(20,20,21)
+2025-12-03 19:32:24,502 INFO [enhanced_twinkleScoreSheet]            PeakGraph.java:310  | Systems: #1[1, 2] #2[3, 4] #3[5, 6]
+2025-12-03 19:32:25,053 INFO [enhanced_twinkleScoreSheet]        SystemManager.java:779  | 1 part along 3 systems
+2025-12-03 19:32:25,055 INFO [enhanced_twinkleScoreSheet]                 Book.java:545  | Created scores: [{Score 1}]
+2025-12-03 19:32:25,057 INFO [enhanced_twinkleScoreSheet]       StepMonitoring.java:98   | HEADERS
+2025-12-03 19:32:25,674 INFO [enhanced_twinkleScoreSheet]      BasicClassifier.java:277  | Classifier loaded XML norms.
+2025-12-03 19:32:25,683 INFO [enhanced_twinkleScoreSheet]   AbstractClassifier.java:396  | Classifier data loaded from default uri jar:file:/C:/Program%20Files/Audiveris/app/audiveris.jar!/res/basic-classifier.zip
+2025-12-03 19:32:27,338 INFO [enhanced_twinkleScoreSheet]       StepMonitoring.java:98   | STEM_SEEDS
+2025-12-03 19:32:27,460 INFO [enhanced_twinkleScoreSheet]        StemSeedsStep.java:86   | stem(7 max:8)
+2025-12-03 19:32:27,550 INFO [enhanced_twinkleScoreSheet]       StepMonitoring.java:98   | BEAMS
+2025-12-03 19:32:32,006 INFO [enhanced_twinkleScoreSheet]       StepMonitoring.java:98   | LEDGERS
+2025-12-03 19:32:32,212 INFO [enhanced_twinkleScoreSheet]       StepMonitoring.java:98   | HEADS
+2025-12-03 19:32:38,822 INFO [enhanced_twinkleScoreSheet]        HeadSeedTally.java:235  | Scale information: HeadSeeds{NOTEHEAD_VOID[L:-1.7,R:-1.6] NOTEHEAD_BLACK[L:-1.7,R:-1.8]}
+2025-12-03 19:32:38,823 INFO [enhanced_twinkleScoreSheet]       StepMonitoring.java:98   | STEMS
+2025-12-03 19:32:39,947 INFO [enhanced_twinkleScoreSheet]       StepMonitoring.java:98   | REDUCTION
+2025-12-03 19:32:40,106 INFO [enhanced_twinkleScoreSheet]        ReductionStep.java:105  | Stems free length median value: 71 pixels, 3.6 interlines
+2025-12-03 19:32:40,113 INFO [enhanced_twinkleScoreSheet]       StepMonitoring.java:98   | CUE_BEAMS
+2025-12-03 19:32:40,114 INFO [enhanced_twinkleScoreSheet]         CueBeamsStep.java:81   | Step CUE_BEAMS is skipped because small heads switch is off
+2025-12-03 19:32:40,114 INFO [enhanced_twinkleScoreSheet]       StepMonitoring.java:98   | TEXTS
+2025-12-03 19:32:41,523 INFO [enhanced_twinkleScoreSheet]       StepMonitoring.java:98   | MEASURES
+2025-12-03 19:32:41,549 INFO [enhanced_twinkleScoreSheet]                 Page.java:307  | 12 raw measures: [4 in system#1, 4 in system#2, 4 in system#3]
+2025-12-03 19:32:41,550 INFO [enhanced_twinkleScoreSheet]       StepMonitoring.java:98   | CHORDS
+2025-12-03 19:32:41,580 INFO [enhanced_twinkleScoreSheet]       StepMonitoring.java:98   | CURVES
+2025-12-03 19:32:42,913 INFO [enhanced_twinkleScoreSheet]         SlursBuilder.java:240  | Slurs: 1
+2025-12-03 19:32:42,925 INFO [enhanced_twinkleScoreSheet]      SegmentsBuilder.java:155  | Segments: 1
+2025-12-03 19:32:42,938 INFO [enhanced_twinkleScoreSheet]       StepMonitoring.java:98   | SYMBOLS
+2025-12-03 19:32:43,777 INFO [enhanced_twinkleScoreSheet]       StepMonitoring.java:98   | LINKS
+2025-12-03 19:32:43,857 INFO [enhanced_twinkleScoreSheet]       StepMonitoring.java:98   | RHYTHMS
+2025-12-03 19:32:43,951 INFO [enhanced_twinkleScoreSheet]                Voice.java:257  | Measure{#10} Voice{#6 excess:1/4} too long
+2025-12-03 19:32:43,952 INFO [enhanced_twinkleScoreSheet]          StackRhythm.java:224  | S3 MeasureStack#10 no correct rhythm
+2025-12-03 19:32:43,964 INFO [enhanced_twinkleScoreSheet]       StepMonitoring.java:98   | PAGE
+2025-12-03 19:32:43,984 INFO [enhanced_twinkleScoreSheet]                Voice.java:257  | Measure{#10} Voice{#6 excess:1/4} too long
+2025-12-03 19:32:43,987 INFO [enhanced_twinkleScoreSheet]                 Book.java:2550 | Book{enhanced_twinkleScoreSheet} storing
+2025-12-03 19:32:44,049 INFO [enhanced_twinkleScoreSheet]                 Book.java:2531 | Stored /book.xml
+2025-12-03 19:32:44,275 INFO [enhanced_twinkleScoreSheet]           DataHolder.java:348  | Stored /sheet#1/BINARY.png
+2025-12-03 19:32:45,190 INFO [enhanced_twinkleScoreSheet]                Sheet.java:1583 | Stored /sheet#1/sheet#1.xml
+2025-12-03 19:32:45,192 INFO [enhanced_twinkleScoreSheet]                 Book.java:2491 | Book stored as C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1764761537123\enhanced_twinkleScoreSheet.omr
+2025-12-03 19:32:45,201 INFO [enhanced_twinkleScoreSheet]            SheetStub.java:1660 | Disposed sheet
+2025-12-03 19:32:45,284 INFO [enhanced_twinkleScoreSheet]                 Book.java:2018 | End of Stub#1 memory: 32,466,840
+2025-12-03 19:32:45,287 INFO [enhanced_twinkleScoreSheet]                 Book.java:2025 | Book processed.
+2025-12-03 19:32:45,982 INFO [enhanced_twinkleScoreSheet]            SheetStub.java:997  | Loaded /sheet#1/sheet#1.xml
+2025-12-03 19:32:47,012 INFO [enhanced_twinkleScoreSheet]      PartwiseBuilder.java:2661 | Exporting sheet(s): [#1]
+2025-12-03 19:32:47,179 INFO [enhanced_twinkleScoreSheet]        ScoreExporter.java:164  | Score enhanced_twinkleScoreSheet exported to C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1764761537123\enhanced_twinkleScoreSheet.mxl
+2025-12-03 19:32:47,240 INFO [enhanced_twinkleScoreSheet]                Score.java:181  | Closing {Score 1}

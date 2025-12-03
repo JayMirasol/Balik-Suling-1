@@ -161,29 +161,69 @@ app.post("/omr/scan", upload.single("file"), async (req, res) => {
     const jobDir = path.join(OMR_OUT_ROOT, String(Date.now()));
     fs.mkdirSync(jobDir, { recursive: true });
 
-    // For images, try to preprocess them for better OCR quality
+    // For images, apply advanced preprocessing for optimal OMR quality
     let processedFile = req.file.path;
     const isImageFile = /\.(png|jpg|jpeg|tif|tiff|bmp)$/i.test(req.file.originalname);
     
     if (isImageFile) {
       try {
-        // Use ImageMagick or similar tool if available to enhance image quality
-        // Convert to high-contrast, high-DPI format that Audiveris prefers
         const sharp = require('sharp');
         const enhancedPath = path.join(jobDir, 'enhanced_' + path.basename(req.file.originalname, path.extname(req.file.originalname)) + '.tiff');
         
-        await sharp(req.file.path)
-          .resize({ width: 2480, height: 3508, fit: 'inside', withoutEnlargement: false }) // A4 at 300 DPI
+        // Load the image and get metadata
+        const image = sharp(req.file.path);
+        const metadata = await image.metadata();
+        console.log(`Original image: ${metadata.width}x${metadata.height}, format: ${metadata.format}`);
+        
+        // Advanced preprocessing pipeline for music sheet recognition
+        await image
+          // 1. Resize to optimal DPI for Audiveris (A4 at 400 DPI for better accuracy)
+          .resize({ 
+            width: 3300,  // A4 width at 400 DPI
+            height: 4677, // A4 height at 400 DPI
+            fit: 'inside', 
+            withoutEnlargement: false,
+            kernel: 'lanczos3' // High-quality resampling
+          })
+          // 2. Rotate to correct orientation if needed (straighten)
+          .rotate()
+          // 3. Convert to grayscale for consistent processing
           .grayscale()
-          .normalise()
-          .sharpen()
-          .tiff({ compression: 'lzw' })
+          // 4. Remove noise while preserving edges (important for staff lines)
+          .median(3)
+          // 5. Enhance contrast adaptively
+          .normalise({
+            lower: 1,  // Lower percentile for black point
+            upper: 99  // Upper percentile for white point
+          })
+          // 6. Enhance local contrast (CLAHE-like effect)
+          .linear(1.2, -10)
+          // 7. Sharpen to enhance staff lines and note heads
+          .sharpen({
+            sigma: 1.5,     // Moderate sharpening
+            m1: 1.0,        // Sharpening amount
+            m2: 0.5,        // Sharpening threshold
+            x1: 2,          // Flat area threshold
+            y2: 10,         // Maximum brightening
+            y3: 20          // Maximum darkening
+          })
+          // 8. Apply threshold for binary-like image (better for line detection)
+          .threshold(128, { grayscale: false })
+          // 9. Save as high-quality TIFF
+          .tiff({ 
+            compression: 'lzw',
+            quality: 100,
+            predictor: 'horizontal'
+          })
           .toFile(enhancedPath);
         
         processedFile = enhancedPath;
-        console.log(`Image preprocessed: ${processedFile}`);
+        console.log(`✓ Image preprocessing complete: ${enhancedPath}`);
+        console.log(`  - Noise reduction applied`);
+        console.log(`  - Contrast enhanced`);
+        console.log(`  - Staff lines optimized`);
       } catch (preprocessErr) {
-        console.warn('Image preprocessing failed, using original:', preprocessErr);
+        console.warn('⚠ Image preprocessing failed, using original:', preprocessErr);
         // Continue with original file if preprocessing fails
       }
     }

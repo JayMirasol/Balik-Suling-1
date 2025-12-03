@@ -1,0 +1,57 @@
+2025-12-03 20:07:25,147 INFO [enhanced_score_0]                 Book.java:562  | 1 sheet in C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1764763640642\enhanced_score_0.tiff
+2025-12-03 20:07:25,463 INFO []                 Book.java:2531 | Stored /book.xml
+2025-12-03 20:07:25,464 INFO []                 Book.java:2491 | Book stored as C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1764763640642\enhanced_score_0.omr
+2025-12-03 20:07:25,475 INFO []                 Book.java:1933 | Book reaching PAGE on sheets:[#1]
+2025-12-03 20:07:25,478 INFO [enhanced_score_0]       StepMonitoring.java:98   | LOAD
+2025-12-03 20:07:25,814 INFO [enhanced_score_0]            SheetStub.java:1273 | Loaded image #1 2480x3209 from C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1764763640642\enhanced_score_0.tiff
+2025-12-03 20:07:25,820 INFO [enhanced_score_0]            ImageUtil.java:124  | Converting max RGB to gray
+2025-12-03 20:07:26,131 INFO [enhanced_score_0]       StepMonitoring.java:98   | BINARY
+2025-12-03 20:07:27,153 INFO [enhanced_score_0]       StepMonitoring.java:98   | SCALE
+2025-12-03 20:07:27,198 INFO [enhanced_score_0]         ScaleBuilder.java:241  | Beam  guessed height: 10 -- 0.50 of 19 interline
+2025-12-03 20:07:27,198 INFO [enhanced_score_0]         ScaleBuilder.java:264  | Beam measured height: 13 -- 0.50 of [7..19] range at 306% of needed quorum
+2025-12-03 20:07:27,214 INFO [enhanced_score_0]            ScaleStep.java:65   | Scale{ interline(18,19,20) line(3,4,7) beam(13)}
+2025-12-03 20:07:27,216 INFO [enhanced_score_0]       StepMonitoring.java:98   | GRID
+2025-12-03 20:07:28,602 INFO [enhanced_score_0]       LinesRetriever.java:1500 | Global slope: -0.00020
+2025-12-03 20:07:28,718 INFO [enhanced_score_0]    ClustersRetriever.java:328  | Retrieved raw line clusters: 10 of sizes [5] with interline(18,19,20)
+2025-12-03 20:07:29,608 INFO [enhanced_score_0]            PeakGraph.java:310  | Systems: #1[1, 2] #2[3, 4] #3[5, 6] #4[7, 8] #5[9, 10]
+2025-12-03 20:07:30,698 INFO [enhanced_score_0]        SystemManager.java:779  | 1 part along 5 systems
+2025-12-03 20:07:30,700 INFO [enhanced_score_0]                 Book.java:545  | Created scores: [{Score 1}]
+2025-12-03 20:07:30,700 INFO [enhanced_score_0]       StepMonitoring.java:98   | HEADERS
+2025-12-03 20:07:31,238 INFO [enhanced_score_0]      BasicClassifier.java:277  | Classifier loaded XML norms.
+2025-12-03 20:07:31,238 INFO [enhanced_score_0]   AbstractClassifier.java:396  | Classifier data loaded from default uri jar:file:/C:/Program%20Files/Audiveris/app/audiveris.jar!/res/basic-classifier.zip
+2025-12-03 20:07:34,016 INFO [enhanced_score_0]       StepMonitoring.java:98   | STEM_SEEDS
+2025-12-03 20:07:34,149 INFO [enhanced_score_0]        StemSeedsStep.java:86   | stem(6 max:7)
+2025-12-03 20:07:34,318 INFO [enhanced_score_0]       StepMonitoring.java:98   | BEAMS
+2025-12-03 20:07:41,636 INFO [enhanced_score_0]       StepMonitoring.java:98   | LEDGERS
+2025-12-03 20:07:42,328 INFO [enhanced_score_0]       StepMonitoring.java:98   | HEADS
+2025-12-03 20:07:53,377 INFO [enhanced_score_0]        HeadSeedTally.java:235  | Scale information: HeadSeeds{NOTEHEAD_VOID[R:-1.7] NOTEHEAD_BLACK[L:-1.3,R:-1.7]}
+2025-12-03 20:07:53,377 INFO [enhanced_score_0]       StepMonitoring.java:98   | STEMS
+2025-12-03 20:07:55,917 INFO [enhanced_score_0]       StepMonitoring.java:98   | REDUCTION
+2025-12-03 20:07:56,356 INFO [enhanced_score_0]        ReductionStep.java:105  | Stems free length median value: 68 pixels, 3.6 interlines
+2025-12-03 20:07:56,366 INFO [enhanced_score_0]       StepMonitoring.java:98   | CUE_BEAMS
+2025-12-03 20:07:56,366 INFO [enhanced_score_0]         CueBeamsStep.java:81   | Step CUE_BEAMS is skipped because small heads switch is off
+2025-12-03 20:07:56,366 INFO [enhanced_score_0]       StepMonitoring.java:98   | TEXTS
+2025-12-03 20:07:58,064 INFO [enhanced_score_0]       StepMonitoring.java:98   | MEASURES
+2025-12-03 20:07:58,089 INFO [enhanced_score_0]                 Page.java:307  | 23 raw measures: [6 in system#1, 5 in system#2, 4 in system#3, 4 in system#4, 4 in system#5]
+2025-12-03 20:07:58,089 INFO [enhanced_score_0]       StepMonitoring.java:98   | CHORDS
+2025-12-03 20:07:58,138 INFO [enhanced_score_0]       StepMonitoring.java:98   | CURVES
+2025-12-03 20:08:00,751 INFO [enhanced_score_0]         SlursBuilder.java:240  | Slurs: 9
+2025-12-03 20:08:00,794 INFO [enhanced_score_0]      SegmentsBuilder.java:155  | Segments: 24
+2025-12-03 20:08:00,835 INFO [enhanced_score_0]       StepMonitoring.java:98   | SYMBOLS
+2025-12-03 20:08:01,619 INFO [enhanced_score_0]       StepMonitoring.java:98   | LINKS
+2025-12-03 20:08:01,754 INFO [enhanced_score_0]       StepMonitoring.java:98   | RHYTHMS
+2025-12-03 20:08:01,918 INFO [enhanced_score_0]       StepMonitoring.java:98   | PAGE
+2025-12-03 20:08:01,929 INFO [enhanced_score_0]       SheetReduction.java:154  | Gutter. Different glyphs 1/2 WordInter#7533{(0.670/0.670) staff:2 TEXT "I—A—A—A—A—" font:C-52} vs EndingInter#7905{(0.797/0.890) staff:3 ENDING}
+2025-12-03 20:08:01,935 INFO [enhanced_score_0]       SheetReduction.java:154  | Gutter. Different glyphs 2/3 WordInter#7541{(0.645/0.645) staff:4 TEXT "I—A—" font:C-52} vs EndingInter#7908{(0.797/0.899) staff:5 ENDING}
+2025-12-03 20:08:01,951 INFO [enhanced_score_0]                 Book.java:2550 | Book{enhanced_score_0} storing
+2025-12-03 20:08:02,049 INFO [enhanced_score_0]                 Book.java:2531 | Stored /book.xml
+2025-12-03 20:08:02,270 INFO [enhanced_score_0]           DataHolder.java:348  | Stored /sheet#1/BINARY.png
+2025-12-03 20:08:03,915 INFO [enhanced_score_0]                Sheet.java:1583 | Stored /sheet#1/sheet#1.xml
+2025-12-03 20:08:03,915 INFO [enhanced_score_0]                 Book.java:2491 | Book stored as C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1764763640642\enhanced_score_0.omr
+2025-12-03 20:08:03,915 INFO [enhanced_score_0]            SheetStub.java:1660 | Disposed sheet
+2025-12-03 20:08:04,016 INFO [enhanced_score_0]                 Book.java:2018 | End of Stub#1 memory: 31,544,080
+2025-12-03 20:08:04,020 INFO [enhanced_score_0]                 Book.java:2025 | Book processed.
+2025-12-03 20:08:05,195 INFO [enhanced_score_0]            SheetStub.java:997  | Loaded /sheet#1/sheet#1.xml
+2025-12-03 20:08:06,070 INFO [enhanced_score_0]      PartwiseBuilder.java:2661 | Exporting sheet(s): [#1]
+2025-12-03 20:08:06,377 INFO [enhanced_score_0]        ScoreExporter.java:164  | Score enhanced_score_0 exported to C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1764763640642\enhanced_score_0.mxl
+2025-12-03 20:08:06,459 INFO [enhanced_score_0]                Score.java:181  | Closing {Score 1}

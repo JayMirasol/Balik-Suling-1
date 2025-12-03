@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useState, useCallback } from "react";
 import axios from "axios";
 // Use ESM build to avoid CJS subpath resolution issues in some bundlers
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib/dist/pdf-lib.esm.js";
+import "./scanScore.css";
 
 export default function ScanScore() {
   const [mode, setMode] = useState("score"); // "score" or "audio"
@@ -11,6 +12,10 @@ export default function ScanScore() {
   const [result, setResult] = useState(null);
   const [busy, setBusy] = useState(false);
   const [dragOver, setDragOver] = useState(false);
+  const [scanProgress, setScanProgress] = useState(0);
+  const [scanStage, setScanStage] = useState("");
+  const [isScanning, setIsScanning] = useState(false);
+  const [imageQuality, setImageQuality] = useState(null);
 
   // If REACT_APP_API_BASE is set (e.g., http://127.0.0.1:8001) we'll use it; otherwise CRA proxy.
   const base = process.env.REACT_APP_API_BASE || "";
@@ -39,14 +44,68 @@ export default function ScanScore() {
     setObjectUrl(null);
     setResult(null);
     setBusy(false);
+    setScanProgress(0);
+    setScanStage("");
+    setIsScanning(false);
+    setImageQuality(null);
   };
+  
+  // Image quality validation
+  const checkImageQuality = useCallback((file) => {
+    return new Promise((resolve) => {
+      if (!isImage(file)) {
+        resolve(null);
+        return;
+      }
+      
+      const img = new Image();
+      img.onload = () => {
+        const width = img.width;
+        const height = img.height;
+        const pixelCount = width * height;
+        
+        // Calculate approximate DPI based on typical A4 size assumptions
+        // A4 is 8.27 × 11.69 inches (2480 × 3508 pixels at 300 DPI)
+        const assumedWidthInches = 8.27;
+        const estimatedDPI = Math.round(width / assumedWidthInches);
+        
+        const quality = {
+          width,
+          height,
+          pixelCount,
+          estimatedDPI,
+          fileSize: file.size,
+          isGoodResolution: estimatedDPI >= 300,
+          isAcceptableResolution: estimatedDPI >= 200,
+          isPoorResolution: estimatedDPI < 200,
+          message: estimatedDPI >= 300 
+            ? '✓ Excellent resolution for scanning'
+            : estimatedDPI >= 200 
+              ? '⚠ Acceptable resolution, but higher is better'
+              : '⚠ Low resolution detected - consider using a higher quality scan',
+          color: estimatedDPI >= 300 ? '#22aa66' : estimatedDPI >= 200 ? '#ff9800' : '#d32f2f'
+        };
+        
+        resolve(quality);
+        URL.revokeObjectURL(img.src);
+      };
+      
+      img.onerror = () => {
+        resolve(null);
+        URL.revokeObjectURL(img.src);
+      };
+      
+      img.src = URL.createObjectURL(file);
+    });
+  }, []);
+  
 
   const switchMode = (newMode) => {
     setMode(newMode);
     reset();
   };
 
-  const setChosenFile = (f) => {
+  const setChosenFile = async (f) => {
     if (!f) {
       reset();
       return;
@@ -61,6 +120,14 @@ export default function ScanScore() {
       setObjectUrl(url);
     } else {
       setObjectUrl(null);
+    }
+    
+    // Check image quality for score mode
+    if (mode === "score" && isImage(f)) {
+      const quality = await checkImageQuality(f);
+      setImageQuality(quality);
+    } else {
+      setImageQuality(null);
     }
   };
 
@@ -85,6 +152,9 @@ export default function ScanScore() {
     if (!file) return;
     setBusy(true);
     setResult(null);
+    setIsScanning(true);
+    setScanProgress(0);
+    
     try {
       const formData = new FormData();
       formData.append("file", file);
@@ -93,10 +163,40 @@ export default function ScanScore() {
       const endpoint = mode === "audio" ? "/audio/chords" : "/omr/scan";
       const url = buildUrl(endpoint);
       
+      // Simulate scanning progress for better UX
+      const progressInterval = setInterval(() => {
+        setScanProgress(prev => {
+          if (prev < 90) return prev + Math.random() * 10;
+          return prev;
+        });
+      }, 400);
+      
+      // Update scanning stages
+      const stages = mode === "audio" 
+        ? ["Loading audio file...", "Analyzing frequency spectrum...", "Detecting chord patterns...", "Identifying chord progressions...", "Finalizing results..."]
+        : ["Loading image...", "Preprocessing: Enhancing contrast...", "Preprocessing: Removing noise...", "Detecting staff lines...", "Reading musical notation...", "Identifying chords...", "Finalizing results..."];
+      
+      let stageIndex = 0;
+      const stageInterval = setInterval(() => {
+        if (stageIndex < stages.length) {
+          setScanStage(stages[stageIndex]);
+          stageIndex++;
+        }
+      }, mode === "audio" ? 1500 : 2000);
+      
       const { data } = await axios.post(url, formData, {
         headers: { "Content-Type": "multipart/form-data" },
         timeout: 180_000, // allow time for processing
       });
+      
+      clearInterval(progressInterval);
+      clearInterval(stageInterval);
+      setScanProgress(100);
+      setScanStage("Complete!");
+      
+      // Delay to show completion
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
       setResult(data);
       
       // Track successful chord scan
@@ -120,6 +220,9 @@ export default function ScanScore() {
       });
     } finally {
       setBusy(false);
+      setIsScanning(false);
+      setScanProgress(0);
+      setScanStage("");
     }
   };
 
@@ -346,6 +449,137 @@ export default function ScanScore() {
       border: "1px solid #ddd",
       borderRadius: 10,
     },
+    scannerOverlay: {
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      background: 'rgba(0, 0, 0, 0.85)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 9999,
+      backdropFilter: 'blur(4px)',
+    },
+    scannerContainer: {
+      background: 'linear-gradient(145deg, #1a1a1a, #2d2d2d)',
+      borderRadius: 20,
+      padding: '40px 50px',
+      maxWidth: 600,
+      width: '90%',
+      boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+      position: 'relative',
+      overflow: 'hidden',
+    },
+    scannerTitle: {
+      color: '#fff',
+      fontSize: 24,
+      fontWeight: 700,
+      marginBottom: 10,
+      textAlign: 'center',
+      textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
+    },
+    scannerStage: {
+      color: '#22aa66',
+      fontSize: 16,
+      fontWeight: 500,
+      marginBottom: 25,
+      textAlign: 'center',
+      minHeight: 24,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 8,
+    },
+    scanLine: {
+      position: 'relative',
+      height: 200,
+      background: 'linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%)',
+      borderRadius: 12,
+      marginBottom: 25,
+      border: '2px solid #333',
+      overflow: 'hidden',
+      boxShadow: 'inset 0 2px 10px rgba(0, 0, 0, 0.8)',
+    },
+    scanLineInner: {
+      position: 'absolute',
+      width: '100%',
+      height: '4px',
+      background: 'linear-gradient(90deg, transparent, #00ff88 50%, transparent)',
+      boxShadow: '0 0 20px #00ff88, 0 0 40px #00ff88',
+      animation: 'scanAnimation 2.5s ease-in-out infinite',
+      top: '10%',
+    },
+    scanGrid: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundImage: 'linear-gradient(0deg, transparent 24%, rgba(0, 255, 136, 0.05) 25%, rgba(0, 255, 136, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 255, 136, 0.05) 75%, rgba(0, 255, 136, 0.05) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(0, 255, 136, 0.05) 25%, rgba(0, 255, 136, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 255, 136, 0.05) 75%, rgba(0, 255, 136, 0.05) 76%, transparent 77%, transparent)',
+      backgroundSize: '50px 50px',
+      opacity: 0.3,
+    },
+    progressBar: {
+      width: '100%',
+      height: 8,
+      background: '#222',
+      borderRadius: 10,
+      overflow: 'hidden',
+      marginBottom: 15,
+      border: '1px solid #333',
+      boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.5)',
+    },
+    progressFill: {
+      height: '100%',
+      background: 'linear-gradient(90deg, #00cc66, #00ff88, #00cc66)',
+      backgroundSize: '200% 100%',
+      animation: 'progressShimmer 2s linear infinite',
+      transition: 'width 0.3s ease-out',
+      boxShadow: '0 0 10px #00ff88',
+    },
+    progressText: {
+      color: '#aaa',
+      fontSize: 14,
+      textAlign: 'center',
+      fontWeight: 600,
+      fontFamily: 'monospace',
+    },
+    scannerCorner: {
+      position: 'absolute',
+      width: 40,
+      height: 40,
+      border: '3px solid #00ff88',
+    },
+    cornerTL: {
+      top: 20,
+      left: 20,
+      borderRight: 'none',
+      borderBottom: 'none',
+      boxShadow: '-2px -2px 10px rgba(0, 255, 136, 0.3)',
+    },
+    cornerTR: {
+      top: 20,
+      right: 20,
+      borderLeft: 'none',
+      borderBottom: 'none',
+      boxShadow: '2px -2px 10px rgba(0, 255, 136, 0.3)',
+    },
+    cornerBL: {
+      bottom: 20,
+      left: 20,
+      borderRight: 'none',
+      borderTop: 'none',
+      boxShadow: '-2px 2px 10px rgba(0, 255, 136, 0.3)',
+    },
+    cornerBR: {
+      bottom: 20,
+      right: 20,
+      borderLeft: 'none',
+      borderTop: 'none',
+      boxShadow: '2px 2px 10px rgba(0, 255, 136, 0.3)',
+    },
     resultCard: (ok) => ({
       marginTop: 16,
       padding: 16,
@@ -373,6 +607,7 @@ export default function ScanScore() {
       background: "#fff",
       fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
       lineHeight: 1.6,
+      animation: result?.ok ? 'fadeInUp 0.5s ease-out' : 'none',
     },
     progressionBox: {
       border: "1px dashed #aaa",
@@ -404,6 +639,53 @@ export default function ScanScore() {
 
   return (
     <div className="screen-container">
+    {/* Scanning Animation Overlay */}
+    {isScanning && (
+      <div style={styles.scannerOverlay}>
+        <div style={styles.scannerContainer}>
+          {/* Corner decorations */}
+          <div style={{...styles.scannerCorner, ...styles.cornerTL}}></div>
+          <div style={{...styles.scannerCorner, ...styles.cornerTR}}></div>
+          <div style={{...styles.scannerCorner, ...styles.cornerBL}}></div>
+          <div style={{...styles.scannerCorner, ...styles.cornerBR}}></div>
+          
+          <div style={styles.scannerTitle}>
+            {mode === "score" ? "🎼 Scanning Music Score" : "🎵 Analyzing Audio"}
+          </div>
+          
+          <div style={styles.scannerStage}>
+            <span style={{
+              display: 'inline-block',
+              width: 8,
+              height: 8,
+              borderRadius: '50%',
+              background: '#00ff88',
+              animation: 'pulse 1s ease-in-out infinite',
+              marginRight: 8,
+              boxShadow: '0 0 10px #00ff88'
+            }}></span>
+            {scanStage}
+          </div>
+          
+          <div style={styles.scanLine}>
+            <div style={styles.scanGrid}></div>
+            <div style={styles.scanLineInner}></div>
+          </div>
+          
+          <div style={styles.progressBar}>
+            <div style={{
+              ...styles.progressFill,
+              width: `${scanProgress}%`
+            }}></div>
+          </div>
+          
+          <div style={styles.progressText}>
+            {Math.round(scanProgress)}% Complete
+          </div>
+        </div>
+      </div>
+    )}
+    
     <div style={styles.page}>
       <div style={styles.header}>
         <div>
@@ -460,24 +742,51 @@ export default function ScanScore() {
           onDragOver={onDragOver}
           onDragLeave={onDragLeave}
           onDrop={onDrop}
+          className={`dropzone-enhanced ${dragOver ? 'drag-over' : ''}`}
           style={styles.dropzone}
           aria-label="Drop a file here"
         >
-          <div style={{ marginBottom: 8 }}>
-            <strong>Drop a {mode === "score" ? "score" : "audio"} file here</strong> — or choose a file:
+          <div style={{ 
+            fontSize: 48, 
+            marginBottom: 12,
+            opacity: dragOver ? 1 : 0.6,
+            transition: 'all 0.3s ease',
+            transform: dragOver ? 'scale(1.1)' : 'scale(1)'
+          }}>
+            {mode === "score" ? "🎼" : "🎵"}
+          </div>
+          <div style={{ marginBottom: 8, fontSize: 16, fontWeight: 600 }}>
+            {dragOver ? (
+              <span style={{ color: '#2a6' }}>Drop your file here!</span>
+            ) : (
+              <span>Drop a {mode === "score" ? "score" : "audio"} file here — or choose a file</span>
+            )}
           </div>
           <input
             type="file"
             accept={mode === "score" ? "image/*,.pdf,.omr" : "audio/*,.mp3,.wav,.m4a,.flac,.ogg,.aac"}
             onChange={onFileChange}
-            style={{ display: "inline-block" }}
+            style={{ 
+              display: "inline-block",
+              padding: '8px 12px',
+              background: '#fff',
+              border: '1px solid #ccc',
+              borderRadius: 6,
+              cursor: 'pointer',
+              fontSize: 14
+            }}
           />
-          <div style={{ marginTop: 8, ...styles.hint }}>
+          <div style={{ marginTop: 12, ...styles.hint }}>
             {mode === "score" ? (
-              <>Tip: For images (PNG/JPG), use high-resolution scans (~300–400 dpi) with good contrast. 
-              Printed music sheets work best. PDFs are automatically optimized.</>
+              <>
+                <strong>📷 For best results:</strong> Use high-resolution scans (~300–400 dpi) with good contrast. 
+                Printed music sheets work best. PDFs are automatically optimized.
+              </>
             ) : (
-              <>Tip: Clear recordings work best. Instrumental tracks preferred. Avoid heavy distortion or background noise.</>
+              <>
+                <strong>🎧 For best results:</strong> Clear recordings work best. Instrumental tracks preferred. 
+                Avoid heavy distortion or background noise.
+              </>
             )}
           </div>
         </div>
@@ -490,6 +799,28 @@ export default function ScanScore() {
             <div>
               <span style={styles.label}>Type:</span> {file.type || `.${ext(file)}`}
             </div>
+            {imageQuality && (
+              <div style={{ 
+                marginTop: 8, 
+                padding: 8, 
+                background: imageQuality.isGoodResolution ? '#e8f5e9' : imageQuality.isAcceptableResolution ? '#fff3e0' : '#ffebee',
+                borderRadius: 6,
+                borderLeft: `4px solid ${imageQuality.color}`
+              }}>
+                <div style={{ fontWeight: 600, color: imageQuality.color, marginBottom: 4 }}>
+                  Image Quality Analysis
+                </div>
+                <div style={{ fontSize: 13, marginBottom: 2 }}>
+                  <span style={{ opacity: 0.7 }}>Resolution:</span> {imageQuality.width} × {imageQuality.height} px
+                </div>
+                <div style={{ fontSize: 13, marginBottom: 2 }}>
+                  <span style={{ opacity: 0.7 }}>Estimated DPI:</span> ~{imageQuality.estimatedDPI} dpi
+                </div>
+                <div style={{ fontSize: 13, fontWeight: 500, color: imageQuality.color, marginTop: 6 }}>
+                  {imageQuality.message}
+                </div>
+              </div>
+            )}
           </div>
         )}
 
@@ -543,10 +874,24 @@ export default function ScanScore() {
 
       {/* Result */}
       {result && (
-        <div style={styles.resultCard(!!result.ok)}>
+        <div className="result-card-animated" style={styles.resultCard(!!result.ok)}>
           {result.ok ? (
             <>
-              <div style={{ marginBottom: 6 }}>
+              <div style={{ marginBottom: 6, display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span style={{
+                  display: 'inline-block',
+                  width: 24,
+                  height: 24,
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #22aa66, #2a6)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'white',
+                  fontSize: 14,
+                  fontWeight: 'bold',
+                  animation: 'pulse 1s ease-in-out'
+                }}>✓</span>
                 <span style={styles.labelSuccess}>Upload Successfully Converted !</span>
               </div>
 
@@ -585,29 +930,32 @@ export default function ScanScore() {
                   {/* Grid view (4 measures per row) */}
                   <div>
                     {chordGrid.map((row, i) => (
-                      <div key={i} style={styles.chordsGridRow}>
-                        {row.map((m) => (
-                          <div key={m.measure} style={styles.chordCell}>
+                      <div key={i} className="chord-grid-row" style={styles.chordsGridRow}>
+                        {row.map((m, idx) => (
+                          <div key={m.measure} className="chord-reveal" style={{
+                            ...styles.chordCell,
+                            animationDelay: `${(i * 4 + idx) * 0.1}s`
+                          }}>
                             <div>
                               {mode === "audio" && m.time !== undefined ? (
                                 <>
                                   <span style={{ opacity: 0.7 }}>{m.time}s:</span>{" "}
-                                  <strong>{m.chord || "—"}</strong>
+                                  <strong style={{ color: '#2a6', fontSize: '1.1em' }}>{m.chord || "—"}</strong>
                                 </>
                               ) : (
                                 <>
                                   <span style={{ opacity: 0.7 }}>m{String(m.measure).padStart(2, "0")}:</span>{" "}
-                                  <strong>{m.chord || "—"}</strong>
+                                  <strong style={{ color: '#2a6', fontSize: '1.1em' }}>{m.chord || "—"}</strong>
                                 </>
                               )}
                             </div>
                             {Array.isArray(m.notes) && m.notes.length > 0 && (
-                              <div style={{ opacity: 0.75, fontSize: 12 }}>
+                              <div style={{ opacity: 0.75, fontSize: 12, marginTop: 4, color: '#666' }}>
                                 notes: [{m.notes.join(", ")}]
                               </div>
                             )}
                             {mode === "audio" && m.duration && (
-                              <div style={{ opacity: 0.6, fontSize: 11 }}>
+                              <div style={{ opacity: 0.6, fontSize: 11, marginTop: 2 }}>
                                 ({m.duration}s)
                               </div>
                             )}

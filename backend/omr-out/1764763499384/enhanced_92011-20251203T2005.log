@@ -1,0 +1,95 @@
+2025-12-03 20:05:03,800 INFO [enhanced_92011]                 Book.java:562  | 1 sheet in C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1764763499384\enhanced_92011.tiff
+2025-12-03 20:05:04,130 INFO []                 Book.java:2531 | Stored /book.xml
+2025-12-03 20:05:04,130 INFO []                 Book.java:2491 | Book stored as C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1764763499384\enhanced_92011.omr
+2025-12-03 20:05:04,142 INFO []                 Book.java:1933 | Book reaching PAGE on sheets:[#1]
+2025-12-03 20:05:04,145 INFO [enhanced_92011]       StepMonitoring.java:98   | LOAD
+2025-12-03 20:05:04,592 INFO [enhanced_92011]            SheetStub.java:1273 | Loaded image #1 2480x3508 from C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1764763499384\enhanced_92011.tiff
+2025-12-03 20:05:04,592 INFO [enhanced_92011]            ImageUtil.java:124  | Converting max RGB to gray
+2025-12-03 20:05:04,891 INFO [enhanced_92011]       StepMonitoring.java:98   | BINARY
+2025-12-03 20:05:05,981 INFO [enhanced_92011]       StepMonitoring.java:98   | SCALE
+2025-12-03 20:05:06,030 INFO [enhanced_92011]         ScaleBuilder.java:241  | Beam  guessed height:  9 -- 0.50 of 18 interline
+2025-12-03 20:05:06,039 INFO [enhanced_92011]         ScaleBuilder.java:264  | Beam measured height: 11 -- 0.36 of [7..18] range at 211% of needed quorum
+2025-12-03 20:05:06,039 INFO [enhanced_92011]            ScaleStep.java:65   | Scale{ interline(16,18,20) line(5,5,7) beam(11)}
+2025-12-03 20:05:06,043 INFO [enhanced_92011]       StepMonitoring.java:98   | GRID
+2025-12-03 20:05:11,234 INFO [enhanced_92011]       LinesRetriever.java:1500 | Global slope: -0.00044
+2025-12-03 20:05:11,377 INFO [enhanced_92011]    ClustersRetriever.java:328  | Retrieved raw line clusters: 11 of sizes [5] with interline(16,18,20)
+2025-12-03 20:05:13,425 INFO [enhanced_92011]            PeakGraph.java:310  | Systems: #1[1, 2] #2[3] #3[4, 5] #4[6] #5[7, 8] #6[9] #7[10, 11]
+2025-12-03 20:05:16,242 INFO [enhanced_92011]        SystemManager.java:134  | Indentation detected for system #1
+2025-12-03 20:05:16,244 INFO [enhanced_92011]        SystemManager.java:779  | 2 parts along 7 systems
+2025-12-03 20:05:16,246 INFO [enhanced_92011]                 Book.java:545  | Created scores: [{Score 1}]
+2025-12-03 20:05:16,246 INFO [enhanced_92011]       StepMonitoring.java:98   | HEADERS
+2025-12-03 20:05:16,779 INFO []      BasicClassifier.java:277  | Classifier loaded XML norms.
+2025-12-03 20:05:16,785 INFO []   AbstractClassifier.java:396  | Classifier data loaded from default uri jar:file:/C:/Program%20Files/Audiveris/app/audiveris.jar!/res/basic-classifier.zip
+2025-12-03 20:05:18,169 INFO [enhanced_92011]           KeyBuilder.java:1380 | Staff#2 key replication failed.
+2025-12-03 20:05:19,393 INFO [enhanced_92011]       StepMonitoring.java:98   | STEM_SEEDS
+2025-12-03 20:05:19,552 INFO [enhanced_92011]        StemSeedsStep.java:86   | stem(5 max:6)
+2025-12-03 20:05:19,828 INFO [enhanced_92011]       StepMonitoring.java:98   | BEAMS
+2025-12-03 20:05:26,022 INFO [enhanced_92011]       StepMonitoring.java:98   | LEDGERS
+2025-12-03 20:05:27,785 INFO [enhanced_92011]       StepMonitoring.java:98   | HEADS
+2025-12-03 20:05:38,576 INFO [enhanced_92011]        HeadSeedTally.java:235  | Scale information: HeadSeeds{NOTEHEAD_VOID[L:-0.5,R:0.6] NOTEHEAD_BLACK[L:-0.3,R:-0.1]}
+2025-12-03 20:05:38,576 INFO [enhanced_92011]       StepMonitoring.java:98   | STEMS
+2025-12-03 20:05:43,497 INFO [enhanced_92011]       StepMonitoring.java:98   | REDUCTION
+2025-12-03 20:05:43,902 INFO [enhanced_92011]        ReductionStep.java:105  | Stems free length median value: 63 pixels, 3.5 interlines
+2025-12-03 20:05:43,913 INFO [enhanced_92011]       StepMonitoring.java:98   | CUE_BEAMS
+2025-12-03 20:05:43,916 INFO [enhanced_92011]         CueBeamsStep.java:81   | Step CUE_BEAMS is skipped because small heads switch is off
+2025-12-03 20:05:43,916 INFO [enhanced_92011]       StepMonitoring.java:98   | TEXTS
+2025-12-03 20:05:50,283 INFO [enhanced_92011]       StepMonitoring.java:98   | MEASURES
+2025-12-03 20:05:50,311 INFO [enhanced_92011]                 Page.java:307  | 26 raw measures: [4 in system#1, 2 in system#2, 4 in system#3, 4 in system#4, 4 in system#5, 4 in system#6, 4 in system#7]
+2025-12-03 20:05:50,311 INFO [enhanced_92011]       StepMonitoring.java:98   | CHORDS
+2025-12-03 20:05:50,360 INFO [enhanced_92011]       StepMonitoring.java:98   | CURVES
+2025-12-03 20:05:56,242 INFO [enhanced_92011]         SlursBuilder.java:240  | Slurs: 62
+2025-12-03 20:05:56,554 INFO [enhanced_92011]      SegmentsBuilder.java:155  | Segments: 14
+2025-12-03 20:05:56,595 INFO [enhanced_92011]       StepMonitoring.java:98   | SYMBOLS
+2025-12-03 20:06:01,028 INFO [enhanced_92011]       StepMonitoring.java:98   | LINKS
+2025-12-03 20:06:01,215 INFO [enhanced_92011]       StepMonitoring.java:98   | RHYTHMS
+2025-12-03 20:06:01,294 INFO [enhanced_92011]        MeasureRhythm.java:1045 | Measure{#1} No timeOffset for HeadChordInter#8939{(0.888/0.888) staff:2 slot#6 dur:1/4}
+2025-12-03 20:06:01,296 INFO [enhanced_92011]   AbstractChordInter.java:627  | Measure{#1} No timeOffset for HeadChordInter#8939{(0.888/0.888) staff:2 slot#6 dur:1/4}
+2025-12-03 20:06:01,299 INFO [enhanced_92011]          StackRhythm.java:224  | S1 MeasureStack#1 no correct rhythm
+2025-12-03 20:06:01,328 INFO [enhanced_92011]        MeasureRhythm.java:1045 | Measure{#5} No timeOffset for RestChordInter#11562{(0.544/0.544) staff:3 slot#6 dur:1/4}
+2025-12-03 20:06:01,328 INFO [enhanced_92011]   AbstractChordInter.java:627  | Measure{#5} No timeOffset for RestChordInter#11562{(0.544/0.544) staff:3 slot#6 dur:1/4}
+2025-12-03 20:06:01,328 INFO [enhanced_92011]   AbstractChordInter.java:627  | Measure{#5} No timeOffset for HeadChordInter#8967{(0.938/0.938) staff:3 slot#7 dur:1/4}
+2025-12-03 20:06:01,328 INFO [enhanced_92011]   AbstractChordInter.java:627  | Measure{#5} No timeOffset for RestChordInter#11563{(0.704/0.704) staff:3 slot#8 dur:1/4}
+2025-12-03 20:06:01,328 INFO [enhanced_92011]   AbstractChordInter.java:627  | Measure{#5} No timeOffset for HeadChordInter#8968{(0.591/0.591) staff:3 slot#9 dur:1/2}
+2025-12-03 20:06:01,332 INFO [enhanced_92011]   AbstractChordInter.java:627  | Measure{#5} No timeOffset for HeadChordInter#8972{(0.930/0.930) staff:3 slot#13 dur:1/8}
+2025-12-03 20:06:01,334 INFO [enhanced_92011]   AbstractChordInter.java:627  | Measure{#5} No timeOffset for RestChordInter#11564{(0.731/0.731) staff:3 slot#14 dur:1/8}
+2025-12-03 20:06:01,334 INFO [enhanced_92011]                Voice.java:257  | Measure{#5} Voice{#1 excess:1/8} too long
+2025-12-03 20:06:01,334 INFO [enhanced_92011]          StackRhythm.java:224  | S2 MeasureStack#5 no correct rhythm
+2025-12-03 20:06:01,361 INFO [enhanced_92011]        MeasureRhythm.java:1045 | Measure{#11} No timeOffset for HeadChordInter#9019{(0.884/0.884) staff:6 slot#5 dur:1/4}
+2025-12-03 20:06:01,361 INFO [enhanced_92011]          StackRhythm.java:224  | S4 MeasureStack#11 no correct rhythm
+2025-12-03 20:06:01,367 INFO [enhanced_92011]        MeasureRhythm.java:1045 | Measure{#12} No timeOffset for HeadChordInter#9024{(0.911/0.911) staff:6 slot#5 dur:1/8}
+2025-12-03 20:06:01,367 INFO [enhanced_92011]   AbstractChordInter.java:627  | Measure{#12} No timeOffset for HeadChordInter#9025{(0.941/0.941) staff:6 slot#6 dur:1/8}
+2025-12-03 20:06:01,371 INFO [enhanced_92011]          StackRhythm.java:224  | S4 MeasureStack#12 no correct rhythm
+2025-12-03 20:06:01,376 INFO [enhanced_92011]        MeasureRhythm.java:1045 | Measure{#14} No timeOffset for HeadChordInter#9037{(0.938/0.938) staff:6 slot#6 dur:1/4}
+2025-12-03 20:06:01,376 INFO [enhanced_92011]                Voice.java:257  | Measure{#14} Voice{#1 excess:3/8} too long
+2025-12-03 20:06:01,376 INFO [enhanced_92011]          StackRhythm.java:224  | S4 MeasureStack#14 no correct rhythm
+2025-12-03 20:06:01,409 INFO [enhanced_92011]        MeasureRhythm.java:1045 | Measure{#22} No timeOffset for HeadChordInter#9099{(0.688/0.688) staff:9 slot#9 dur:1/2}
+2025-12-03 20:06:01,409 INFO [enhanced_92011]          StackRhythm.java:224  | S6 MeasureStack#22 no correct rhythm
+2025-12-03 20:06:01,416 INFO [enhanced_92011]                Voice.java:257  | Measure{#24P1} Voice{#1 excess:1/16} too long
+2025-12-03 20:06:01,416 INFO [enhanced_92011]          StackRhythm.java:224  | S7 MeasureStack#24 no correct rhythm
+2025-12-03 20:06:01,433 INFO [enhanced_92011]       StepMonitoring.java:98   | PAGE
+2025-12-03 20:06:01,474 INFO [enhanced_92011]                Voice.java:257  | Measure{#5} Voice{#1 excess:1/8} too long
+2025-12-03 20:06:01,476 INFO [enhanced_92011]                Voice.java:257  | Measure{#14} Voice{#1 excess:3/8} too long
+2025-12-03 20:06:01,476 INFO [enhanced_92011]                Voice.java:257  | Measure{#24P1} Voice{#1 excess:1/16} too long
+2025-12-03 20:06:01,476 INFO [enhanced_92011]                 Book.java:2550 | Book{enhanced_92011} storing
+2025-12-03 20:06:01,612 INFO [enhanced_92011]                 Book.java:2531 | Stored /book.xml
+2025-12-03 20:06:01,862 INFO [enhanced_92011]           DataHolder.java:348  | Stored /sheet#1/BINARY.png
+2025-12-03 20:06:03,676 INFO [enhanced_92011]                Sheet.java:1583 | Stored /sheet#1/sheet#1.xml
+2025-12-03 20:06:03,678 INFO [enhanced_92011]                 Book.java:2491 | Book stored as C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1764763499384\enhanced_92011.omr
+2025-12-03 20:06:03,688 INFO [enhanced_92011]            SheetStub.java:1660 | Disposed sheet
+2025-12-03 20:06:03,783 INFO [enhanced_92011]                 Book.java:2018 | End of Stub#1 memory: 31,417,376
+2025-12-03 20:06:03,783 INFO [enhanced_92011]                 Book.java:2025 | Book processed.
+2025-12-03 20:06:06,187 INFO [enhanced_92011]            SheetStub.java:997  | Loaded /sheet#1/sheet#1.xml
+2025-12-03 20:06:07,293 INFO [enhanced_92011]      PartwiseBuilder.java:2661 | Exporting sheet(s): [#1]
+2025-12-03 20:06:07,296 INFO [enhanced_92011]                 Part.java:351  | Sheet#1 System#1 Part#3{ staves[1,2] configs:[5,5]} dummyPart id: 1
+2025-12-03 20:06:07,312 INFO [enhanced_92011]                 Part.java:351  | Sheet#1 System#2 Part#2{ staves[3] configs:[5]} dummyPart id: 1
+2025-12-03 20:06:07,326 INFO [enhanced_92011]                 Part.java:351  | Sheet#1 System#4 Part#2{ staves[6] configs:[5]} dummyPart id: 1
+2025-12-03 20:06:07,328 INFO [enhanced_92011]                 Part.java:351  | Sheet#1 System#6 Part#2{ staves[9] configs:[5]} dummyPart id: 1
+2025-12-03 20:06:07,345 INFO [enhanced_92011]                 Part.java:351  | Sheet#1 System#1 Part#3{ staves[1,2] configs:[5,5]} dummyPart id: 2
+2025-12-03 20:06:07,376 INFO [enhanced_92011]                 Part.java:351  | Sheet#1 System#2 Part#2{ staves[3] configs:[5]} dummyPart id: 3
+2025-12-03 20:06:07,378 INFO [enhanced_92011]                 Part.java:351  | Sheet#1 System#3 Part#1{ staves[4] configs:[5]} dummyPart id: 3
+2025-12-03 20:06:07,378 INFO [enhanced_92011]                 Part.java:351  | Sheet#1 System#4 Part#2{ staves[6] configs:[5]} dummyPart id: 3
+2025-12-03 20:06:07,381 INFO [enhanced_92011]                 Part.java:351  | Sheet#1 System#5 Part#1{ staves[7] configs:[5]} dummyPart id: 3
+2025-12-03 20:06:07,381 INFO [enhanced_92011]                 Part.java:351  | Sheet#1 System#6 Part#2{ staves[9] configs:[5]} dummyPart id: 3
+2025-12-03 20:06:07,381 INFO [enhanced_92011]                 Part.java:351  | Sheet#1 System#7 Part#1{ staves[10] configs:[5]} dummyPart id: 3
+2025-12-03 20:06:07,629 INFO [enhanced_92011]        ScoreExporter.java:164  | Score enhanced_92011 exported to C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1764763499384\enhanced_92011.mxl
+2025-12-03 20:06:07,715 INFO [enhanced_92011]                Score.java:181  | Closing {Score 1}

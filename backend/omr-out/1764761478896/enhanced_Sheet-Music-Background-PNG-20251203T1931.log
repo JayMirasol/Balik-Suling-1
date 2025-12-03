@@ -1,0 +1,29 @@
+2025-12-03 19:31:40,629 INFO [enhanced_Sheet-Music-Background-PNG]                 Book.java:562  | 1 sheet in C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1764761478896\enhanced_Sheet-Music-Background-PNG.tiff
+2025-12-03 19:31:41,095 INFO []                 Book.java:2531 | Stored /book.xml
+2025-12-03 19:31:41,096 INFO []                 Book.java:2491 | Book stored as C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1764761478896\enhanced_Sheet-Music-Background-PNG.omr
+2025-12-03 19:31:41,109 INFO []                 Book.java:1933 | Book reaching PAGE on sheets:[#1]
+2025-12-03 19:31:41,116 INFO [enhanced_Sheet-Music-Background-PNG]       StepMonitoring.java:98   | LOAD
+2025-12-03 19:31:41,596 INFO [enhanced_Sheet-Music-Background-PNG]            SheetStub.java:1273 | Loaded image #1 2480x3209 from C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1764761478896\enhanced_Sheet-Music-Background-PNG.tiff
+2025-12-03 19:31:41,601 INFO [enhanced_Sheet-Music-Background-PNG]            ImageUtil.java:206  | Discarding alpha band ...
+2025-12-03 19:31:42,053 INFO [enhanced_Sheet-Music-Background-PNG]            ImageUtil.java:124  | Converting max RGB to gray
+2025-12-03 19:31:42,382 INFO [enhanced_Sheet-Music-Background-PNG]       StepMonitoring.java:98   | BINARY
+2025-12-03 19:31:43,566 INFO [enhanced_Sheet-Music-Background-PNG]       StepMonitoring.java:98   | SCALE
+2025-12-03 19:31:43,620 WARN [enhanced_Sheet-Music-Background-PNG]            SheetStub.java:412  | enhanced_Sheet-Music-Background-PNG
+
+ With a too low interline value of 2 pixels,
+ either this sheet contains no multi-line staves,
+ or the picture resolution is too low (try 300 DPI).
+
+ This interline value is NOT RELIABLE!
+2025-12-03 19:31:43,622 INFO [enhanced_Sheet-Music-Background-PNG]                 Book.java:545  | Created scores: []
+2025-12-03 19:31:43,622 INFO [enhanced_Sheet-Music-Background-PNG]            SheetStub.java:1191 | Sheet enhanced_Sheet-Music-Background-PNG flagged as invalid.
+2025-12-03 19:31:43,623 INFO [enhanced_Sheet-Music-Background-PNG]            SheetStub.java:1410 | StepException cause detected in [LOAD, BINARY, SCALE, GRID, HEADERS, STEM_SEEDS, BEAMS, LEDGERS, HEADS, STEMS, REDUCTION, CUE_BEAMS, TEXTS, MEASURES, CHORDS, CURVES, SYMBOLS, LINKS, RHYTHMS, PAGE]
+2025-12-03 19:31:43,624 INFO [enhanced_Sheet-Music-Background-PNG]                 Book.java:2550 | Book{enhanced_Sheet-Music-Background-PNG} storing
+2025-12-03 19:31:43,654 INFO [enhanced_Sheet-Music-Background-PNG]                 Book.java:2531 | Stored /book.xml
+2025-12-03 19:31:43,884 INFO [enhanced_Sheet-Music-Background-PNG]           DataHolder.java:348  | Stored /sheet#1/BINARY.png
+2025-12-03 19:31:44,429 INFO [enhanced_Sheet-Music-Background-PNG]                Sheet.java:1583 | Stored /sheet#1/sheet#1.xml
+2025-12-03 19:31:44,430 INFO [enhanced_Sheet-Music-Background-PNG]                 Book.java:2491 | Book stored as C:\Dev\Balik-Suling-Updated-FreelanceProject-main\backend\omr-out\1764761478896\enhanced_Sheet-Music-Background-PNG.omr
+2025-12-03 19:31:44,439 INFO [enhanced_Sheet-Music-Background-PNG]            SheetStub.java:1660 | Disposed sheet
+2025-12-03 19:31:44,482 INFO [enhanced_Sheet-Music-Background-PNG]                 Book.java:2018 | End of Stub#1 memory: 12,463,864
+2025-12-03 19:31:44,483 INFO [enhanced_Sheet-Music-Background-PNG]                 Book.java:2025 | Book processed.
+2025-12-03 19:31:44,484 INFO [enhanced_Sheet-Music-Background-PNG]                 Book.java:599  | Could not export since transcription did not complete successfully

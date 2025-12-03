@@ -1,0 +1,244 @@
+/* Scanning Animation Styles */
+@keyframes scanAnimation {
+  0% {
+    top: 10%;
+    opacity: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    top: 90%;
+    opacity: 1;
+  }
+}
+
+@keyframes progressShimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Chord result animations */
+.chord-reveal {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.chord-reveal:nth-child(1) { animation-delay: 0.1s; }
+.chord-reveal:nth-child(2) { animation-delay: 0.2s; }
+.chord-reveal:nth-child(3) { animation-delay: 0.3s; }
+.chord-reveal:nth-child(4) { animation-delay: 0.4s; }
+.chord-reveal:nth-child(5) { animation-delay: 0.5s; }
+.chord-reveal:nth-child(6) { animation-delay: 0.6s; }
+.chord-reveal:nth-child(7) { animation-delay: 0.7s; }
+.chord-reveal:nth-child(8) { animation-delay: 0.8s; }
+
+/* Scanner glow effects */
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 5px #00ff88, 0 0 10px #00ff88, 0 0 15px #00ff88;
+  }
+  50% {
+    box-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88, 0 0 30px #00ff88;
+  }
+}
+
+/* Enhance image preview on hover */
+.preview-image-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  transition: transform 0.3s ease;
+}
+
+.preview-image-wrapper:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* Progress bar enhancement */
+@keyframes progressPulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* Smooth transitions */
+* {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* Scanner line variants */
+@keyframes scanReverse {
+  0% {
+    top: 90%;
+    opacity: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    top: 10%;
+    opacity: 1;
+  }
+}
+
+/* Status indicator */
+@keyframes statusBlink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+/* Scanning grid pattern */
+@keyframes gridPulse {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Result card entrance */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.result-card-animated {
+  animation: slideInUp 0.5s ease-out;
+}
+
+/* Chord grid stagger */
+.chord-grid-row {
+  opacity: 0;
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+.chord-grid-row:nth-child(1) { animation-delay: 0.1s; }
+.chord-grid-row:nth-child(2) { animation-delay: 0.2s; }
+.chord-grid-row:nth-child(3) { animation-delay: 0.3s; }
+.chord-grid-row:nth-child(4) { animation-delay: 0.4s; }
+.chord-grid-row:nth-child(5) { animation-delay: 0.5s; }
+.chord-grid-row:nth-child(6) { animation-delay: 0.6s; }
+.chord-grid-row:nth-child(7) { animation-delay: 0.7s; }
+.chord-grid-row:nth-child(8) { animation-delay: 0.8s; }
+
+/* Loading spinner alternative */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Enhance button interactions */
+button {
+  transition: all 0.2s ease;
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* File drop zone enhancement */
+.dropzone-enhanced {
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.dropzone-enhanced::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at center, rgba(34, 170, 102, 0.1) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.dropzone-enhanced.drag-over::before {
+  opacity: 1;
+}
+
+/* Success checkmark animation */
+@keyframes checkmark {
+  0% {
+    stroke-dashoffset: 100;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Enhanced corner decorations */
+@keyframes cornerPulse {
+  0%, 100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+  }
+}
+
+.scanner-corner {
+  animation: cornerPulse 2s ease-in-out infinite;
+}
