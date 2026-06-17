@@ -25,6 +25,7 @@ const AdmZip = require("adm-zip");
 const mm = require("music-metadata");
 const franc = require("franc");
 const { smartTranslateTokens, fetchTagalogLangEntry } = require("./dict-helpers");
+const { query } = require("./db");
 
 const app = express();
 
@@ -1031,57 +1032,16 @@ app.get("/dict/lookup", async (req, res) => {
 // ---------- end translation helpers ----------
 
 // --- Views -------------------------------------------------------------------
-const VIEWS_FILE = path.join(__dirname, "views.json");
-const FEEDBACK_FILE = path.join(__dirname, "feedback.json");
-const SONGS_FILE = path.join(__dirname, "songs.json");
-
-// Ensure files exist
-if (!fs.existsSync(VIEWS_FILE)) {
-  fs.writeFileSync(VIEWS_FILE, JSON.stringify({}));
-}
-if (!fs.existsSync(FEEDBACK_FILE)) {
-  fs.writeFileSync(FEEDBACK_FILE, JSON.stringify([]));
-}
-if (!fs.existsSync(SONGS_FILE)) {
-  fs.writeFileSync(SONGS_FILE, JSON.stringify([]));
-}
-
-function readViews() {
-  try {
-    const data = fs.readFileSync(VIEWS_FILE, "utf8");
-    return JSON.parse(data);
-  } catch (e) {
-    return {};
-  }
-}
-
-function writeViews(views) {
-  fs.writeFileSync(VIEWS_FILE, JSON.stringify(views, null, 2));
-}
-
-// Simple in-memory IP recent map to help dedupe short-term (not persistent)
-const ipRecent = new Map(); // ip -> { key -> ts }
-const IP_DEDUPE_WINDOW_MS = Number(process.env.IP_DEDUPE_WINDOW_MS || 60 * 60 * 1000); // 1h by default
-
-function cleanupIpRecent() {
-  const now = Date.now();
-  for (const [ip, map] of ipRecent.entries()) {
-    for (const [key, ts] of Object.entries(map)) {
-      if (now - ts > IP_DEDUPE_WINDOW_MS) delete map[key];
-    }
-    if (!Object.keys(map).length) ipRecent.delete(ip);
-  }
-}
-
-// Periodic cleanup
-setInterval(cleanupIpRecent, 10 * 60 * 1000);
+// View counts, feedback, and songs are stored in PostgreSQL (Neon).
+// See db.js for the connection pool and schema.sql for the table definitions.
 
 // GET all views (returns mapping title->count, and also key->count for completeness)
-app.get("/api/views", (req, res) => {
+app.get("/api/views", async (req, res) => {
   try {
-    const data = fs.existsSync(VIEWS_FILE) ? fs.readFileSync(VIEWS_FILE, "utf8") : "{}";
-    const views = JSON.parse(data || "{}");
+    const { rows } = await query("SELECT view_key, count FROM views");
     // Return the raw mapping: { "Atin Cu Pung Singsing": 5, "/chords/..": 2, ... }
+    const views = {};
+    for (const r of rows) views[r.view_key] = r.count;
     res.json(views);
   } catch (error) {
     console.error("Error reading views:", error);
@@ -1093,7 +1053,7 @@ app.get("/api/views", (req, res) => {
 // POST increment
 // Expect body: { key: "/chords/...", title: "Human Title" }
 // --- API: POST /api/views/increment ----------------------------------------
-app.post("/api/views/increment", (req, res) => {
+app.post("/api/views/increment", async (req, res) => {
   try {
     // Expect body: { title: "Atin Cu Pung Singsing", key: "/chords/..." }
     const { title, key } = req.body || {};
@@ -1103,26 +1063,14 @@ app.post("/api/views/increment", (req, res) => {
       return res.status(400).json({ ok: false, error: "title or key is required." });
     }
 
-    // Read current views (fresh)
-    let views = {};
-    try {
-      const raw = fs.readFileSync(VIEWS_FILE, "utf8");
-      views = JSON.parse(raw || "{}");
-    } catch (err) {
-      // If parse/read fails, start with empty object (and log)
-      console.warn("Could not read views.json cleanly, starting fresh:", err && err.message);
-      views = {};
-    }
-
-    // Ensure integer and increment
-    const prev = Number(views[storageKey] || 0);
-    const next = prev + 1;
-    views[storageKey] = next;
-
-    // Write atomically: write to tmp then rename
-    const tmpPath = VIEWS_FILE + ".tmp";
-    fs.writeFileSync(tmpPath, JSON.stringify(views, null, 2), "utf8");
-    fs.renameSync(tmpPath, VIEWS_FILE);
+    // Atomic upsert-and-increment in a single statement (race-safe).
+    const { rows } = await query(
+      `INSERT INTO views (view_key, count) VALUES ($1, 1)
+       ON CONFLICT (view_key) DO UPDATE SET count = views.count + 1
+       RETURNING count`,
+      [storageKey]
+    );
+    const next = rows[0].count;
 
     console.log(`Incremented views for "${storageKey}" -> ${next}`);
 
@@ -1140,24 +1088,14 @@ app.post("/api/views/increment", (req, res) => {
 // ============================================================================
 
 // Submit feedback
-app.post("/api/feedback/submit", (req, res) => {
+app.post("/api/feedback/submit", async (req, res) => {
   try {
     const { name, email, rating, comment, timestamp } = req.body || {};
-    
+
     if (!name || !email || !comment) {
       return res.status(400).json({ ok: false, error: "Missing required fields" });
     }
 
-    // Read existing feedback
-    let feedback = [];
-    try {
-      const data = fs.readFileSync(FEEDBACK_FILE, "utf8");
-      feedback = JSON.parse(data || "[]");
-    } catch (e) {
-      feedback = [];
-    }
-
-    // Add new feedback
     const newFeedback = {
       id: Date.now(),
       name,
@@ -1167,10 +1105,18 @@ app.post("/api/feedback/submit", (req, res) => {
       timestamp: timestamp || new Date().toISOString(),
     };
 
-    feedback.push(newFeedback);
-
-    // Write back
-    fs.writeFileSync(FEEDBACK_FILE, JSON.stringify(feedback, null, 2));
+    await query(
+      `INSERT INTO feedback (id, name, email, rating, comment, created_at)
+       VALUES ($1, $2, $3, $4, $5, $6)`,
+      [
+        newFeedback.id,
+        newFeedback.name,
+        newFeedback.email,
+        newFeedback.rating,
+        newFeedback.comment,
+        newFeedback.timestamp,
+      ]
+    );
 
     return res.json({ ok: true, message: "Feedback submitted successfully", feedback: newFeedback });
   } catch (error) {
@@ -1180,11 +1126,14 @@ app.post("/api/feedback/submit", (req, res) => {
 });
 
 // Get all feedback
-app.get("/api/feedback", (req, res) => {
+app.get("/api/feedback", async (req, res) => {
   try {
-    const data = fs.existsSync(FEEDBACK_FILE) ? fs.readFileSync(FEEDBACK_FILE, "utf8") : "[]";
-    const feedback = JSON.parse(data || "[]");
-    return res.json({ ok: true, feedback });
+    const { rows } = await query(
+      `SELECT id, name, email, rating, comment, created_at AS timestamp
+       FROM feedback
+       ORDER BY created_at ASC, id ASC`
+    );
+    return res.json({ ok: true, feedback: rows });
   } catch (error) {
     console.error("Error fetching feedback:", error);
     return res.status(500).json({ ok: false, error: "Failed to fetch feedback" });
@@ -1192,21 +1141,10 @@ app.get("/api/feedback", (req, res) => {
 });
 
 // Delete feedback
-app.delete("/api/feedback/:id", (req, res) => {
+app.delete("/api/feedback/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    
-    let feedback = [];
-    try {
-      const data = fs.readFileSync(FEEDBACK_FILE, "utf8");
-      feedback = JSON.parse(data || "[]");
-    } catch (e) {
-      feedback = [];
-    }
-
-    feedback = feedback.filter(f => f.id !== Number(id));
-    fs.writeFileSync(FEEDBACK_FILE, JSON.stringify(feedback, null, 2));
-
+    await query("DELETE FROM feedback WHERE id = $1", [Number(id)]);
     return res.json({ ok: true, message: "Feedback deleted successfully" });
   } catch (error) {
     console.error("Error deleting feedback:", error);
@@ -1219,11 +1157,12 @@ app.delete("/api/feedback/:id", (req, res) => {
 // ============================================================================
 
 // Get all songs
-app.get("/api/songs", (req, res) => {
+app.get("/api/songs", async (req, res) => {
   try {
-    const data = fs.existsSync(SONGS_FILE) ? fs.readFileSync(SONGS_FILE, "utf8") : "[]";
-    const songs = JSON.parse(data || "[]");
-    return res.json({ ok: true, songs });
+    const { rows } = await query(
+      "SELECT id, title, image, audio, path, youtube_link FROM songs ORDER BY id ASC"
+    );
+    return res.json({ ok: true, songs: rows });
   } catch (error) {
     console.error("Error fetching songs:", error);
     return res.status(500).json({ ok: false, error: "Failed to fetch songs" });
@@ -1231,20 +1170,12 @@ app.get("/api/songs", (req, res) => {
 });
 
 // Add new song
-app.post("/api/songs", (req, res) => {
+app.post("/api/songs", async (req, res) => {
   try {
-    const { title, image, audio, path } = req.body || {};
-    
+    const { title, image, audio, path, youtubeLink, youtube_link } = req.body || {};
+
     if (!title) {
       return res.status(400).json({ ok: false, error: "Song title is required" });
-    }
-
-    let songs = [];
-    try {
-      const data = fs.readFileSync(SONGS_FILE, "utf8");
-      songs = JSON.parse(data || "[]");
-    } catch (e) {
-      songs = [];
     }
 
     const newSong = {
@@ -1253,10 +1184,14 @@ app.post("/api/songs", (req, res) => {
       image: image || "",
       audio: audio || "",
       path: path || `/chords/${title.toLowerCase().replace(/\s+/g, "-")}`,
+      youtube_link: youtubeLink || youtube_link || "",
     };
 
-    songs.push(newSong);
-    fs.writeFileSync(SONGS_FILE, JSON.stringify(songs, null, 2));
+    await query(
+      `INSERT INTO songs (id, title, image, audio, path, youtube_link)
+       VALUES ($1, $2, $3, $4, $5, $6)`,
+      [newSong.id, newSong.title, newSong.image, newSong.audio, newSong.path, newSong.youtube_link]
+    );
 
     return res.json({ ok: true, message: "Song added successfully", song: newSong });
   } catch (error) {
@@ -1266,35 +1201,38 @@ app.post("/api/songs", (req, res) => {
 });
 
 // Update song
-app.put("/api/songs/:id", (req, res) => {
+app.put("/api/songs/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, image, audio, path } = req.body || {};
+    const { title, image, audio, path, youtubeLink, youtube_link } = req.body || {};
+    const yt = youtubeLink !== undefined ? youtubeLink : youtube_link;
 
-    let songs = [];
-    try {
-      const data = fs.readFileSync(SONGS_FILE, "utf8");
-      songs = JSON.parse(data || "[]");
-    } catch (e) {
-      songs = [];
-    }
+    // Partial update preserving prior semantics: a falsy/empty title keeps the
+    // existing value; image/audio/path are updated whenever provided (even "").
+    const { rows } = await query(
+      `UPDATE songs SET
+         title = COALESCE(NULLIF($2, ''), title),
+         image = COALESCE($3, image),
+         audio = COALESCE($4, audio),
+         path  = COALESCE($5, path),
+         youtube_link = COALESCE($6, youtube_link)
+       WHERE id = $1
+       RETURNING id, title, image, audio, path, youtube_link`,
+      [
+        Number(id),
+        title === undefined ? null : title,
+        image === undefined ? null : image,
+        audio === undefined ? null : audio,
+        path === undefined ? null : path,
+        yt === undefined ? null : yt,
+      ]
+    );
 
-    const index = songs.findIndex(s => s.id === Number(id));
-    if (index === -1) {
+    if (rows.length === 0) {
       return res.status(404).json({ ok: false, error: "Song not found" });
     }
 
-    songs[index] = {
-      ...songs[index],
-      title: title || songs[index].title,
-      image: image !== undefined ? image : songs[index].image,
-      audio: audio !== undefined ? audio : songs[index].audio,
-      path: path !== undefined ? path : songs[index].path,
-    };
-
-    fs.writeFileSync(SONGS_FILE, JSON.stringify(songs, null, 2));
-
-    return res.json({ ok: true, message: "Song updated successfully", song: songs[index] });
+    return res.json({ ok: true, message: "Song updated successfully", song: rows[0] });
   } catch (error) {
     console.error("Error updating song:", error);
     return res.status(500).json({ ok: false, error: "Failed to update song" });
@@ -1302,21 +1240,10 @@ app.put("/api/songs/:id", (req, res) => {
 });
 
 // Delete song
-app.delete("/api/songs/:id", (req, res) => {
+app.delete("/api/songs/:id", async (req, res) => {
   try {
     const { id } = req.params;
-
-    let songs = [];
-    try {
-      const data = fs.readFileSync(SONGS_FILE, "utf8");
-      songs = JSON.parse(data || "[]");
-    } catch (e) {
-      songs = [];
-    }
-
-    songs = songs.filter(s => s.id !== Number(id));
-    fs.writeFileSync(SONGS_FILE, JSON.stringify(songs, null, 2));
-
+    await query("DELETE FROM songs WHERE id = $1", [Number(id)]);
     return res.json({ ok: true, message: "Song deleted successfully" });
   } catch (error) {
     console.error("Error deleting song:", error);
@@ -1324,6 +1251,105 @@ app.delete("/api/songs/:id", (req, res) => {
   }
 });
 
+
+// ============================================================================
+// 6) USERS / LOGIN TRACKING
+// ============================================================================
+
+// Record a login. Upserts the user by email and bumps last_login_at/login_count.
+// Body: { email, name, picture, provider, googleId }
+app.post("/api/users/login", async (req, res) => {
+  try {
+    const { email, name, picture, provider, googleId } = req.body || {};
+
+    const normEmail = String(email || "").trim().toLowerCase();
+    if (!normEmail) {
+      return res.status(400).json({ ok: false, error: "email is required" });
+    }
+
+    const { rows } = await query(
+      `INSERT INTO users (email, name, picture, provider, google_sub, login_count, last_login_at)
+       VALUES ($1, $2, $3, $4, $5, 1, now())
+       ON CONFLICT (email) DO UPDATE SET
+         name        = COALESCE(NULLIF(EXCLUDED.name, ''), users.name),
+         picture     = COALESCE(NULLIF(EXCLUDED.picture, ''), users.picture),
+         provider    = EXCLUDED.provider,
+         google_sub  = COALESCE(EXCLUDED.google_sub, users.google_sub),
+         login_count = users.login_count + 1,
+         last_login_at = now()
+       RETURNING id, email, name, picture, provider, created_at, last_login_at, login_count`,
+      [
+        normEmail,
+        name || "",
+        picture || "",
+        provider === "google" ? "google" : "local",
+        googleId || null,
+      ]
+    );
+
+    return res.json({ ok: true, user: rows[0] });
+  } catch (error) {
+    console.error("Error recording login:", error);
+    return res.status(500).json({ ok: false, error: "Failed to record login" });
+  }
+});
+
+// List all users (admin) — most recently active first.
+app.get("/api/users", async (req, res) => {
+  try {
+    const { rows } = await query(
+      `SELECT id, email, name, picture, provider, created_at, last_login_at, login_count
+       FROM users
+       ORDER BY last_login_at DESC`
+    );
+    return res.json({ ok: true, users: rows });
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    return res.status(500).json({ ok: false, error: "Failed to fetch users" });
+  }
+});
+
+// ============================================================================
+// 7) LISTEN COUNTS (per-track play counter)
+// ============================================================================
+
+// All listen counts as a mapping { trackId: count }, most-played first.
+app.get("/api/listens", async (req, res) => {
+  try {
+    const { rows } = await query(
+      "SELECT track_id, count FROM listen_counts ORDER BY count DESC"
+    );
+    const listens = {};
+    for (const r of rows) listens[r.track_id] = r.count;
+    return res.json({ ok: true, listens });
+  } catch (error) {
+    console.error("Error fetching listens:", error);
+    return res.status(500).json({ ok: false, error: "Failed to fetch listens" });
+  }
+});
+
+// Record a listen for a track. Body: { trackId } (or { title }).
+app.post("/api/listens/increment", async (req, res) => {
+  try {
+    const { trackId, title } = req.body || {};
+    const key = String(trackId || title || "").trim();
+    if (!key) {
+      return res.status(400).json({ ok: false, error: "trackId or title is required" });
+    }
+
+    const { rows } = await query(
+      `INSERT INTO listen_counts (track_id, count) VALUES ($1, 1)
+       ON CONFLICT (track_id) DO UPDATE SET count = listen_counts.count + 1
+       RETURNING count`,
+      [key]
+    );
+
+    return res.json({ ok: true, trackId: key, count: rows[0].count });
+  } catch (error) {
+    console.error("Error incrementing listen:", error);
+    return res.status(500).json({ ok: false, error: "Failed to increment listen" });
+  }
+});
 
 // --- Bind -------------------------------------------------------------------
 const PORT = Number(process.env.PORT || 8001);
