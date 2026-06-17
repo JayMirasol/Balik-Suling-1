@@ -4,6 +4,23 @@ import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from 'jwt-decode';
 import "./login.css";
 
+const API_BASE = process.env.REACT_APP_API_URL || "";
+
+// Record a login to the backend (Neon). Non-blocking: never block the user's
+// login flow if this fails. keepalive lets the request survive the redirect.
+async function recordLogin(user) {
+  try {
+    await fetch(`${API_BASE}/api/users/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(user),
+      keepalive: true,
+    });
+  } catch (err) {
+    console.warn("Could not record login to server:", err && err.message);
+  }
+}
+
 export default function Login() {
   const [showThankYouMessage, setShowThankYouMessage] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
@@ -97,7 +114,8 @@ export default function Login() {
         localStorage.setItem("balikSulingUsers", JSON.stringify(users));
         localStorage.setItem("currentUser", JSON.stringify(newUser));
         localStorage.setItem("token", `balik_suling_${newUser.id}`);
-        
+
+        await recordLogin({ email: newUser.email, name: newUser.name, provider: "local" });
         window.location.href = "/feed";
       } else {
         // Login
@@ -112,7 +130,8 @@ export default function Login() {
 
         localStorage.setItem("currentUser", JSON.stringify(user));
         localStorage.setItem("token", `balik_suling_${user.id}`);
-        
+
+        await recordLogin({ email: user.email, name: user.name, provider: "local" });
         window.location.href = "/feed";
       }
     } catch (err) {
@@ -121,7 +140,7 @@ export default function Login() {
     }
   };
 
-  const handleGoogleSuccess = (credentialResponse) => {
+  const handleGoogleSuccess = async (credentialResponse) => {
     try {
       console.log('Google login successful, processing user data...');
       // Decode the JWT token from Google
@@ -160,6 +179,15 @@ export default function Login() {
       localStorage.setItem("currentUser", JSON.stringify(googleUser));
       localStorage.setItem("token", `balik_suling_${googleUser.id}`);
       
+      // Persist the login to Neon (server-side record of who logs in)
+      await recordLogin({
+        email: googleUser.email,
+        name: googleUser.name,
+        picture: googleUser.picture,
+        provider: "google",
+        googleId: googleUser.id,
+      });
+
       console.log('Login complete, redirecting to /feed');
       // Use window.location for a full page reload to ensure token is picked up
       window.location.href = "/feed";
