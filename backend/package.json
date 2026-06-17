@@ -7,7 +7,8 @@
   "scripts": {
     "start": "node server.js",
     "dev": "npx nodemon server.js",
-    "dict:expand": "node scripts/expand-pam-dict.js"
+    "dict:expand": "node scripts/expand-pam-dict.js",
+    "db:deploy": "node scripts/migrate.js"
   },
   "dependencies": {
     "@tonaljs/tonal": "^4.10.0",
@@ -24,6 +25,7 @@
     "music-metadata": "^11.9.0",
     "nanoid": "^5.1.6",
     "nodemailer": "^7.0.9",
+    "pg": "^8.13.1",
     "sharp": "^0.33.5"
   }
 }
