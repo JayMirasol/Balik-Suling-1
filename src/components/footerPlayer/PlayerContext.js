@@ -3,6 +3,22 @@ import React, { createContext, useContext, useMemo, useState, useCallback, useEf
 // Minimal player context for local feed songs
 const PlayerContext = createContext(null);
 
+const API_BASE = process.env.REACT_APP_API_URL || "";
+
+// Record a play in the backend (Neon listen_counts). Fire-and-forget: never
+// blocks or breaks playback if the request fails.
+function recordListen(title) {
+  if (!title) return;
+  try {
+    fetch(`${API_BASE}/api/listens/increment`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ trackId: title }),
+      keepalive: true,
+    }).catch(() => {});
+  } catch {}
+}
+
 export function PlayerProvider({ children }) {
   const [queue, setQueue] = useState([]); // [{ title, image, audio }]
   const [index, setIndex] = useState(-1);
@@ -12,6 +28,7 @@ export function PlayerProvider({ children }) {
   const current = index >= 0 && index < queue.length ? queue[index] : null;
 
   const playTrack = useCallback((track, newQueue) => {
+    recordListen(track && track.title);
     if (Array.isArray(newQueue) && newQueue.length) {
       setQueue(newQueue);
       const i = newQueue.findIndex((t) => t.title === track.title);
